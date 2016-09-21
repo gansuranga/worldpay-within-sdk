@@ -34,6 +34,8 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
 
     public string UrlPrefix { get; set; }
 
+    public string Scheme { get; set; }
+
     public ServiceMessage() {
     }
 
@@ -83,6 +85,13 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
             case 5:
               if (field.Type == TType.String) {
                 UrlPrefix = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 6:
+              if (field.Type == TType.String) {
+                Scheme = iprot.ReadString();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -148,6 +157,14 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
           oprot.WriteString(UrlPrefix);
           oprot.WriteFieldEnd();
         }
+        if (Scheme != null) {
+          field.Name = "scheme";
+          field.Type = TType.String;
+          field.ID = 6;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Scheme);
+          oprot.WriteFieldEnd();
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -189,6 +206,12 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
         __first = false;
         __sb.Append("UrlPrefix: ");
         __sb.Append(UrlPrefix);
+      }
+      if (Scheme != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Scheme: ");
+        __sb.Append(Scheme);
       }
       __sb.Append(")");
       return __sb.ToString();

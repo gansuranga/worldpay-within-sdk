@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Worldpay.Innovation.WPWithin
+﻿namespace Worldpay.Innovation.WPWithin
 {
     public class PaymentResponse
     {
@@ -16,8 +10,6 @@ namespace Worldpay.Innovation.WPWithin
 
         public ServiceDeliveryToken ServiceDeliveryToken { get; set; }
 
-        public string ClientUuid { get; set; }
-
         public override bool Equals(object that)
         {
             return new EqualsBuilder<PaymentResponse>(this, that)
@@ -25,7 +17,6 @@ namespace Worldpay.Innovation.WPWithin
                 .With(m => m.ClientId)
                 .With(m => m.TotalPaid)
                 .With(m => m.ServiceDeliveryToken)
-                .With(m => m.ClientUuid)
                 .Equals();
         }
 
@@ -36,7 +27,6 @@ namespace Worldpay.Innovation.WPWithin
                 .With(m => m.ClientId)
                 .With(m => m.TotalPaid)
                 .With(m => m.ServiceDeliveryToken)
-                .With(m => m.ClientUuid)
                 .HashCode;
         }
 
@@ -47,7 +37,6 @@ namespace Worldpay.Innovation.WPWithin
                 .Append(m => m.ClientId)
                 .Append(m => m.TotalPaid)
                 .Append(m => m.ServiceDeliveryToken)
-                .Append(m => m.ClientUuid)
                 .ToString();
         }
     }

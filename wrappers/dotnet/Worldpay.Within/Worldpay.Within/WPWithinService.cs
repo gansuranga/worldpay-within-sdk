@@ -12,13 +12,30 @@ using ThriftWPWithinService = Worldpay.Innovation.WPWithin.Rpc.WPWithin;
 namespace Worldpay.Innovation.WPWithin
 {
     /// <summary>
-    ///     Service wrapper that hides all references to underlying implementation (i.e. Thrift).
+    ///     The main Worldpay Within service endpoint.
     /// </summary>
+    /// <remarks>
+    ///     <para>To access a Worldpay Within service create an instance of this class, configured with a <see cref="RpcAgentConfiguration"/> instance that informs this instance
+    /// how to connect to the Thrift RPC Agent that manages the communication to remote devices.</para>
+    /// <para>Note that this single service interface is the used for both producing (selling) and consuming (buying) services.</para>
+    /// </remarks>
     public class WPWithinService : IDisposable
     {
+        /// <summary>
+        /// Delegate used for registering handlers for the <see cref="WPWithinService.OnBeginServiceDelivery"/> event.
+        /// </summary>
+        /// <param name="serviceId">The identity of the service that has begun delivering its service.</param>
+        /// <param name="serviceDeliveryToken">A token that can be validated to ensure that origin of the event is genuine.</param>
+        /// <param name="unitsToSupply">The number of units that will be supplied.</param>
         public delegate void BeginServiceDeliveryHandler(
             int serviceId, ServiceDeliveryToken serviceDeliveryToken, int unitsToSupply);
 
+        /// <summary>
+        /// Delegate used for registering handlers for the <see cref="WPWithinService.OnEndServiceDelivery"/> event.
+        /// </summary>
+        /// <param name="serviceId">The identity of the service that has completed delivering its service.</param>
+        /// <param name="serviceDeliveryToken">A token that can be validated to ensure that origin of the event is genuine.</param>
+        /// <param name="unitsReceived">The number of units that have been supplied.</param>
         public delegate void EndServiceDeliveryHandler(
             int serviceId, ServiceDeliveryToken serviceDeliveryToken, int unitsReceived);
 
@@ -29,15 +46,15 @@ namespace Worldpay.Innovation.WPWithin
         private ThriftWPWithinService.Client _client;
         private bool _isDisposed;
         private TTransport _transport;
-        private string v1;
-        private int v2;
-        private int v3;
 
-
+        /// <summary>
+        /// Creates an instance of the service that will communicate with remote devices using the configuration supplied by <paramref name="localAgentConfiguration"/>.
+        /// </summary>
+        /// <param name="localAgentConfiguration">Describes how the local Thrift RPC agent (the core SDK) can be communicated with.</param>
         public WPWithinService(RpcAgentConfiguration localAgentConfiguration)
         {
             InitClient(localAgentConfiguration);
-            if (localAgentConfiguration.CallbackPort>0)
+            if (localAgentConfiguration.CallbackPort > 0)
             {
                 _listener = new CallbackServerManager(localAgentConfiguration);
                 _listener.Start();
@@ -78,27 +95,46 @@ namespace Worldpay.Innovation.WPWithin
             Dispose(true);
         }
 
+        /// <summary>
+        /// Event raised for consumers when a service that has been paid for starts delivering that service.
+        /// </summary>
+        /// <remarks>This event will only be raised if <see cref="RpcAgentConfiguration.CallbackPort"/> has been set, which causes the Thrift RPC Agent to set up a callback
+        /// mechanism.</remarks>
         public event BeginServiceDeliveryHandler OnBeginServiceDelivery
         {
             add { _listener.BeginServiceDelivery += value; }
             remove { _listener.BeginServiceDelivery -= value; }
         }
 
+        /// <summary>
+        /// Event raised for consumers when a service that has been paid for completes delivering that service.
+        /// </summary>
+        /// <remarks>This event will only be raised if <see cref="RpcAgentConfiguration.CallbackPort"/> has been set, which causes the Thrift RPC Agent to set up a callback
+        /// mechanism.</remarks>
         public event EndServiceDeliveryHandler OnEndServiceDelivery
         {
             add { _listener.EndServiceDelivery += value; }
             remove { _listener.EndServiceDelivery -= value; }
         }
 
+        /// <summary>
+        /// Adds a new service to those offered by this producer.
+        /// </summary>
+        /// <param name="service">The service to add.  Must not be null.</param>
         public void AddService(Service service)
         {
             _client.addService(ServiceAdapter.Create(service));
         }
 
+        /// <summary>
+        /// Removes a service, so that it is no longer offered by this producer.
+        /// </summary>
+        /// <param name="service">The service to remove.</param>
         public void RemoveService(Service service)
         {
             _client.removeService(ServiceAdapter.Create(service));
         }
+
 
         public void InitConsumer(string scheme, string hostname, int port, string urlPrefix, string serviceId,
             HceCard hceCard)

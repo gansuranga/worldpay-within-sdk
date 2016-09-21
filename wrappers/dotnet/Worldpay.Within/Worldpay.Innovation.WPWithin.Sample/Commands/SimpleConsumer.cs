@@ -6,6 +6,10 @@ using System.Threading;
 
 namespace Worldpay.Innovation.WPWithin.Sample.Commands
 {
+
+    /// <summary>
+    /// Shows how a consumer can purchase and take delivery of a service offered by a producer, such as <see cref="SimpleProducer"/>.
+    /// </summary>
     internal class SimpleConsumer
     {
         private readonly TextWriter _error;
@@ -17,33 +21,62 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
             _error = error;
         }
 
+        /// <summary>
+        ///  Consumes a single unit of the first price, of the first service of the first device found.
+        /// </summary>
+        /// <param name="service">An initialised service interface.</param>
+        /// <returns>Indication of the success of the operation.</returns>
         public CommandResult MakePurchase(WPWithinService service)
         {
             service.SetupDevice("my-device", "an example consumer device");
 
             ServiceMessage firstDevice = DiscoverDevices(service)?.FirstOrDefault();
-            if (firstDevice == null) return CommandResult.NonCriticalError;
+            if (firstDevice == null)
+            {
+                _error.WriteLine("No devices discovered.  Is a producer running on your network?");
+                return CommandResult.NonCriticalError;
+            }
+            else
+            {
+                _output.WriteLine("Discovered device: {0}", firstDevice);
+            }
 
-            connectToDevice(service, firstDevice);
+            // Configure our WPWithinService as a consumer, using a dummy payment card.
+            ConnectToDevice(service, firstDevice);
 
+            // Get the first service offered by the device.
             ServiceDetails firstService = GetAvailableServices(service)?.FirstOrDefault();
-            if (firstService == null) return CommandResult.NonCriticalError;
+            if (firstService == null)
+            {
+                _error.WriteLine("Couldn't find any services offered by {0}", firstDevice);
+                return CommandResult.NonCriticalError;
+            }
+            else
+            {
+                _output.WriteLine("Found first service {0}", firstService);
+            }
 
-            Price firstPrice = GetServicePrices(service, firstService.ServiceId.Value)?.FirstOrDefault();
+            // Get the first first offered by the first service on the first device.
+            Price firstPrice = GetServicePrices(service, firstService.ServiceId)?.FirstOrDefault();
             if (firstPrice == null) return CommandResult.NonCriticalError;
 
-            TotalPriceResponse priceResponse = GetServicePriceQuote(service, firstService.ServiceId.Value, 1,
-                firstPrice.Id.Value);
+            TotalPriceResponse priceResponse = GetServicePriceQuote(service, firstService.ServiceId, 1,
+                firstPrice.Id);
             if (priceResponse == null) return CommandResult.CriticalError;
 
-            PurchaseService(service, firstService.ServiceId.Value, priceResponse);
+            PurchaseService(service, firstService.ServiceId, priceResponse);
 
             return CommandResult.Success;
         }
 
+        /// <summary>
+        /// Spends 5 seconds attempting to discover devices offering services to consume.
+        /// </summary>
+        /// <param name="service">A WPWithin service instance that will be used to do the discovery.</param>
+        /// <returns>A list (possibly empty) of discovered devices/services.</returns>
         private List<ServiceMessage> DiscoverDevices(WPWithinService service)
         {
-            List<ServiceMessage> devices = service.DeviceDiscovery(25000).ToList();
+            List<ServiceMessage> devices = service.DeviceDiscovery(5000).ToList();
 
             if (devices.Any())
             {
@@ -67,7 +100,7 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
             return devices;
         }
 
-        private void connectToDevice(WPWithinService service, ServiceMessage svcMsg)
+        private void ConnectToDevice(WPWithinService service, ServiceMessage svcMsg)
         {
             HceCard card = new HceCard
             {
@@ -135,7 +168,6 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
             if (pResp != null)
             {
                 _output.WriteLine("Payment response: ");
-                _output.WriteLine("Client UUID: {0}", pResp.ClientUuid);
                 _output.WriteLine("Client ServiceId: {0}", pResp.ServerId);
                 _output.WriteLine("Total paid: {0}", pResp.TotalPaid);
                 _output.WriteLine("ServiceDeliveryToken.issued: {0}", pResp.ServiceDeliveryToken.Issued);

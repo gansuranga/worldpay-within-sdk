@@ -22,14 +22,14 @@ namespace Worldpay.Innovation.WPWithin.Rpc
     /// WorldpayWithin Callback Service - RPC clients implement this service to enable callbacks from WorldpayWithin Service
     /// </summary>
     public interface Iface {
-      void beginServiceDelivery(int serviceId, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsToSupply);
+      void beginServiceDelivery(int serviceID, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsToSupply);
       #if SILVERLIGHT
-      IAsyncResult Begin_beginServiceDelivery(AsyncCallback callback, object state, int serviceId, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsToSupply);
+      IAsyncResult Begin_beginServiceDelivery(AsyncCallback callback, object state, int serviceID, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsToSupply);
       void End_beginServiceDelivery(IAsyncResult asyncResult);
       #endif
       void endServiceDelivery(int serviceID, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsReceived);
       #if SILVERLIGHT
-      IAsyncResult Begin_endServiceDelivery(AsyncCallback callback, object state, int serviceId, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsReceived);
+      IAsyncResult Begin_endServiceDelivery(AsyncCallback callback, object state, int serviceID, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsReceived);
       void End_endServiceDelivery(IAsyncResult asyncResult);
       #endif
     }
@@ -95,9 +95,9 @@ namespace Worldpay.Innovation.WPWithin.Rpc
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_beginServiceDelivery(AsyncCallback callback, object state, int serviceId, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsToSupply)
+      public IAsyncResult Begin_beginServiceDelivery(AsyncCallback callback, object state, int serviceID, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsToSupply)
       {
-        return send_beginServiceDelivery(callback, state, serviceId, serviceDeliveryToken, unitsToSupply);
+        return send_beginServiceDelivery(callback, state, serviceID, serviceDeliveryToken, unitsToSupply);
       }
 
       public void End_beginServiceDelivery(IAsyncResult asyncResult)
@@ -108,20 +108,20 @@ namespace Worldpay.Innovation.WPWithin.Rpc
 
       #endif
 
-      public void beginServiceDelivery(int serviceId, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsToSupply)
+      public void beginServiceDelivery(int serviceID, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsToSupply)
       {
         #if !SILVERLIGHT
-        send_beginServiceDelivery(serviceId, serviceDeliveryToken, unitsToSupply);
+        send_beginServiceDelivery(serviceID, serviceDeliveryToken, unitsToSupply);
         recv_beginServiceDelivery();
 
         #else
-        var asyncResult = Begin_beginServiceDelivery(null, null, serviceId, serviceDeliveryToken, unitsToSupply);
+        var asyncResult = Begin_beginServiceDelivery(null, null, serviceID, serviceDeliveryToken, unitsToSupply);
         End_beginServiceDelivery(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_beginServiceDelivery(AsyncCallback callback, object state, int serviceId, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsToSupply)
+      public IAsyncResult send_beginServiceDelivery(AsyncCallback callback, object state, int serviceID, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsToSupply)
       #else
       public void send_beginServiceDelivery(int serviceID, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsToSupply)
       #endif
@@ -159,9 +159,9 @@ namespace Worldpay.Innovation.WPWithin.Rpc
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_endServiceDelivery(AsyncCallback callback, object state, int serviceId, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsReceived)
+      public IAsyncResult Begin_endServiceDelivery(AsyncCallback callback, object state, int serviceID, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsReceived)
       {
-        return send_endServiceDelivery(callback, state, serviceId, serviceDeliveryToken, unitsReceived);
+        return send_endServiceDelivery(callback, state, serviceID, serviceDeliveryToken, unitsReceived);
       }
 
       public void End_endServiceDelivery(IAsyncResult asyncResult)
@@ -179,13 +179,13 @@ namespace Worldpay.Innovation.WPWithin.Rpc
         recv_endServiceDelivery();
 
         #else
-        var asyncResult = Begin_endServiceDelivery(null, null, serviceId, serviceDeliveryToken, unitsReceived);
+        var asyncResult = Begin_endServiceDelivery(null, null, serviceID, serviceDeliveryToken, unitsReceived);
         End_endServiceDelivery(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_endServiceDelivery(AsyncCallback callback, object state, int serviceId, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsReceived)
+      public IAsyncResult send_endServiceDelivery(AsyncCallback callback, object state, int serviceID, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsReceived)
       #else
       public void send_endServiceDelivery(int serviceID, Worldpay.Innovation.WPWithin.Rpc.Types.ServiceDeliveryToken serviceDeliveryToken, int unitsReceived)
       #endif
@@ -371,7 +371,7 @@ namespace Worldpay.Innovation.WPWithin.Rpc
           oprot.WriteStructBegin(struc);
           TField field = new TField();
           if (ServiceID != null) {
-            field.Name = "serviceId";
+            field.Name = "serviceID";
             field.Type = TType.I32;
             field.ID = 1;
             oprot.WriteFieldBegin(field);
@@ -594,7 +594,7 @@ namespace Worldpay.Innovation.WPWithin.Rpc
           oprot.WriteStructBegin(struc);
           TField field = new TField();
           if (ServiceID != null) {
-            field.Name = "serviceId";
+            field.Name = "serviceID";
             field.Type = TType.I32;
             field.ID = 1;
             oprot.WriteFieldBegin(field);

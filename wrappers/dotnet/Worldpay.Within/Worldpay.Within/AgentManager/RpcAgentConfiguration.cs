@@ -361,6 +361,13 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
             return transport;
         }
 
+        /// <summary>
+        /// Retrives the correct Thrift transport type based on the value in <see cref="Transport"/>.
+        /// </summary>
+        /// <returns>If <see cref="Transport"/> is <code>namedpipe</code> then a <see cref="TNamedPipeClientTransport"/> is used.  For all other values
+        /// a <see cref="TSocket"/> is returned.  Depending on the value of <see cref="Framed"/> and <see cref="Buffered"/>, appropriate wrappers will be placed
+        /// around the transport.
+        /// </returns>
         public TTransport GetThriftTransport()
         {
             TTransport transport;
@@ -388,8 +395,14 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
             return transport;
         }
 
+        /// <summary>
+        /// The name of the named pipe that will be used, if <see cref="Transport"/> is set to <code>namedpipe</code>.
+        /// </summary>
         public string NamedPipeName { get; set; } = "thrift-agent";
 
+        /// <summary>
+        /// The type of transport that will be used to communicate with the RPC Agent.  Default is <code>socket</code>.  Set to <code>nameddpipe</code> to use named pipes.
+        /// </summary>
         public string Transport { get; set; } = "socket";
     }
 }
