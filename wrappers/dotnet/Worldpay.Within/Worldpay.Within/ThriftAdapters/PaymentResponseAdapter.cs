@@ -6,13 +6,8 @@ namespace Worldpay.Innovation.WPWithin.ThriftAdapters
     {
         public static PaymentResponse Create(ThriftPaymentResponse makePayment)
         {
-            return new PaymentResponse()
-            {
-                ClientId = makePayment.ClientId,
-                ServerId = makePayment.ServerId,
-                ServiceDeliveryToken = ServiceDeliveryTokenAdapter.Create(makePayment.ServiceDeliveryToken),
-                TotalPaid = makePayment.TotalPaid
-            };
+            return new PaymentResponse(makePayment.ServerId, makePayment.ClientId, makePayment.TotalPaid,
+                ServiceDeliveryTokenAdapter.Create(makePayment.ServiceDeliveryToken));
         }
     }
 }

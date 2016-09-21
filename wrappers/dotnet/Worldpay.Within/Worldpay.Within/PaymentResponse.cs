@@ -1,14 +1,37 @@
 ﻿namespace Worldpay.Innovation.WPWithin
 {
+    /// <summary>
+    /// The response to a request to make a payment by a consumer to a producer. 
+    /// </summary>
     public class PaymentResponse
     {
-        public string ServerId { get; set; }
+        public PaymentResponse(string serverId, string clientId, int? totalPaid, ServiceDeliveryToken serviceDeliveryToken)
+        {
+            ServerId = serverId;
+            ClientId = clientId;
+            TotalPaid = totalPaid ?? 0;
+            ServiceDeliveryToken = serviceDeliveryToken;
+        }
 
-        public string ClientId { get; set; }
+        /// <summary>
+        /// The identity of the server that produced the response.
+        /// </summary>
+        public string ServerId { get; }
 
-        public int? TotalPaid { get; set; }
+        /// <summary>
+        /// The identity of the client has received the response.
+        /// </summary>
+        public string ClientId { get; }
 
-        public ServiceDeliveryToken ServiceDeliveryToken { get; set; }
+        /// <summary>
+        /// The total amount of money paid for the service.
+        /// </summary>
+        public int TotalPaid { get; }
+
+        /// <summary>
+        /// A token that can be used by the consumer to initiate the delivery of the service from the producer. 
+        /// </summary>
+        public ServiceDeliveryToken ServiceDeliveryToken { get; }
 
         public override bool Equals(object that)
         {

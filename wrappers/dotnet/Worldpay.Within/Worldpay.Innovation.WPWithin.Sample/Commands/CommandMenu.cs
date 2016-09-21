@@ -118,7 +118,6 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
             _rpcManager = new RpcAgentManager(new RpcAgentConfiguration());
             _rpcManager.StartThriftRpcAgentProcess();
             _service = new WPWithinService(_defaultAgentConfig);
-            _rpcManager.StopThriftRpcAgentProcess();
             return CommandResult.Success;
         }
 

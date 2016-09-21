@@ -14,14 +14,7 @@ namespace Worldpay.Innovation.WPWithin.ThriftAdapters
 
         private static ServiceMessage Create(ThriftServiceMessage sm)
         {
-            return new ServiceMessage()
-            {
-                DeviceDescription = sm.DeviceDescription,
-                Hostname = sm.Hostname,
-                PortNumber = sm.PortNumber,
-                ServerId = sm.ServerId,
-                UrlPrefix = sm.UrlPrefix
-            };
+            return new ServiceMessage(sm.ServerId, sm.UrlPrefix, sm.PortNumber, sm.Hostname, sm.DeviceDescription);
         }
     }
 }
