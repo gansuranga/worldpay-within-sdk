@@ -1,14 +1,26 @@
 @echo off
+
+rem This simple batch file makes it easier to regenerate the dotnet Thrift code from the contract
+rem defined in \rpc\wpwithin.thrift within this project.
+rem
+rem You must have set a THRIFT_HOME environment variable, or you can modify this batch file to hardcode
+rem the full path to the thrift compiler.
+
 setlocal
 
-set _WPWithinHome=%GOPATH%\src\github.com\wptechinnovation\worldpay-within-sdk
+if NOT DEFINED THRIFT_HOME (
+	echo Please set THRIFT_HOME environment variable to the root of your Apache Thrift 0.9.3 installation
+	goto end
+)
 
-rem Edit this to point to your Thrift installation
-set _ThriftHome=c:\apps\thrift-0.9.3
+set _WPWithinHome=%GOPATH%\src\github.com\wptechinnovation\worldpay-within-sdk
 
 set _OutputDirectory=%_WPWithinHome%\wrappers\dotnet\Worldpay.Within\Worldpay.Within.Rpc
 echo Regenerating Thrift RPC classes in to %_OutputDirectory%
 
-%_ThriftHome%\thrift-0.9.3.exe -r -out %_OutputDirectory% --gen csharp:nullable,union %_WPWithinHome%\rpc\wpwithin.thrift
+%THRIFT_HOME%\thrift-0.9.3.exe -r -out %_OutputDirectory% --gen csharp:nullable,union %_WPWithinHome%\rpc\wpwithin.thrift
+
+:end
 
 endlocal
+
