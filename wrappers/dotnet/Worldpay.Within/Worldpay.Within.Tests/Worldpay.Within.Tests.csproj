@@ -61,7 +61,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="CallbackTest.cs" />
     <Compile Include="ConsumerTest.cs" />
     <Compile Include="ProducerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

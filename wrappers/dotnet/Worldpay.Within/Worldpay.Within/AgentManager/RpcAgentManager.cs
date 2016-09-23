@@ -156,7 +156,7 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
             Process process = (Process) sender;
             ThriftRpcLog.Info($"RpcAgent({process.Id}): {e.Data}");
             OnMessage?.Invoke(process, e.Data);
-            const string startString = "Starting the rpc server on";
+            const string startString = "Begin parsing log level arguments";
             if (e.Data != null && e.Data.Contains(startString))
             {
                 Log.InfoFormat("Found magic string \"{0}\" indicating that RPC Agent {1} has started successfully",
