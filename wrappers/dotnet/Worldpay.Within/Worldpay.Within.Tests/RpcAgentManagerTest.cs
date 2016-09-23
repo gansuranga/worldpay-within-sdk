@@ -16,8 +16,8 @@ namespace Worldpay.Within.Tests
             bool started = false;
             mgr.OnStarted += (s,e) =>
             {
-                mgr.StopThriftRpcAgentProcess();
                 started = true;
+                mgr.StopThriftRpcAgentProcess();
             };
             mgr.StartThriftRpcAgentProcess();
 
@@ -27,7 +27,7 @@ namespace Worldpay.Within.Tests
                 Thread.Sleep(500);
                 retries++;
             }
-            if (!started) Assert.Fail("Thrift RPC Agent didn't start");
+            if (!started) Assert.Fail("Thrift RPC Agent didn't start within 5000ms");
         }
 
         

@@ -37,9 +37,9 @@ namespace Worldpay.Innovation.WPWithin.Rpc
       IAsyncResult Begin_removeService(AsyncCallback callback, object state, Worldpay.Innovation.WPWithin.Rpc.Types.Service svc);
       void End_removeService(IAsyncResult asyncResult);
       #endif
-      void initConsumer(string scheme, string hostname, int port, string urlPrefix, string serverId, Worldpay.Innovation.WPWithin.Rpc.Types.HCECard hceCard);
+      void initConsumer(string scheme, string hostname, int port, string urlPrefix, string clientID, Worldpay.Innovation.WPWithin.Rpc.Types.HCECard hceCard);
       #if SILVERLIGHT
-      IAsyncResult Begin_initConsumer(AsyncCallback callback, object state, string scheme, string hostname, int port, string urlPrefix, string serverId, Worldpay.Innovation.WPWithin.Rpc.Types.HCECard hceCard);
+      IAsyncResult Begin_initConsumer(AsyncCallback callback, object state, string scheme, string hostname, int port, string urlPrefix, string clientID, Worldpay.Innovation.WPWithin.Rpc.Types.HCECard hceCard);
       void End_initConsumer(IAsyncResult asyncResult);
       #endif
       void initProducer(string merchantClientKey, string merchantServiceKey);
@@ -347,9 +347,9 @@ namespace Worldpay.Innovation.WPWithin.Rpc
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_initConsumer(AsyncCallback callback, object state, string scheme, string hostname, int port, string urlPrefix, string serverId, Worldpay.Innovation.WPWithin.Rpc.Types.HCECard hceCard)
+      public IAsyncResult Begin_initConsumer(AsyncCallback callback, object state, string scheme, string hostname, int port, string urlPrefix, string clientID, Worldpay.Innovation.WPWithin.Rpc.Types.HCECard hceCard)
       {
-        return send_initConsumer(callback, state, scheme, hostname, port, urlPrefix, serverId, hceCard);
+        return send_initConsumer(callback, state, scheme, hostname, port, urlPrefix, clientID, hceCard);
       }
 
       public void End_initConsumer(IAsyncResult asyncResult)
@@ -360,22 +360,22 @@ namespace Worldpay.Innovation.WPWithin.Rpc
 
       #endif
 
-      public void initConsumer(string scheme, string hostname, int port, string urlPrefix, string serverId, Worldpay.Innovation.WPWithin.Rpc.Types.HCECard hceCard)
+      public void initConsumer(string scheme, string hostname, int port, string urlPrefix, string clientID, Worldpay.Innovation.WPWithin.Rpc.Types.HCECard hceCard)
       {
         #if !SILVERLIGHT
-        send_initConsumer(scheme, hostname, port, urlPrefix, serverId, hceCard);
+        send_initConsumer(scheme, hostname, port, urlPrefix, clientID, hceCard);
         recv_initConsumer();
 
         #else
-        var asyncResult = Begin_initConsumer(null, null, scheme, hostname, port, urlPrefix, serverId, hceCard);
+        var asyncResult = Begin_initConsumer(null, null, scheme, hostname, port, urlPrefix, clientID, hceCard);
         End_initConsumer(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_initConsumer(AsyncCallback callback, object state, string scheme, string hostname, int port, string urlPrefix, string serverId, Worldpay.Innovation.WPWithin.Rpc.Types.HCECard hceCard)
+      public IAsyncResult send_initConsumer(AsyncCallback callback, object state, string scheme, string hostname, int port, string urlPrefix, string clientID, Worldpay.Innovation.WPWithin.Rpc.Types.HCECard hceCard)
       #else
-      public void send_initConsumer(string scheme, string hostname, int port, string urlPrefix, string serverId, Worldpay.Innovation.WPWithin.Rpc.Types.HCECard hceCard)
+      public void send_initConsumer(string scheme, string hostname, int port, string urlPrefix, string clientID, Worldpay.Innovation.WPWithin.Rpc.Types.HCECard hceCard)
       #endif
       {
         oprot_.WriteMessageBegin(new TMessage("initConsumer", TMessageType.Call, seqid_));
@@ -384,7 +384,7 @@ namespace Worldpay.Innovation.WPWithin.Rpc
         args.Hostname = hostname;
         args.Port = port;
         args.UrlPrefix = urlPrefix;
-        args.ServerId = serverId;
+        args.ClientID = clientID;
         args.HceCard = hceCard;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
@@ -1229,7 +1229,7 @@ namespace Worldpay.Innovation.WPWithin.Rpc
         iprot.ReadMessageEnd();
         initConsumer_result result = new initConsumer_result();
         try {
-          iface_.initConsumer(args.Scheme, args.Hostname, args.Port.Value, args.UrlPrefix, args.ServerId, args.HceCard);
+          iface_.initConsumer(args.Scheme, args.Hostname, args.Port.Value, args.UrlPrefix, args.ClientID, args.HceCard);
         } catch (Worldpay.Innovation.WPWithin.Rpc.Types.Error err) {
           result.Err = err;
         }
@@ -1992,7 +1992,7 @@ namespace Worldpay.Innovation.WPWithin.Rpc
 
       public string UrlPrefix { get; set; }
 
-      public string ServerId { get; set; }
+      public string ClientID { get; set; }
 
       public Worldpay.Innovation.WPWithin.Rpc.Types.HCECard HceCard { get; set; }
 
@@ -2044,7 +2044,7 @@ namespace Worldpay.Innovation.WPWithin.Rpc
                 break;
               case 5:
                 if (field.Type == TType.String) {
-                  ServerId = iprot.ReadString();
+                  ClientID = iprot.ReadString();
                 } else { 
                   TProtocolUtil.Skip(iprot, field.Type);
                 }
@@ -2110,12 +2110,12 @@ namespace Worldpay.Innovation.WPWithin.Rpc
             oprot.WriteString(UrlPrefix);
             oprot.WriteFieldEnd();
           }
-          if (ServerId != null) {
-            field.Name = "serverId";
+          if (ClientID != null) {
+            field.Name = "clientID";
             field.Type = TType.String;
             field.ID = 5;
             oprot.WriteFieldBegin(field);
-            oprot.WriteString(ServerId);
+            oprot.WriteString(ClientID);
             oprot.WriteFieldEnd();
           }
           if (HceCard != null) {
@@ -2162,11 +2162,11 @@ namespace Worldpay.Innovation.WPWithin.Rpc
           __sb.Append("UrlPrefix: ");
           __sb.Append(UrlPrefix);
         }
-        if (ServerId != null) {
+        if (ClientID != null) {
           if(!__first) { __sb.Append(", "); }
           __first = false;
-          __sb.Append("ServerId: ");
-          __sb.Append(ServerId);
+          __sb.Append("ClientID: ");
+          __sb.Append(ClientID);
         }
         if (HceCard != null) {
           if(!__first) { __sb.Append(", "); }

@@ -1,22 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Worldpay.Innovation.WPWithin
+﻿namespace Worldpay.Innovation.WPWithin
 {
+
+    /// <summary>
+    /// Describes a remote service/device that we can connect to in order to consumer a service they are producing.  
+    /// </summary>
+    /// <see cref="Device"/> 
     public class ServiceMessage
     {
-        public string DeviceDescription { get; set; }
+        public ServiceMessage(string serverId, string urlPrefix, int? portNumber, string hostname, string deviceDescription)
+        {
+            ServerId = serverId;
+            UrlPrefix = urlPrefix;
+            PortNumber = portNumber;
+            Hostname = hostname;
+            DeviceDescription = deviceDescription;
+        }
 
-        public string Hostname { get; set; }
+        public string DeviceDescription { get; }
 
-        public int? PortNumber { get; set; }
+        public string Hostname { get; }
 
-        public string ServerId { get; set; }
+        public int? PortNumber { get; }
 
-        public string UrlPrefix { get; set; }
+        public string ServerId { get;}
+
+        public string UrlPrefix { get; }
 
         public override bool Equals(object that)
         {

@@ -32,8 +32,6 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
 
     public ServiceDeliveryToken ServiceDeliveryToken { get; set; }
 
-    public string ClientUUID { get; set; }
-
     public PaymentResponse() {
     }
 
@@ -77,13 +75,6 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
               if (field.Type == TType.Struct) {
                 ServiceDeliveryToken = new ServiceDeliveryToken();
                 ServiceDeliveryToken.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 5:
-              if (field.Type == TType.String) {
-                ClientUUID = iprot.ReadString();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -141,14 +132,6 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
           ServiceDeliveryToken.Write(oprot);
           oprot.WriteFieldEnd();
         }
-        if (ClientUUID != null) {
-          field.Name = "ClientUUID";
-          field.Type = TType.String;
-          field.ID = 5;
-          oprot.WriteFieldBegin(field);
-          oprot.WriteString(ClientUUID);
-          oprot.WriteFieldEnd();
-        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -184,12 +167,6 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
         __first = false;
         __sb.Append("ServiceDeliveryToken: ");
         __sb.Append(ServiceDeliveryToken);
-      }
-      if (ClientUUID != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("ClientUUID: ");
-        __sb.Append(ClientUUID);
       }
       __sb.Append(")");
       return __sb.ToString();

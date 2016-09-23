@@ -1,8 +1,10 @@
-﻿using System;
-using ThriftPricePerUnit = Worldpay.Innovation.WPWithin.Rpc.Types.PricePerUnit;
+﻿using ThriftPricePerUnit = Worldpay.Innovation.WPWithin.Rpc.Types.PricePerUnit;
 
 namespace Worldpay.Innovation.WPWithin.ThriftAdapters
 {
+    /// <summary>
+    ///     Thrift type adapter for <see cref="PricePerUnit" />.
+    /// </summary>
     internal class PricePerUnitAdapter
     {
         internal static ThriftPricePerUnit Create(PricePerUnit pricePerUnit)
@@ -16,11 +18,7 @@ namespace Worldpay.Innovation.WPWithin.ThriftAdapters
 
         public static PricePerUnit Create(ThriftPricePerUnit pricePerUnit)
         {
-            return new PricePerUnit()
-            {
-                CurrencyCode = pricePerUnit.CurrencyCode,
-                Amount = pricePerUnit.Amount
-            };
+            return new PricePerUnit(pricePerUnit.Amount ?? 0, pricePerUnit.CurrencyCode);
         }
     }
 }

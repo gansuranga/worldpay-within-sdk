@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Worldpay.Innovation.WPWithin.Sample.Commands
 {
+
+    /// <summary>
+    /// Used by <see cref="CommandMenu"/> commands to indicate how the method terminated (if an exception wasn't thrown).
+    /// </summary>
     public enum CommandResult
     {
         /// <summary>

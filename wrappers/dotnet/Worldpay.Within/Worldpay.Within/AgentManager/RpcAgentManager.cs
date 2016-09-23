@@ -20,45 +20,8 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
     ///     </para>
     ///     <para>
     ///         As the Thrift RPC Agent runs as separate process, we have to invoke it as if it were a separate tool, rather
-    ///         than loading in to the
-    ///         same address space.
+    ///         than loading in to the same address space.
     ///     </para>
-    ///     <list type="bullet">
-    ///         <item>
-    ///             <description>Start a binary and keep reference to process.</description>
-    ///         </item>
-    ///         <item>
-    ///             <description>Using the reference during start, be able to stop the process.</description>
-    ///         </item>
-    ///         <item>
-    ///             <description>Monitor std and err outputs.  Surface errors to calling application</description>
-    ///         </item>
-    ///         <item>
-    ///             <description>
-    ///                 Monitor the exit code of the RPC Agent. 0 = success, non-0 = error ( will be updating this app
-    ///                 to return the appropriate exit codes)
-    ///             </description>
-    ///         </item>
-    ///         <item>
-    ///             <description>
-    ///                 Ability to support multiple operating systems. Most of the wrappers will be able to run on
-    ///                 multiple OSes we should aim to support { Linux, Windows, Mac OS }
-    ///             </description>
-    ///         </item>
-    ///         <item>
-    ///             <description>We should support 3 architectures { ia32, x86-64, arm }</description>
-    ///         </item>
-    ///         <item>
-    ///             <description>
-    ///                 The launcher should be able to determine the OS and CPU architecture that the application is
-    ///                 running on.This will enable the correct selection of the binary to launch. Please note that the wrapper
-    ///                 distribution is to include the binaries for the various platforms / architectures.
-    ///             </description>
-    ///         </item>
-    ///         <item>
-    ///             <description>We will agree on a filename convention such as rpc-agent-os-cpu(.ext) e.g.rpc-agent-win-64.exe</description>
-    ///         </item>
-    ///     </list>
     /// </remarks>
     public class RpcAgentManager
     {
@@ -193,7 +156,7 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
             Process process = (Process) sender;
             ThriftRpcLog.Info($"RpcAgent({process.Id}): {e.Data}");
             OnMessage?.Invoke(process, e.Data);
-            const string startString = "Starting the rpc server on";
+            const string startString = "Begin parsing log level arguments";
             if (e.Data != null && e.Data.Contains(startString))
             {
                 Log.InfoFormat("Found magic string \"{0}\" indicating that RPC Agent {1} has started successfully",
