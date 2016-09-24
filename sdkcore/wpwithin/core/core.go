@@ -21,6 +21,7 @@ type Core struct {
 	HTEClient      hte.Client
 	EventHandler   event.Handler
 	Configuration  configuration.WPWithin
+	MongoDBLogger    event.Handler
 }
 
 // NewCore Create a new Core

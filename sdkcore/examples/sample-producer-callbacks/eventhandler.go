@@ -20,3 +20,9 @@ func (eh *EventHandlerImpl) EndServiceDelivery(serviceID int, serviceDeliveryTok
 
 	fmt.Println("go event from core - end service delivery")
 }
+
+// GenericEvent used for handling generic events
+func (eh *EventHandlerImpl) GenericEvent(name string, message string, data interface{}) error {
+
+	return nil
+}

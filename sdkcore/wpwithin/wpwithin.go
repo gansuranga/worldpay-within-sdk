@@ -87,6 +87,22 @@ func Initialise(name, description string) (WPWithin, error) {
 
 	result.core = core
 
+	// MongoDBLogger Setup
+	mg, err := utils.NewMongoDBLogger()
+
+	if err != nil {
+
+		fmt.Printf("Error creating new MongoDBLogger: %s\n", err.Error())
+
+	}
+
+	// Note - we assign MongoDBLogger and also go ahead to log the events
+	// The logger handles cases when there is no MongoDB connection
+	result.core.MongoDBLogger = mg
+	genericEvent(result.core, "WPWithin.initialise", "result", result.core)
+
+	// END MongoDBLogger Setup
+
 	// Parse configuration
 	rawCfg, err := configuration.Load("wpwconfig.json")
 	wpwConfig := configuration.WPWithin{}
@@ -163,6 +179,8 @@ func (wp *wpWithinImpl) AddService(service *types.Service) error {
 
 	wp.core.Device.Services[service.ID] = service
 
+	genericEvent(wp.core, "WPWithin.AddService", "Service", service)
+
 	return nil
 }
 
@@ -179,6 +197,8 @@ func (wp *wpWithinImpl) RemoveService(service *types.Service) error {
 	if wp.core.Device.Services != nil {
 
 		delete(wp.core.Device.Services, service.ID)
+
+		genericEvent(wp.core, "WPWithin.RemoveService", "Service", service)
 	}
 
 	return nil
@@ -227,6 +247,8 @@ func (wp *wpWithinImpl) InitConsumer(scheme, hostname string, portNumber int, ur
 	}
 
 	wp.core.HTEClient = client
+
+	genericEvent(wp.core, "WPWithin.InitConsumer", "Service", clientID)
 
 	return nil
 }
@@ -302,6 +324,8 @@ func (wp *wpWithinImpl) InitProducer(merchantClientKey, merchantServiceKey strin
 
 	}
 
+	genericEvent(wp.core, "WPWithin.initProducer", "producer", svc)
+
 	return startErr
 }
 
@@ -313,6 +337,8 @@ func (wp *wpWithinImpl) GetDevice() *types.Device {
 			log.WithField("Stack", string(debug.Stack())).Errorf("Recover: WPWithin.GetDevice()")
 		}
 	}()
+
+	genericEvent(wp.core, "WPWithin.GetDevice", "device", wp.core.Device)
 
 	return wp.core.Device
 }
@@ -361,6 +387,8 @@ func (wp *wpWithinImpl) StartServiceBroadcast(timeoutMillis int) error {
 
 	}
 
+	genericEvent(wp.core, "WPWithin.StartServiceBroadcast", "message", msg)
+
 	return errBroadcast
 }
 
@@ -376,6 +404,8 @@ func (wp *wpWithinImpl) StopServiceBroadcast() {
 	}()
 
 	wp.core.SvcBroadcaster.StopBroadcast()
+
+	genericEvent(wp.core, "WPWithin.StopServiceBroadcast", "message", "stopping")
 }
 
 func (wp *wpWithinImpl) DeviceDiscovery(timeoutMillis int) ([]types.BroadcastMessage, error) {
@@ -404,6 +434,8 @@ func (wp *wpWithinImpl) DeviceDiscovery(timeoutMillis int) ([]types.BroadcastMes
 			svcResults = append(svcResults, svc)
 		}
 	}
+
+	genericEvent(wp.core, "WPWithin.DeviceDiscovery", "devices", svcResults)
 
 	return svcResults, nil
 }
@@ -434,6 +466,8 @@ func (wp *wpWithinImpl) GetServicePrices(serviceID int) ([]types.Price, error) {
 		result = append(result, price)
 	}
 
+	genericEvent(wp.core, "WPWithin.GetServicePrices", "prices", result)
+
 	return result, nil
 }
 
@@ -450,6 +484,8 @@ func (wp *wpWithinImpl) SelectService(serviceID, numberOfUnits, priceID int) (ty
 	}()
 
 	tpr, err := wp.core.HTEClient.NegotiatePrice(serviceID, priceID, numberOfUnits)
+
+	genericEvent(wp.core, "WPWithin.SelectService", "Total Price Response", tpr)
 
 	return tpr, err
 }
@@ -474,6 +510,9 @@ func (wp *wpWithinImpl) MakePayment(request types.TotalPriceResponse) (types.Pay
 	}
 
 	paymentResponse, err := wp.core.HTEClient.MakeHtePayment(request.PaymentReferenceID, request.ClientID, token)
+
+	genericEvent(wp.core, "WPWithin.MakePayment", "Payment Request", paymentResponse)
+	genericEvent(wp.core, "WPWithin.MakePayment", "Payment Response", paymentResponse)
 
 	return paymentResponse, err
 }
@@ -502,6 +541,8 @@ func (wp *wpWithinImpl) RequestServices() ([]types.ServiceDetails, error) {
 
 		result = append(result, svc)
 	}
+
+	genericEvent(wp.core, "WPWithin.RequestServices", "result", result)
 
 	return result, nil
 }
@@ -547,6 +588,8 @@ func (wp *wpWithinImpl) BeginServiceDelivery(serviceID int, serviceDeliveryToken
 
 	log.WithFields(log.Fields{"UnitsToSupply": deliveryResponse.UnitsToSupply}).Info("EndDeliveryResponse")
 
+	genericEvent(wp.core, "WPWithin.BeginServiceDelivery", "DeliveryResponse", deliveryResponse)
+
 	return deliveryResponse.ServiceDeliveryToken, nil
 }
 
@@ -577,6 +620,8 @@ func (wp *wpWithinImpl) EndServiceDelivery(serviceID int, serviceDeliveryToken t
 	}
 
 	log.WithFields(log.Fields{"UnitsJustSupplied": deliveryResponse.UnitsJustSupplied, "UnitsRemaining": deliveryResponse.UnitsRemaining}).Info("EndDeliveryResponse")
+
+	genericEvent(wp.core, "WPWithin.EndServiceDelivery", "DeliveryResponse", deliveryResponse)
 
 	return deliveryResponse.ServiceDeliveryToken, nil
 }
@@ -636,5 +681,26 @@ func doWebSocketLogSetup(cfg configuration.WPWithin) {
 
 			fmt.Printf("Error initialising WebSocket logger: %s\n", err.Error())
 		}
+	}
+}
+
+func genericEvent(core *core.Core, name string, message string, doc interface{}) {
+
+	log.Debug("wpwithin.genericEvent")
+
+	if core.MongoDBLogger != nil {
+
+		log.Debug("core.MongoDBLogger is set, will attempt to write event")
+
+		err := core.MongoDBLogger.GenericEvent("WPWithin.initialise", "result", doc)
+
+		if err != nil {
+
+			log.WithField("Error", err.Error()).Info("wpwithin.genericEvent:: Error writing event with MongoDBLogger")
+		}
+
+	} else {
+
+		log.Debug("core.MongoDBLogger is not set, not writing event")
 	}
 }
