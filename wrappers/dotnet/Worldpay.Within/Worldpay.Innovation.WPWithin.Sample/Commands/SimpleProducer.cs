@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using Common.Logging;
 
@@ -41,7 +42,7 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
         {
             _output.WriteLine("WorldpayWithin Sample Producer...");
 
-            _service.SetupDevice("Producer Example", "Example WorldpayWithin producer");
+            _service.SetupDevice(".NET Producer Example", $"Example WorldpayWithin producer running on {Dns.GetHostName()}");
 
             /*
              * Creates a simple electric car charging service, that offers a price to deliver 1 kWh of electricy for £25.
@@ -73,9 +74,9 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
 
             Log.Info("Starting service broadcast");
 
-            /* Asynchronously broadcast the service's availablility for 20 seconds before exiting.
+            /* Asynchronously broadcast the service's availablility until stopped
              */
-            _task = Task.Run(() => _service.StartServiceBroadcast(20000));
+            _task = Task.Run(() => _service.StartServiceBroadcast(0));
             return CommandResult.Success;
         }
 

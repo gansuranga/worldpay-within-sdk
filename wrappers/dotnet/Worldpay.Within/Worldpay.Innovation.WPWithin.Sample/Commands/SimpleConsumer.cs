@@ -111,16 +111,7 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
         /// <param name="svcMsg">A description of the service (device) offered that we want to connect to.</param>
         private void ConnectToDevice(WPWithinService service, ServiceMessage svcMsg)
         {
-            HceCard card = new HceCard
-                (
-                "Bilbo",
-                "Baggins",
-                "Card",
-                "5555555555554444",
-                11,
-                2018,
-                "113"
-                );
+            HceCard card = new HceCard("Bilbo", "Baggins", "Card", "5555555555554444", 11, 2018, "113");
             service.InitConsumer("http://", svcMsg.Hostname, svcMsg.PortNumber ?? 80, svcMsg.UrlPrefix, svcMsg.ServerId,
                 card);
         }
