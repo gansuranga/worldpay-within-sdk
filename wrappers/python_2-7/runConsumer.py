@@ -149,7 +149,7 @@ def run():
         else:
             print "Could not get device"
         wpw.stopRPCAgent()
-    except WPWithinGeneralException as wpge:
+    except WWTypes.WPWithinGeneralException as wpge:
         print wpge
 
 

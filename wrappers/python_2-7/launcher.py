@@ -39,6 +39,9 @@ class launcher(object):
           elif(hostOS == "win32"):
               process = self.launchWindows(path, flags)
               return process
+          elif (hostOS == "windows"):
+              process = self.launchWindows(path, flags)
+              return process
           else:
             logging.debug("Unable to launch binary on host architecture (Unsupported by launcher)(Host=" + str(hostOS) + ")")
       else:
