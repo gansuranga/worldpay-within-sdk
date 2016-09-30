@@ -33,6 +33,7 @@ const (
 // SDKFactory for creating WPWithin instances. // TODO Needs to be reworked so can be partially implemented.
 type SDKFactory interface {
 	GetDevice(name, description string) (*types.Device, error)
+	GetDeviceAlt(name, description string, persistGUID bool) (*types.Device, error)
 	GetPSPMerchant(merchantClientKey, merchantServiceKey string) (psp.PSP, error)
 	GetPSPClient() (psp.PSP, error)
 	GetSvcBroadcaster(ipv4Address string) (servicediscovery.Broadcaster, error)
@@ -55,6 +56,12 @@ func NewSDKFactory() (SDKFactory, error) {
 
 // GetDevice create a device with Name and Description
 func (factory *SDKFactoryImpl) GetDevice(name, description string) (*types.Device, error) {
+
+	return factory.GetDeviceAlt(name, description, true)
+}
+
+// GetDeviceAlt alternative get device function where UUID is not persisted/or read from the filesystem
+func (factory *SDKFactoryImpl) GetDeviceAlt(name, description string, persistGUID bool) (*types.Device, error) {
 
 	var deviceGUID string
 

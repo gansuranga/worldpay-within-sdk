@@ -40,9 +40,8 @@ type WPWithin interface {
 	SetEventHandler(handler event.Handler) error
 }
 
-// Initialise Initialise the SDK - Returns an implementation of WPWithin
-// Must provide a device name and description
-func Initialise(name, description string) (WPWithin, error) {
+// AltInitialise an alternative initialiser
+func AltInitialise(name, description string, persistGUID bool) (WPWithin, error) {
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -151,6 +150,13 @@ func Initialise(name, description string) (WPWithin, error) {
 	result.core.SvcScanner = sc
 
 	return result, nil
+}
+
+// Initialise Initialise the SDK - Returns an implementation of WPWithin
+// Must provide a device name and description
+func Initialise(name, description string) (WPWithin, error) {
+
+	return AltInitialise(name, description, true)
 }
 
 type wpWithinImpl struct {
