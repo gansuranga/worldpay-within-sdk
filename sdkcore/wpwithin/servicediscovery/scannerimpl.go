@@ -47,6 +47,7 @@ func (scanner *scannerImpl) ScanForServices(timeout int) (map[string]types.Broad
 		if err != nil {
 
 			scanner.run = false
+			return nil, err
 		}
 
 		// Defer closing connection in go routine instead of main routine as it will be closed before the go routine starts.
