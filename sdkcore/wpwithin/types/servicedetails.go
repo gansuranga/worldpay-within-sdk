@@ -2,7 +2,7 @@ package types
 
 // ServiceDetails Details of a service
 type ServiceDetails struct {
-	ServiceID          int
-	ServiceDescription string
-	ServiceName        string
+	ServiceID          int    `json:"serviceID"`
+	ServiceDescription string `json:"serviceDescription"`
+	ServiceName        string `json:"serviceName"`
 }

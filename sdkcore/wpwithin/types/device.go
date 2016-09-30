@@ -2,11 +2,11 @@ package types
 
 // Device details of a device
 type Device struct {
-	UID         string
-	Name        string
-	Description string
-	Services    map[int]*Service
-	IPv4Address string
+	UID         string           `json:"uid"`
+	Name        string           `json:"name"`
+	Description string           `json:"description"`
+	Services    map[int]*Service `json:"services"`
+	IPv4Address string           `json:"ipv4Address"`
 }
 
 // NewDevice create a new device
