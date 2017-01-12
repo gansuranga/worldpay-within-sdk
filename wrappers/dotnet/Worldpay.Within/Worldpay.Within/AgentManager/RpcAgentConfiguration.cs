@@ -163,8 +163,10 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                     return _rpcAgentPath;
                 }
                 string agentPath = ConfigurationManager.AppSettings[PathPropertyName];
+                
                 if (agentPath == null)
                 {
+                    // The RPC Agent Path isn't configured in application config, so go looking for it.
                     DirectoryInfo parent = new DirectoryInfo(".");
                     Log.InfoFormat(
                         "No {0} property found in application configuration, searching for it relative to {1}",
@@ -177,13 +179,18 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                     if (parent == null)
                     {
                         throw new Exception(
-                            $"Unable to locate {sdkDir} override with property {PathPropertyName} property in App.config");
+                            $"Unable to locate {sdkDir} (couldn't find a diredctory called ({sdkDir}), you must override with property {PathPropertyName} property in App.config");
                     }
                     _rpcAgentPath =
                         new FileInfo(string.Join(System.IO.Path.DirectorySeparatorChar.ToString(), parent.FullName,
                             "applications",
                             "rpc-agent",
                             "rpc-agent.exe")).FullName;
+                }
+                else
+                {
+                    // RPC Agent Path is configured in application config, so set this in the class to it's cached and return
+                    _rpcAgentPath = agentPath;
                 }
                 return _rpcAgentPath;
             }

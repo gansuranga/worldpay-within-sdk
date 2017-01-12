@@ -94,24 +94,27 @@ namespace Worldpay.Within.Tests
         {
             Log.InfoFormat("Attempting to launch Thrift RPC Agent {0}", RpcAgentPath);
 
-            Process thriftRpcProcess = new Process();
-            thriftRpcProcess.StartInfo = new ProcessStartInfo(RpcAgentPath, string.Join(" ",
-                "-host", RpcAgentServiceHost,
-                "-port", RpcAgentServicePort,
-                "-protocol",
-                ConfigurationManager.AppSettings[RpcAgentProtocolProperty] ?? RpcAgentProtocolPropertyDefault
-                ))
+            Process thriftRpcProcess = new Process
             {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
+                StartInfo = new ProcessStartInfo(RpcAgentPath, string.Join(" ",
+                    "-host", RpcAgentServiceHost,
+                    "-port", RpcAgentServicePort,
+                    "-protocol",
+                    ConfigurationManager.AppSettings[RpcAgentProtocolProperty] ?? RpcAgentProtocolPropertyDefault
+                ))
+                {
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                }
             };
             thriftRpcProcess.OutputDataReceived += (sender, args) => ThriftRpcAgentLog.Info(args.Data);
             thriftRpcProcess.ErrorDataReceived += (sender, args) => ThriftRpcAgentLog.Error(args.Data);
             thriftRpcProcess.Start();
             thriftRpcProcess.BeginOutputReadLine();
             thriftRpcProcess.BeginErrorReadLine();
+            _thriftRpcProcess = thriftRpcProcess;
         }
 
         public static void KillThriftRpcAgentProcess()

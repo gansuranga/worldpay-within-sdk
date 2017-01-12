@@ -58,6 +58,11 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
         /// </summary>
         public event EventHandler OnExited;
 
+
+        /// <summary>
+        /// No-op except for storing the passed config.
+        /// </summary>
+        /// <param name="config"></param>
         public RpcAgentManager(RpcAgentConfiguration config)
         {
             _config = config;
