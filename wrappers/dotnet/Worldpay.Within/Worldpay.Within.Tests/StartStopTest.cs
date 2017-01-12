@@ -1,7 +1,7 @@
-﻿using System;
-using Common.Logging;
+﻿using Common.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Worldpay.Innovation.WPWithin;
+using Worldpay.Innovation.WPWithin.AgentManager;
 
 namespace Worldpay.Within.Tests
 {
@@ -13,9 +13,24 @@ namespace Worldpay.Within.Tests
         [TestMethod]
         public void StartAndStop()
         {
-            using (WPWithinService service = new WPWithinService("localhost", 9091, 9092))
+            RpcAgentConfiguration cfg = new RpcAgentConfiguration
             {
-                Log.InfoFormat("Successfully created service {0}", service);
+                CallbackPort = 9092,
+                ServicePort = 9091,
+                ServiceHost = "localhost"
+            };
+            RpcAgentManager mgr = new RpcAgentManager(cfg);
+            mgr.StartThriftRpcAgentProcess();
+            try
+            {
+                using (WPWithinService service = new WPWithinService(cfg))
+                {
+                    Log.InfoFormat("Successfully created service {0}", service);
+                }
+            }
+            finally
+            {
+                mgr.StopThriftRpcAgentProcess();
             }
         }
     }

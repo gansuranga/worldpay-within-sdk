@@ -2,6 +2,7 @@
 using Common.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Worldpay.Innovation.WPWithin;
+using Worldpay.Innovation.WPWithin.AgentManager;
 
 namespace Worldpay.Within.Tests
 {
@@ -9,10 +10,11 @@ namespace Worldpay.Within.Tests
     /// Summary description for ConsumerTest
     /// </summary>
     [TestClass]
-    public class ConsumerTest : ThriftTest
+    public class ConsumerTest
     {
 
         private static readonly ILog Log = LogManager.GetLogger<ConsumerTest>();
+        private static RpcAgentManager _mgr;
 
         #region Additional test attributes
         //
@@ -35,17 +37,17 @@ namespace Worldpay.Within.Tests
         // public void MyTestCleanup() { }
         //
         #endregion
-
-        [ClassInitialize]
-        public static void StartThriftRpcService(TestContext context)
+        [TestInitialize]
+        public void StartThriftRpcService()
         {
-            StartThriftRpcAgentProcess(context);
+            _mgr = new RpcAgentManager(new RpcAgentConfiguration());
+            _mgr.StartThriftRpcAgentProcess();
         }
 
-        [ClassCleanup]
-        public static void StopThriftRpcService()
+        [TestCleanup]
+        public void StopThriftRpcService()
         {
-            KillThriftRpcAgentProcess();
+            _mgr.StopThriftRpcAgentProcess();
         }
 
         [TestMethod]
@@ -54,8 +56,9 @@ namespace Worldpay.Within.Tests
             string defaultDeviceName = Environment.MachineName;
             string defaultDeviceDescription =
                 $".net wrapper unit test.  Class: {this.GetType().Name}.  Method: {System.Reflection.MethodBase.GetCurrentMethod().Name}";
-            ThriftClient.SetupDevice(defaultDeviceName, defaultDeviceDescription);
-            foreach (ServiceMessage service in ThriftClient.DeviceDiscovery(20000))
+            WPWithinService thriftClient = new WPWithinService(new RpcAgentConfiguration());
+            thriftClient.SetupDevice(defaultDeviceName, defaultDeviceDescription);
+            foreach (ServiceMessage service in thriftClient.DeviceDiscovery(2000))
             {
                 Log.InfoFormat("Found service: ", service);
             }

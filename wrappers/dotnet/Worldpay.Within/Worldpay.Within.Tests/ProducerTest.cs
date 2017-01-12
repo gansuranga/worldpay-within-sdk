@@ -1,23 +1,27 @@
-﻿using Common.Logging;
+﻿using System.Collections.Generic;
+using Common.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Worldpay.Innovation.WPWithin;
+using Worldpay.Innovation.WPWithin.AgentManager;
 
 namespace Worldpay.Within.Tests
 {
     [TestClass]
-    public class ProducerTest : ThriftTest
+    public class ProducerTest
     {
         private static readonly ILog Log = LogManager.GetLogger<ProducerTest>();
+        private static RpcAgentManager _mgr;
 
 
         [TestMethod]
         public void SendSimpleMessage()
         {
-            ThriftClient.SetupDevice("DotNet RPC client", "This is coming from C# via Thrift RPC.");
+            WPWithinService thriftClient = new WPWithinService(new RpcAgentConfiguration());
+            thriftClient.SetupDevice("DotNet RPC client", "This is coming from C# via Thrift RPC.");
             Log.Info("Initialising Producer");
-            ThriftClient.InitProducer("cl_key", "srv_key");
-            ThriftClient.StartServiceBroadcast(2000);
-            var svcMsgs = ThriftClient.DeviceDiscovery(2000);
+            thriftClient.InitProducer("cl_key", "srv_key");
+            thriftClient.StartServiceBroadcast(2000);
+            IEnumerable<ServiceMessage> svcMsgs = thriftClient.DeviceDiscovery(2000);
 
             if (svcMsgs != null)
             {
@@ -34,16 +38,17 @@ namespace Worldpay.Within.Tests
             Log.Info("All done, closing transport");
         }
 
-        [ClassInitialize]
-        public static void StartThriftRpcService(TestContext context)
+        [TestInitialize]
+        public void StartThriftRpcService()
         {
-            StartThriftRpcAgentProcess(context);
+            _mgr = new RpcAgentManager(new RpcAgentConfiguration());
+            _mgr.StartThriftRpcAgentProcess();
         }
 
-        [ClassCleanup]
-        public static void StopThriftRpcService()
+        [TestCleanup]
+        public void StopThriftRpcService()
         {
-            KillThriftRpcAgentProcess();
+            _mgr.StopThriftRpcAgentProcess();
         }
     }
 }
