@@ -53,6 +53,8 @@ namespace Worldpay.Innovation.WPWithin
         /// <param name="localAgentConfiguration">Describes how the local Thrift RPC agent (the core SDK) can be communicated with.</param>
         public WPWithinService(RpcAgentConfiguration localAgentConfiguration)
         {
+            if (localAgentConfiguration == null)
+                throw new ArgumentNullException("A configuration must be supplied", nameof(localAgentConfiguration));
             InitClient(localAgentConfiguration);
             if (localAgentConfiguration.CallbackPort > 0)
             {
