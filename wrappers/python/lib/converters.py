@@ -1,3 +1,5 @@
+#pylint: disable=too-many-arguments
+
 try:
     from ttypes import *
 except ImportError:

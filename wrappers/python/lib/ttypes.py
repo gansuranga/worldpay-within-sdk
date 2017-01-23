@@ -63,6 +63,8 @@ class ServiceDetails(object):
         self.serviceId = serviceId
         self.serviceDescription = serviceDescription
 
+#pylint: disable=too-many-arguments
+
 
 class TotalPriceResponse(object):
     def __init__(self, serverId, clientId, priceId, unitsToSupply, totalPrice, paymentReferenceId, merchantClientKey):
@@ -73,6 +75,7 @@ class TotalPriceResponse(object):
         self.totalPrice = totalPrice
         self.paymentReferenceId = paymentReferenceId
         self.merchantClientKey = merchantClientKey
+        # currencyCode
 
 
 class ServiceDeliveryToken(object):

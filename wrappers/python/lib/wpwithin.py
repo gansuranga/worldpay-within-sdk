@@ -1,3 +1,5 @@
+#pylint: disable=too-many-arguments
+
 import thriftpy
 from thriftpy.rpc import make_client, make_server
 from thriftpy.protocol.binary import TBinaryProtocolFactory
@@ -119,33 +121,33 @@ class WPWithin(object):
     def beginServiceDelivery(self, serviceId, serviceDeliveryToken, unitsToSupply):
         token = ConvertToThriftServiceDeliveryToken(serviceDeliveryToken)
         try:
-            serviceDeliveryToken = self.thriftClient.beginServiceDelivery(clientId, token, unitsToSupply)
+            tokenReceived = self.thriftClient.beginServiceDelivery(serviceId, token, unitsToSupply)
         except wpt.Error as err:
             raise Error(err.message)
         else:
-            return ConvertFromThriftServiceDeliveryToken(serviceDeliveryToken)
+            return ConvertFromThriftServiceDeliveryToken(tokenReceived)
 
     def endServiceDelivery(self, serviceId, serviceDeliveryToken, unitsReceived):
         token = ConvertToThriftServiceDeliveryToken(serviceDeliveryToken)
         try:
-            serviceDeliveryToken = self.thriftClient.endServiceDelivery(clientId, token, unitsReceived)
+            tokenReceived = self.thriftClient.endServiceDelivery(serviceId, token, unitsReceived)
         except wpt.Error as err:
             raise Error(err.message)
         else:
-            return ConvertFromThriftServiceDeliveryToken(serviceDeliveryToken)
+            return ConvertFromThriftServiceDeliveryToken(tokenReceived)
 
 def runRPCAgent(port, dir="./rpc-agent/", callbackPort=None):
     return launcher.runRPCAgent(dir, port, callbackPort=callbackPort)
 
 def createClient(host, port, startRPC, startCallbackServer=False, callbackPort=None, callbackService=None, rpcDir=None):
-    
+
     if (startCallbackServer == True) and (callbackPort == None or callbackService == None):
         raise ValueError('No callback port or service provided')
 
     wpw_thrift = thriftpy.load('wpwithin.thrift', module_name="wpw_thrift")
 
     returnDict = {}
-    
+
     if startRPC:
         if rpcDir == None and startCallbackServer == None:
             proc = runRPCAgent(port)
@@ -160,7 +162,7 @@ def createClient(host, port, startRPC, startCallbackServer=False, callbackPort=N
     time.sleep(2)
     # add try ...
     TClient = make_client(wpw_thrift.WPWithin, host=host, port=port, proto_factory=TBinaryProtocolFactory(), trans_factory=TBufferedTransportFactory())
-    
+
     if startCallbackServer:
         server = make_server(callbackService, wpwithincallbacks, host=host, port=callbackPort, proto_factory=TBinaryProtocolFactory(), trans_factory=TBufferedTransportFactory()) 
         returnDict['server'] = server

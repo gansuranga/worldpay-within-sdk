@@ -1,3 +1,5 @@
+#pylint: disable=too-many-arguments
+
 import thriftpy
 
 try:
@@ -19,8 +21,8 @@ class WPWithinCallback(object):
         except wpt.Error as err:
             raise Error(err.message)
 
-    def endServiceDelivery(self, serviceId, serviceDeliveryToken, unitsToSupply):
+    def endServiceDelivery(self, serviceId, serviceDeliveryToken, unitsReceived):
         try:
-            self.thriftClient.beginServiceDelivery(self, serviceId, serviceDeliveryToken, unitsToSupply)
+            self.thriftClient.endServiceDelivery(self, serviceId, serviceDeliveryToken, unitsReceived)
         except wpt.Error as err:
             raise Error(err.message)
