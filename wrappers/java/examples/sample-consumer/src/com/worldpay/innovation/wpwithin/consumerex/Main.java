@@ -5,7 +5,9 @@ import com.worldpay.innovation.wpwithin.WPWithinWrapper;
 import com.worldpay.innovation.wpwithin.WPWithinWrapperImpl;
 import com.worldpay.innovation.wpwithin.types.*;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 public class Main {
@@ -17,7 +19,7 @@ public class Main {
 
         System.out.println("Starting Consumer Example Written in Java.");
 
-        wpw = new WPWithinWrapperImpl("127.0.0.1", 8778, true);
+        wpw = new WPWithinWrapperImpl("127.0.0.1", 10000, false);
 
         try {
 
@@ -107,7 +109,12 @@ public class Main {
         card.setType("Card");
         card.setCvc("113");
 
-        wpw.initConsumer(svcMsg.getScheme(), svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), wpwDevice.getUid(), card);
+        Map<String, String> pspConfig = new HashMap<>();
+        pspConfig.put("psp_name", "worldpayonlinepayments");
+        pspConfig.put("api_endpoint", "https://api.worldpay.com/v1");
+
+
+        wpw.initConsumer(svcMsg.getScheme(), svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), wpwDevice.getUid(), card, pspConfig);
     }
 
     private static Set<WWServiceDetails> getAvailableServices() throws WPWithinGeneralException {
