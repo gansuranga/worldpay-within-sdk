@@ -6,6 +6,8 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	devclienttypes "github.com/wptechinnovation/worldpay-within-sdk/applications/dev-client/types"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp/onlineworldpay"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types"
 )
 
@@ -148,7 +150,13 @@ func mAutoConsume() error {
 			fmt.Printf("Found Service:: (%s:%d/%s) - %s\n", services[foundServiceIdx].Hostname, services[foundServiceIdx].PortNumber, services[foundServiceIdx].URLPrefix, services[foundServiceIdx].DeviceDescription)
 
 			log.Debug("Init consumer")
-			err := sdk.InitConsumer("http://", services[foundServiceIdx].Hostname, services[foundServiceIdx].PortNumber, services[foundServiceIdx].URLPrefix, services[foundServiceIdx].ServerID, deviceProfile.DeviceEntity.Consumer.HCECard)
+
+			// Could come from a config file..
+			var pspConfig = make(map[string]string, 0)
+			pspConfig[psp.CfgPSPName] = onlineworldpay.PSPName
+			pspConfig[onlineworldpay.CfgAPIEndpoint] = "https://api.worldpay.com/v1"
+
+			err := sdk.InitConsumer("http://", services[foundServiceIdx].Hostname, services[foundServiceIdx].PortNumber, services[foundServiceIdx].URLPrefix, services[foundServiceIdx].ServerID, deviceProfile.DeviceEntity.Consumer.HCECard, pspConfig)
 			if err != nil {
 
 				return err
