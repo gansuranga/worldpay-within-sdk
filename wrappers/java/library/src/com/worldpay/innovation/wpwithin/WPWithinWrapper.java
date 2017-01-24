@@ -13,6 +13,8 @@ import com.worldpay.innovation.wpwithin.types.WWServiceDeliveryToken;
 import com.worldpay.innovation.wpwithin.types.WWServiceDetails;
 import com.worldpay.innovation.wpwithin.types.WWServiceMessage;
 import com.worldpay.innovation.wpwithin.types.WWTotalPriceResponse;
+
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -61,19 +63,19 @@ public interface WPWithinWrapper {
      * @param urlPrefix This will be the urlPrefix for which the restful interface of the producer is located at
      * @param serverId This is the unique Id of the server of the producer, provided by the service message
      * @param hceCard This is the payment credentials to configure the consumer with, which it will use to make payments
+     * @param pspConfig represent configuration for PSP integration i.e. online.worldpay.com or SecureNet
      * @throws WPWithinGeneralException
      */
-    public void initConsumer(String scheme, String hostname, Integer port, String urlPrefix, String serverId, WWHCECard hceCard) throws WPWithinGeneralException;
+    public void initConsumer(String scheme, String hostname, Integer port, String urlPrefix, String serverId, WWHCECard hceCard, Map<String, String> pspConfig) throws WPWithinGeneralException;
 
     /**
      * This initiates the device as a producer / or initialises the devices producer
      * capability.
      *
-     * @param merchantClientKey This is the online.worldpay.com client key for your test account
-     * @param merchantServiceKey This is the online.worlpday.com merchant service key (secret key) from your test account
+     * @param pspConfig represent configuration for PSP integration i.e. online.worldpay.com or SecureNet
      * @throws WPWithinGeneralException
      */
-    public void initProducer(String merchantClientKey, String merchantServiceKey) throws WPWithinGeneralException;
+    public void initProducer(Map<String, String> pspConfig) throws WPWithinGeneralException;
 
     /**
      * This is able to provide back details of the the current device that the

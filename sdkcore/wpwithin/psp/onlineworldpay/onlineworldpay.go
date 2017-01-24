@@ -211,12 +211,13 @@ func post(url string, requestBody []byte, headers map[string]string, v interface
 
 	wpErr := types.ErrorResponse{}
 
-	if err := json.Unmarshal(respBody, &wpErr); err == nil {
+	err = json.Unmarshal(respBody, &wpErr)
+	if err != nil {
 
-		log.WithFields(log.Fields{"Message": wpErr.Message, "Description": wpErr.Description, "CustomCode": wpErr.CustomCode, "HTTP Status Code": wpErr.HTTPStatusCode, "HelpUrl": wpErr.ErrorHelpURL}).Debug("** POST Response")
-
-		return fmt.Errorf("HTTP Status: %d - CustomCode: %s - Message: %s", wpErr.HTTPStatusCode, wpErr.CustomCode, wpErr.Message)
+		return err
 	}
 
-	return nil
+	log.WithFields(log.Fields{"Message": wpErr.Message, "Description": wpErr.Description, "CustomCode": wpErr.CustomCode, "HTTP Status Code": wpErr.HTTPStatusCode, "HelpUrl": wpErr.ErrorHelpURL}).Debug("** POST Response")
+
+	return fmt.Errorf("HTTP Status: %d - CustomCode: %s - Message: %s", wpErr.HTTPStatusCode, wpErr.CustomCode, wpErr.Message)
 }
