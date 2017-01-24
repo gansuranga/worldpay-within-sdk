@@ -34,7 +34,9 @@ func mNewProducer() error {
 
 	defer fmt.Println("Initialised new producer")
 
-	return sdk.InitProducer(merchantClientKey, merchantServiceKey)
+	// Could come from a config file..
+	var pspConfig = make(map[string]string, 0)
+	return sdk.InitProducer(pspConfig)
 }
 
 func mAddRoboWashService() error {
