@@ -1,11 +1,14 @@
 package core
 
 import (
+	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/hte"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp/onlineworldpay"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp/securenet"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/servicediscovery"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types/event"
@@ -33,8 +36,8 @@ const (
 // SDKFactory for creating WPWithin instances. // TODO Needs to be reworked so can be partially implemented.
 type SDKFactory interface {
 	GetDevice(name, description string) (*types.Device, error)
-	GetPSPMerchant(merchantClientKey, merchantServiceKey string) (psp.PSP, error)
-	GetPSPClient() (psp.PSP, error)
+	GetPSPMerchant(pspConfig map[string]string) (psp.PSP, error)
+	GetPSPClient(pspConfig map[string]string) (psp.PSP, error)
 	GetSvcBroadcaster(ipv4Address string) (servicediscovery.Broadcaster, error)
 	GetSvcScanner() (servicediscovery.Scanner, error)
 	GetHTE(device *types.Device, psp psp.PSP, ipv4Address, scheme string, hteCredential *hte.Credential, om hte.OrderManager, hteSvcHandler *hte.ServiceHandler) (hte.Service, error)
@@ -99,15 +102,57 @@ func (factory *SDKFactoryImpl) GetDevice(name, description string) (*types.Devic
 }
 
 // GetPSPMerchant get a new PSP implementation in context of Merchant i.e. client/service keys are set
-func (factory *SDKFactoryImpl) GetPSPMerchant(merchantClientKey, merchantServiceKey string) (psp.PSP, error) {
+func (factory *SDKFactoryImpl) GetPSPMerchant(pspConfig map[string]string) (psp.PSP, error) {
 
-	return onlineworldpay.NewMerchant(merchantClientKey, merchantServiceKey, WPOnlineAPIEndpoint)
+	if pspConfig == nil {
+
+		return nil, errors.New("PSP Config map must be set")
+	}
+
+	switch pspConfig[psp.CfgPSPName] {
+
+	case onlineworldpay.PSPName:
+		return onlineworldpay.NewMerchant(pspConfig[onlineworldpay.CfgMerchantClientKey], pspConfig[onlineworldpay.CfgMerchantServiceKey], pspConfig[onlineworldpay.CfgAPIEndpoint])
+
+	case securenet.PSPName:
+		devID, err := strconv.Atoi(pspConfig[securenet.CfgDeveloperID])
+
+		if err != nil {
+
+			return nil, fmt.Errorf("Error parsing developerID as int")
+		}
+
+		return securenet.NewSecureNetMerchant(pspConfig[securenet.CfgSecureNetID], pspConfig[securenet.CfgSecureKey], pspConfig[securenet.CfgPublicKey], pspConfig[securenet.CfgAppVersion], pspConfig[securenet.CfgAppVersion], int32(devID), pspConfig[securenet.CfgHTTPProxy])
+	}
+
+	return nil, fmt.Errorf("Unknown PSP: %s", pspConfig[psp.CfgPSPName])
 }
 
 // GetPSPClient get a new PSP implementation in context of a client i.e. only the endpoint is set
-func (factory *SDKFactoryImpl) GetPSPClient() (psp.PSP, error) {
+func (factory *SDKFactoryImpl) GetPSPClient(pspConfig map[string]string) (psp.PSP, error) {
 
-	return onlineworldpay.NewClient(WPOnlineAPIEndpoint)
+	if pspConfig == nil {
+
+		return nil, errors.New("PSP Config map must be set")
+	}
+
+	switch pspConfig[psp.CfgPSPName] {
+
+	case "worldpayonlinepayments":
+		return onlineworldpay.NewClient(pspConfig[onlineworldpay.CfgAPIEndpoint])
+
+	case "securenet":
+		devID, err := strconv.Atoi(pspConfig[securenet.CfgDeveloperID])
+
+		if err != nil {
+
+			return nil, fmt.Errorf("Error parsing developerID as int")
+		}
+
+		return securenet.NewSecureNetConsumer(pspConfig[securenet.CfgAPIEndpoint], pspConfig[securenet.CfgAppVersion], int32(devID), pspConfig[securenet.CfgHTTPProxy])
+	}
+
+	return nil, fmt.Errorf("Unknown PSP: %s", pspConfig[psp.CfgPSPName])
 }
 
 // GetSvcBroadcaster get an instance of service broadcaster

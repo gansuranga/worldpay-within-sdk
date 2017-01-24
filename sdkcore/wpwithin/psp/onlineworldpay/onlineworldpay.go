@@ -194,8 +194,11 @@ func post(url string, requestBody []byte, headers map[string]string, v interface
 	if resp.StatusCode == HTTPOK {
 
 		log.Debug(fmt.Sprintf("Response body: %s", string(respBody)))
+		err1 := json.Unmarshal(respBody, &v)
+		if err1 != nil {
 
-		return json.Unmarshal(respBody, &v)
+			return err1
+		}
 	}
 
 	wpErr := types.ErrorResponse{}

@@ -9,6 +9,8 @@ import (
 	log "github.com/Sirupsen/logrus"
 	devclienttypes "github.com/wptechinnovation/worldpay-within-sdk/applications/dev-client/types"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp/securenet"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/rpc"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types"
 )
@@ -131,9 +133,14 @@ func mLoadDeviceProfile() error {
 		return err
 	}
 
-	json.Unmarshal(file, &deviceProfile)
+	err = json.Unmarshal(file, &deviceProfile)
+	if err != nil {
+
+		fmt.Printf("Error parsing deviceProfile: %s", err.Error())
+	}
 
 	if deviceProfile.DeviceEntity != nil {
+
 		if err := initialiseDevice(deviceProfile.DeviceEntity); err != nil {
 			return err
 		}
@@ -141,6 +148,7 @@ func mLoadDeviceProfile() error {
 	}
 
 	if deviceProfile.DeviceEntity.Producer != nil {
+
 		if err := setupProducer(deviceProfile.DeviceEntity.Producer); err != nil {
 			return err
 		}
@@ -152,7 +160,20 @@ func mLoadDeviceProfile() error {
 
 func setupProducer(producer *devclienttypes.Producer) error {
 
-	if err := sdk.InitProducer(producer.ProducerConfig.PspMerchantClientKey, producer.ProducerConfig.PspMerchantServiceKey); err != nil {
+	// Could come from a config file..
+	var pspConfig = make(map[string]string, 0)
+	pspConfig[psp.CfgPSPName] = securenet.PSPName
+	pspConfig[securenet.CfgAPIEndpoint] = "https://gwapi.demo.securenet.com/api"
+	pspConfig[securenet.CfgAppVersion] = "0.1"
+	pspConfig[securenet.CfgDeveloperID] = "123"
+	pspConfig[securenet.CfgPublicKey] = "8c0ce953-455d-4c12-8d14-ff20d565e485"
+	pspConfig[securenet.CfgSecureKey] = "KZ9kWv2EPy7M"
+	pspConfig[securenet.CfgSecureNetID] = "8008609"
+	pspConfig[psp.CfgHTEPrivateKey] = "KZ9kWv2EPy7M"
+	pspConfig[psp.CfgHTEPublicKey] = "8c0ce953-455d-4c12-8d14-ff20d565e485"
+	pspConfig[securenet.CfgHTTPProxy] = "https://127.0.0.1:7001"
+
+	if err := sdk.InitProducer(pspConfig); err != nil {
 		return err
 	}
 
