@@ -61,10 +61,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ConsumerTest.cs" />
     <Compile Include="ProducerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RpcAgentManagerTest.cs" />
     <Compile Include="StartStopTest.cs" />
   </ItemGroup>
   <ItemGroup>

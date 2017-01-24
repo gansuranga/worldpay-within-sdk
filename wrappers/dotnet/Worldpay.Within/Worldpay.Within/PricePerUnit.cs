@@ -1,4 +1,5 @@
 ﻿using System;
+using Worldpay.Innovation.WPWithin.Utils;
 
 namespace Worldpay.Innovation.WPWithin
 {

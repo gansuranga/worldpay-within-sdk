@@ -1,48 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Worldpay.Innovation.WPWithin
+namespace Worldpay.Innovation.WPWithin.Utils
 {
 
-    /**
-     * Taken from http://www.jroller.com/DhavalDalal/entry/equals_hashcode_and_tostring_builders
-     * Code licensed under CC-3.0
-     */
+    /// <summary>
+    /// Convenience utility class for building good implementations of <see cref="object.ToString()"/>.
+    /// </summary>
+    /// <remarks>
+    /// Based onhttp://www.jroller.com/DhavalDalal/entry/equals_hashcode_and_tostring_builders.
+    /// Code licensed under CC-3.0.
+    /// </remarks>
+    /// <typeparam name="T">The type of objects that we are generated a string for.</typeparam>
     public class ToStringBuilder<T>
     {
-        private readonly T target;
-        private readonly string typeName;
-        private const string DELIMITER = "=";
-        private IList<string> values = new List<string>();
+        private readonly T _target;
+        private readonly string _typeName;
+        private const string Delimiter = "=";
+        private readonly IList<string> _values = new List<string>();
 
         public ToStringBuilder(T target)
         {
-            this.target = target;
-            typeName = target.GetType().Name;
+            this._target = target;
+            _typeName = target.GetType().Name;
         }
 
         public ToStringBuilder<T> Append<TProperty>(Expression<Func<T, TProperty>> propertyOrField)
         {
-            var expression = propertyOrField.Body as MemberExpression;
+            MemberExpression expression = propertyOrField.Body as MemberExpression;
             if (expression == null)
             {
                 throw new ArgumentException("Expecting Property or Field Expression");
             }
-            var name = expression.Member.Name;
-            var func = propertyOrField.Compile();
-            var returnValue = func(target);
+            string name = expression.Member.Name;
+            Func<T, TProperty> func = propertyOrField.Compile();
+            TProperty returnValue = func(_target);
             string value = (returnValue == null) ? "null" : returnValue.ToString();
-            values.Add(name + DELIMITER + value);
+            _values.Add($"{name}{Delimiter}{value}");
             return this;
         }
 
         public override string ToString()
         {
-            return typeName + ":{" + string.Join(",", values) + "}";
+            return $"{_typeName}:{{{string.Join(",", _values)}}}";
         }
     }
 }
