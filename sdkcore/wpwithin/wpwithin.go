@@ -10,6 +10,7 @@ import (
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/configuration"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/core"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/hte"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types/event"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/utils"
@@ -25,8 +26,8 @@ var Factory core.SDKFactory
 type WPWithin interface {
 	AddService(service *types.Service) error
 	RemoveService(service *types.Service) error
-	InitConsumer(scheme, hostname string, portNumber int, urlPrefix, clientID string, hceCard *types.HCECard) error
-	InitProducer(merchantClientKey, merchantServiceKey string) error
+	InitConsumer(scheme, hostname string, portNumber int, urlPrefix, clientID string, hceCard *types.HCECard, pspConfig map[string]string) error
+	InitProducer(config map[string]string) error
 	GetDevice() *types.Device
 	StartServiceBroadcast(timeoutMillis int) error
 	StopServiceBroadcast()
@@ -104,18 +105,23 @@ func Initialise(name, description string) (WPWithin, error) {
 	// END MongoDBLogger Setup
 
 	// Parse configuration
-	rawCfg, err := configuration.Load("wpwconfig.json")
+	rawCfg, err1 := configuration.Load("wpwconfig.json")
 	wpwConfig := configuration.WPWithin{}
+	if err1 != nil {
+
+		return result, err1
+	}
+
 	wpwConfig.ParseConfig(rawCfg)
 	core.Configuration = wpwConfig
 
 	doWebSocketLogSetup(core.Configuration)
 
-	dev, err := Factory.GetDevice(name, description)
+	dev, err2 := Factory.GetDevice(name, description)
 
-	if err != nil {
+	if err2 != nil {
 
-		return result, err
+		return result, err2
 	}
 
 	result.core.Device = dev
@@ -204,7 +210,7 @@ func (wp *wpWithinImpl) RemoveService(service *types.Service) error {
 	return nil
 }
 
-func (wp *wpWithinImpl) InitConsumer(scheme, hostname string, portNumber int, urlPrefix, clientID string, hceCard *types.HCECard) error {
+func (wp *wpWithinImpl) InitConsumer(scheme, hostname string, portNumber int, urlPrefix, clientID string, hceCard *types.HCECard, pspConfig map[string]string) error {
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -215,9 +221,13 @@ func (wp *wpWithinImpl) InitConsumer(scheme, hostname string, portNumber int, ur
 		}
 	}()
 
-	// Setup PSP as client
+	if pspConfig == nil {
 
-	_psp, err := Factory.GetPSPClient()
+		return errors.New("PSPConfig map must be set")
+	}
+
+	// Setup PSP as client
+	_psp, err := Factory.GetPSPClient(pspConfig)
 
 	if err != nil {
 
@@ -253,7 +263,7 @@ func (wp *wpWithinImpl) InitConsumer(scheme, hostname string, portNumber int, ur
 	return nil
 }
 
-func (wp *wpWithinImpl) InitProducer(merchantClientKey, merchantServiceKey string) error {
+func (wp *wpWithinImpl) InitProducer(pspConfig map[string]string) error {
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -265,26 +275,22 @@ func (wp *wpWithinImpl) InitProducer(merchantClientKey, merchantServiceKey strin
 
 	// Parameter validation
 
-	if merchantClientKey == "" {
+	if pspConfig == nil {
 
-		return errors.New("merchant client key should not be empty")
-	} else if merchantServiceKey == "" {
-
-		return errors.New("merchant service key should not be empty")
+		return errors.New("PSP Config map must me set")
 	}
 
 	// Start HTE initialisation tasks
-
-	psp, err := Factory.GetPSPMerchant(merchantClientKey, merchantServiceKey)
+	_psp, err := Factory.GetPSPMerchant(pspConfig)
 
 	if err != nil {
 
 		return fmt.Errorf("Unable to create psp: %q", err.Error())
 	}
 
-	wp.core.Psp = psp
+	wp.core.Psp = _psp
 
-	hteCredential, err := hte.NewHTECredential(merchantClientKey, merchantServiceKey)
+	hteCredential, err := hte.NewHTECredential(pspConfig[psp.CfgHTEPublicKey], pspConfig[psp.CfgHTEPrivateKey])
 
 	if err != nil {
 
@@ -586,7 +592,7 @@ func (wp *wpWithinImpl) BeginServiceDelivery(serviceID int, serviceDeliveryToken
 		return types.ServiceDeliveryToken{}, err
 	}
 
-	log.WithFields(log.Fields{"UnitsToSupply": deliveryResponse.UnitsToSupply}).Info("EndDeliveryResponse")
+	log.WithFields(log.Fields{"UnitsToSupply": deliveryResponse.UnitsToSupply}).Info("BeginDeliveryResponse")
 
 	genericEvent(wp.core, "WPWithin.BeginServiceDelivery", "DeliveryResponse", deliveryResponse)
 

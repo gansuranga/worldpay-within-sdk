@@ -3,7 +3,7 @@ package rpc
 import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin"
-	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/rpc/wpthrift/wpthrift_types"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/rpc/wpthrift/gen-go/wpthrift_types"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types/event"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/utils"
@@ -86,7 +86,7 @@ func (wp *WPWithinHandler) RemoveService(svc *wpthrift_types.Service) (err error
 }
 
 // InitConsumer Initialise a consumer to connect to a producer
-func (wp *WPWithinHandler) InitConsumer(scheme string, hostname string, port int32, urlPrefix string, serviceID string, hceCard *wpthrift_types.HCECard) (err error) {
+func (wp *WPWithinHandler) InitConsumer(scheme string, hostname string, port int32, urlPrefix string, serviceID string, hceCard *wpthrift_types.HCECard, pspConfig map[string]string) (err error) {
 
 	log.Debug("RPC.WPWithinHandler.InitConsumer()")
 
@@ -100,17 +100,17 @@ func (wp *WPWithinHandler) InitConsumer(scheme string, hostname string, port int
 		Cvc:        hceCard.Cvc,
 	}
 
-	return wp.wpwithin.InitConsumer(scheme, hostname, int(port), urlPrefix, serviceID, &_hceCard)
+	return wp.wpwithin.InitConsumer(scheme, hostname, int(port), urlPrefix, serviceID, &_hceCard, pspConfig)
 }
 
 // InitProducer initialise a producer
-func (wp *WPWithinHandler) InitProducer(merchantClientKey string, merchantServiceKey string) (err error) {
+func (wp *WPWithinHandler) InitProducer(pspConfig map[string]string) (err error) {
 
 	log.Debug("RPC.WPWithinHandler.InitProducer()")
 
 	go func() {
 
-		wp.wpwithin.InitProducer(merchantClientKey, merchantServiceKey)
+		wp.wpwithin.InitProducer(pspConfig)
 
 	}()
 
@@ -144,7 +144,7 @@ func (wp *WPWithinHandler) GetDevice() (r *wpthrift_types.Device, err error) {
 
 			// Convert the prices to Thrift prices
 			svcPrices := svc.Prices
-			thriftPrices := make(map[int32]wpthrift_types.Price, 0)
+			thriftPrices := make(map[int32]*wpthrift_types.Price, 0)
 
 			log.Debugf("Found %d prices for service: %s (%d)", len(svcPrices), svc.ID, svc.Name)
 
@@ -154,7 +154,7 @@ func (wp *WPWithinHandler) GetDevice() (r *wpthrift_types.Device, err error) {
 
 				for _, svcPrice := range svcPrices {
 
-					thriftPrices[int32(svcPrice.ID)] = wpthrift_types.Price{
+					thriftPrices[int32(svcPrice.ID)] = &wpthrift_types.Price{
 
 						ID:          int32(svcPrice.ID),
 						Description: svcPrice.Description,
@@ -208,7 +208,7 @@ func (wp *WPWithinHandler) StopServiceBroadcast() (err error) {
 }
 
 // DeviceDiscovery initiate a discover process to detect the presence of producer devices on the network
-func (wp *WPWithinHandler) DeviceDiscovery(timeoutMillis int32) (r map[*wpthrift_types.ServiceMessage]bool, err error) {
+func (wp *WPWithinHandler) DeviceDiscovery(timeoutMillis int32) (r map[*wpthrift_types.ServiceMessage]struct{}, err error) {
 
 	log.Debug("Begin RPC.WPWithinHandler.ServiceDiscovery()")
 
@@ -219,7 +219,7 @@ func (wp *WPWithinHandler) DeviceDiscovery(timeoutMillis int32) (r map[*wpthrift
 		return nil, err
 	}
 
-	result := make(map[*wpthrift_types.ServiceMessage]bool, 0)
+	result := make(map[*wpthrift_types.ServiceMessage]struct{}, 0)
 
 	for _, gSvcMsg := range gSvcMsgs {
 
@@ -232,7 +232,7 @@ func (wp *WPWithinHandler) DeviceDiscovery(timeoutMillis int32) (r map[*wpthrift
 			Scheme:            gSvcMsg.Scheme,
 		}
 
-		result[tmp] = true
+		result[tmp] = struct{}{}
 	}
 
 	log.Debug("End RPC.WPWithinHandler.ServiceDiscovery()")
@@ -241,7 +241,7 @@ func (wp *WPWithinHandler) DeviceDiscovery(timeoutMillis int32) (r map[*wpthrift
 }
 
 // RequestServices from a consumers perspective, request the services offered by a consumer
-func (wp *WPWithinHandler) RequestServices() (r map[*wpthrift_types.ServiceDetails]bool, err error) {
+func (wp *WPWithinHandler) RequestServices() (r map[*wpthrift_types.ServiceDetails]struct{}, err error) {
 
 	log.Debug("Begin RPC.WPWithinHandler.RequestServices()")
 
@@ -252,7 +252,7 @@ func (wp *WPWithinHandler) RequestServices() (r map[*wpthrift_types.ServiceDetai
 		return nil, err
 	}
 
-	result := make(map[*wpthrift_types.ServiceDetails]bool, 0)
+	result := make(map[*wpthrift_types.ServiceDetails]struct{}, 0)
 
 	for _, gService := range gServices {
 
@@ -261,7 +261,7 @@ func (wp *WPWithinHandler) RequestServices() (r map[*wpthrift_types.ServiceDetai
 			ServiceDescription: gService.ServiceDescription,
 		}
 
-		result[tmp] = true
+		result[tmp] = struct{}{}
 	}
 
 	log.Debug("End RPC.WPWithinHandler.RequestServices()")
@@ -270,7 +270,7 @@ func (wp *WPWithinHandler) RequestServices() (r map[*wpthrift_types.ServiceDetai
 }
 
 // GetServicePrices from a consumers perspective, get the prices for a particular service
-func (wp *WPWithinHandler) GetServicePrices(serviceID int32) (r map[*wpthrift_types.Price]bool, err error) {
+func (wp *WPWithinHandler) GetServicePrices(serviceID int32) (r map[*wpthrift_types.Price]struct{}, err error) {
 
 	log.Debug("RPC.WPWithinHandler.GetServicePrices()")
 
@@ -281,7 +281,7 @@ func (wp *WPWithinHandler) GetServicePrices(serviceID int32) (r map[*wpthrift_ty
 		return nil, err
 	}
 
-	result := make(map[*wpthrift_types.Price]bool, 0)
+	result := make(map[*wpthrift_types.Price]struct{}, 0)
 
 	for _, gSvcPrice := range gSvcPrices {
 
@@ -296,7 +296,7 @@ func (wp *WPWithinHandler) GetServicePrices(serviceID int32) (r map[*wpthrift_ty
 			UnitDescription: gSvcPrice.UnitDescription,
 		}
 
-		result[tmp] = true
+		result[tmp] = struct{}{}
 	}
 
 	return result, nil
