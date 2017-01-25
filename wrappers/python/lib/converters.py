@@ -1,5 +1,9 @@
 #pylint: disable=too-many-arguments
 
+"""
+Converters between thriftpy generated types, and wrapper types in ttypes.py
+"""
+
 try:
     from ttypes import *
 except ImportError:
@@ -17,7 +21,7 @@ def ConvertToThriftPPU(ppu):
 def ConvertToThriftPrice(price):
     ppu = ConvertToThriftPPU(price.pricePerUnit)
     return wpt.Price(id=price.id, description=price.description, pricePerUnit=ppu, unitId=price.unitId, unitDescription=price.unitDescription)
-        
+
 def ConvertToThriftService(service):
     thriftPrices = {}
     for key, value in service.prices.items():
@@ -25,10 +29,10 @@ def ConvertToThriftService(service):
     return wpt.Service(id=service.id, name=service.name, description=service.description, prices=thriftPrices)
 
 def ConvertToThriftHCECard(card):
-    return wpt.HCECard(firstName=card.firstName, lastName=card.lastName, expMonth=card.expMonth, expYear=card.expYear, cardNumber=card.cardNumber, cardType=card.cardType, cvc=card.cvc)
+    return wpt.HCECard(firstName=card.firstName, lastName=card.lastName, expMonth=card.expMonth, expYear=card.expYear, cardNumber=card.cardNumber, type=card.type, cvc=card.cvc)
 
 def ConvertToThriftTotalPriceResponse(response):
-    return wpt.TotalPriceResponse(serverId=response.serverId, clientId=response.clientId, priceId=response.priceId, unitsToSupply=response.unitsToSupply, totalPrice=response.totalPrice, paymentReferenceId=response.paymentReferenceId, merchantClientKey=response.merchantClientKey)
+    return wpt.TotalPriceResponse(serverId=response.serverId, clientId=response.clientId, priceId=response.priceId, unitsToSupply=response.unitsToSupply, totalPrice=response.totalPrice, paymentReferenceId=response.paymentReferenceId, merchantClientKey=response.merchantClientKey, currencyCode=response.currencyCode)
 
 def ConvertToThriftServiceDeliveryToken(token):
     return wpt.ServiceDeliveryToken(key=token.key, issued=token.issued, expiry=token.expiry, refundOnExpiry=token.refundOnExpiry, signature=token.signature)
@@ -38,13 +42,13 @@ def ConvertFromThriftPPU(ppu):
 
 def ConvertFromThriftPrice(price):
     ppu = ConvertFromThriftPPU(price.pricePerUnit)
-    return Price(id=price.id, description=price.description, pricePerUnit=ppu, unitId=price.unitId, unitDescription=price.unitDescription)
-        
+    return Price(priceId=price.id, description=price.description, pricePerUnit=ppu, unitId=price.unitId, unitDescription=price.unitDescription)
+
 def ConvertFromThriftService(service):
     prices = {}
     for key, value in service.prices.items():
         prices[key] = ConvertFromThriftPrice(value)
-    return Service(id=service.id, name=service.name, description=service.description, prices=prices)
+    return Service(serviceId=service.id, name=service.name, description=service.description, prices=prices)
 
 def ConvertFromThriftDevice(device):
     services = {}
@@ -59,7 +63,7 @@ def ConvertFromThriftServiceDetails(details):
     return ServiceDetails(serviceId=details.serviceId, serviceDescription=details.serviceDescription)
 
 def ConvertFromThriftTotalPriceResponse(response):
-    return TotalPriceResponse(serverId=response.serverId, clientId=response.clientId, priceId=response.priceId, unitsToSupply=response.unitsToSupply, totalPrice=response.totalPrice, paymentReferenceId=response.paymentReferenceId, merchantClientKey=response.merchantClientKey)
+    return TotalPriceResponse(serverId=response.serverId, clientId=response.clientId, priceId=response.priceId, unitsToSupply=response.unitsToSupply, totalPrice=response.totalPrice, paymentReferenceId=response.paymentReferenceId, merchantClientKey=response.merchantClientKey, currencyCode=response.currencyCode)
 
 def ConvertFromThriftServiceDeliveryToken(token):
     return ServiceDeliveryToken(key=token.key, issued=token.issued, expiry=token.expiry, refundOnExpiry=token.refundOnExpiry, signature=token.signature)

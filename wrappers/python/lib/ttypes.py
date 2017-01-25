@@ -1,3 +1,6 @@
+#pylint: disable=too-many-arguments
+
+
 class Error(Exception):
     def __init__(self, message):
         super().__init__(message)
@@ -11,8 +14,8 @@ class PricePerUnit(object):
 
 
 class Price(object):
-    def __init__(self, id, description, pricePerUnit, unitId, unitDescription):
-        self.id = id
+    def __init__(self, priceId, description, pricePerUnit, unitId, unitDescription):
+        self.id = priceId
         self.description = description
         self.pricePerUnit = pricePerUnit
         self.unitId = unitId
@@ -20,8 +23,8 @@ class Price(object):
 
 
 class Service(object):
-    def __init__(self, id, name, description, prices=None):
-        self.id = id
+    def __init__(self, serviceId, name, description, prices=None):
+        self.id = serviceId
         self.name = name
         self.description = description
         self.prices = prices
@@ -34,7 +37,7 @@ class HCECard(object):
         self.expMonth = expMonth
         self.expYear = expYear
         self.cardNumber = cardNumber
-        self.cardType = cardType
+        self.type = cardType
         self.cvc = cvc
 
 
@@ -62,8 +65,6 @@ class ServiceDetails(object):
     def __init__(self, serviceId, serviceDescription):
         self.serviceId = serviceId
         self.serviceDescription = serviceDescription
-
-#pylint: disable=too-many-arguments
 
 
 class TotalPriceResponse(object):

@@ -46,7 +46,7 @@ struct HCECard {
 	3: i32 expMonth
 	4: i32 expYear
 	5: string cardNumber
-	6: string cardType
+	6: string type
 	7: string cvc
 }
 

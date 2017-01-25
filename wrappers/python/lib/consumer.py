@@ -31,13 +31,17 @@ class SampleConsumer:
             Scheme: {0.scheme}'''.format(serviceMessages[i])
 
             print(deviceLog)
-        
+
         # Connect to first device
         return serviceMessages[0]
 
     def connectToDevice(self, serviceMessage):
+        configMap = {
+            "psp_name": "worldpayonlinepayments",
+            "api_endpoint": "https://api.worldpay.com/v1",
+        }
         try:
-            self.client.initConsumer('http://', serviceMessage.hostname, serviceMessage.portNumber, serviceMessage.urlPrefix, serviceMessage.serverId, self.hceCard)
+            self.client.initConsumer('http://', serviceMessage.hostname, serviceMessage.portNumber, serviceMessage.urlPrefix, serviceMessage.serverId, self.hceCard, configMap)
         except types.Error as err:
             print("initConsumer.callback.err: " + err.message)
             raise err
@@ -57,14 +61,14 @@ class SampleConsumer:
             print("Description: {0}".format(service.serviceDescription))
             print("----------")
             return service.serviceId
-            
+
     def getServicePrices(self, serviceId):
         try:
             prices = self.client.getServicePrices(serviceId)
         except types.Error as err:
             print("requestServicePrices.callback.err: " + err.message)
             raise err
-        
+
         if len(prices) > 0:
             price = prices[0]
             printMessage = """Price details for serviceId {0}:
@@ -103,9 +107,9 @@ class SampleConsumer:
         Payment Reference ID: {0.paymentReferenceId}
         Merchant Client Key: {0.merchantClientKey}
         ------""".format(priceResponse)
-        
+
         return priceResponse
-        
+
     def purchaseFirstServiceFirstPrice(self, numberOfUnits):
 
         serviceId = self.getAvailableServices()
@@ -123,7 +127,7 @@ class SampleConsumer:
         if response is None:
             print("Did not receive correct response to make payment")
             return None
-        
+
         printMessage = """Response from make payment:
         Server ID: {0.serverId}
         Client ID: {0.clientId}
