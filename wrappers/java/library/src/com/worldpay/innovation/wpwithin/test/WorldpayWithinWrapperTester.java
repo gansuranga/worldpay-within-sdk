@@ -12,6 +12,9 @@ import com.worldpay.innovation.wpwithin.types.WWHCECard;
 import com.worldpay.innovation.wpwithin.types.WWPrice;
 import com.worldpay.innovation.wpwithin.types.WWServiceDetails;
 import com.worldpay.innovation.wpwithin.types.WWServiceMessage;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -129,8 +132,9 @@ public class WorldpayWithinWrapperTester {
                 wwHceCard.setFirstName("Kevin");
                 wwHceCard.setLastName("Gordon");
                 wwHceCard.setType("VISA");
+                Map<String, String> pspConfig = new HashMap<>();
                 try {
-                    sdk.initConsumer("http://", svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), svcMsg.getServerId(), wwHceCard);
+                    sdk.initConsumer("http://", svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), svcMsg.getServerId(), wwHceCard, pspConfig);
                 } catch (WPWithinGeneralException ex) {
                     Logger.getLogger(WorldpayWithinWrapperTester.class.getName()).log(Level.SEVERE, "Failed to initiate consumer", ex);
                 }
