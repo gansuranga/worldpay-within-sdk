@@ -67,7 +67,7 @@ class ServiceDetails(object):
 
 
 class TotalPriceResponse(object):
-    def __init__(self, serverId, clientId, priceId, unitsToSupply, totalPrice, paymentReferenceId, merchantClientKey):
+    def __init__(self, serverId, clientId, priceId, unitsToSupply, totalPrice, paymentReferenceId, merchantClientKey, currencyCode):
         self.serverId = serverId
         self.clientId = clientId
         self.priceId = priceId
@@ -75,7 +75,7 @@ class TotalPriceResponse(object):
         self.totalPrice = totalPrice
         self.paymentReferenceId = paymentReferenceId
         self.merchantClientKey = merchantClientKey
-        # currencyCode
+        self.currencyCode = currencyCode
 
 
 class ServiceDeliveryToken(object):

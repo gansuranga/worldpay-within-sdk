@@ -17,7 +17,7 @@ service = types.Service(id=1, name="RoboWash", description="Car washed by robot"
 
 client.addService(service)
 
-client.initProducer(merchantClientKey="T_C_6a38539b-89d0-4db9-bec3-d825779c1809", merchantServiceKey="T_S_6b0f27d5-3787-4304-a596-01160c49a55d")
+client.initProducer({"merchantClientKey": "T_C_6a38539b-89d0-4db9-bec3-d825779c1809", "merchantServiceKey": "T_S_6b0f27d5-3787-4304-a596-01160c49a55d"})
 print("Start service broadcast")
 client.startServiceBroadcast(0)
 

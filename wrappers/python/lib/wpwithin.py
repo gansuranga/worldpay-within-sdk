@@ -40,16 +40,16 @@ class WPWithin(object):
         except wpt.Error as err:
             raise Error(err.message)
 
-    def initConsumer(self, scheme, hostname, port, urlPrefix, clientId, hceCard):
+    def initConsumer(self, scheme, hostname, port, urlPrefix, clientId, hceCard, pspConfig):
         card = ConvertToThriftHCECard(hceCard)
         try:
-            self.thriftClient.initConsumer(scheme, hostname, port, urlPrefix, clientId, card)
+            self.thriftClient.initConsumer(scheme, hostname, port, urlPrefix, clientId, card, pspConfig)
         except wpt.Error as err:
             raise Error(err.message)
 
-    def initProducer(self, merchantClientKey, merchantServiceKey):
+    def initProducer(self, pspConfig):
         try:
-            self.thriftClient.initProducer(merchantClientKey, merchantServiceKey)
+            self.thriftClient.initProducer(pspConfig)
         except wpt.Error as err:
             raise Error(err.message)
 
