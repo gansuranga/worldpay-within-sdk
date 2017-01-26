@@ -1,4 +1,4 @@
-import ttypes as types
+from wpwithin_python import Error
 
 
 class SampleConsumer:
@@ -10,7 +10,7 @@ class SampleConsumer:
     def get_device_details(self):
         try:
             service_messages = self.client.device_discovery(8000)
-        except types.Error as err:
+        except Error as err:
             print("deviceDiscovery.callback.err: " + err.message)
             raise err
         if len(service_messages) == 0:
@@ -48,7 +48,7 @@ class SampleConsumer:
                                       service_message.server_id,
                                       self.hce_card,
                                       psp_config)
-        except types.Error as err:
+        except Error as err:
             print("initConsumer.callback.err: " + err.message)
             raise err
         else:
@@ -57,7 +57,7 @@ class SampleConsumer:
     def get_available_services(self):
         try:
             service_details = self.client.request_services()
-        except types.Error as err:
+        except Error as err:
             print("requestServices.callback.err: " + err.message)
             raise err
         if len(service_details) > 0:
@@ -71,7 +71,7 @@ class SampleConsumer:
     def get_service_prices(self, service_id):
         try:
             prices = self.client.get_service_prices(service_id)
-        except types.Error as err:
+        except Error as err:
             print("requestServicePrices.callback.err: " + err.message)
             raise err
 
@@ -89,14 +89,14 @@ class SampleConsumer:
             """.format(service_id, price)
 
         else:
-            raise types.Error("Did not receive any service prices :/")
+            raise Error("Did not receive any service prices :/")
 
         return price
 
     def get_service_price_quote(self, service_id, number_of_units, price_id):
         try:
             price_response = self.client.select_service(service_id, number_of_units, price_id)
-        except types.Error as err:
+        except Error as err:
             print("selectService.callback.err: " + err.message)
             raise err
 
@@ -116,7 +116,7 @@ class SampleConsumer:
 
         try:
             response = self.client.make_payment(price_response)
-        except types.Error as err:
+        except Error as err:
             print("makePayment.callback.err: " + err.message)
             raise err
 

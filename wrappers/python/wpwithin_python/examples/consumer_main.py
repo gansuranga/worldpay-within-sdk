@@ -1,16 +1,15 @@
 from consumer import SampleConsumer
-import ttypes as types
-import wpwithin
+from wpwithin_python import HCECard, create_client, WPWithin
 
-hce_card = types.HCECard(first_name='Bilbo',
-                         last_name='Baggins',
-                         exp_month=11,
-                         exp_year=2018,
-                         card_number='5555555555554444',
-                         card_type='Card',
-                         cvc='113')
+hce_card = HCECard(first_name='Bilbo',
+                   last_name='Baggins',
+                   exp_month=11,
+                   exp_year=2018,
+                   card_number='5555555555554444',
+                   card_type='Card',
+                   cvc='113')
 
-out = wpwithin.create_client("127.0.0.1", 8778, True)
+out = create_client("127.0.0.1", 8778, True)
 
 client = out['client']
 agent = out['rpc']

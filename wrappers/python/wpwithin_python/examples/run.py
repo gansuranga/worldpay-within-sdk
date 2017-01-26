@@ -1,9 +1,9 @@
-#!/usr/bin/python
-import launcher
 import time
+from wpwithin_python import run_rpc_agent
+
 
 def main():
-    proc=launcher.runRPCAgent("./rpc-agent/", "9092")
+    proc=run_rpc_agent("9092", "./rpc-agent/")
     print("FIRST TASK")
     time.sleep(20)
     print("SECOND TASK")

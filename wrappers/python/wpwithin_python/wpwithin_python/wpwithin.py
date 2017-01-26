@@ -1,42 +1,46 @@
-#pylint: disable=too-many-arguments
-
+import os
+import time
+from pkg_resources import resource_filename
 import thriftpy
 from thriftpy.rpc import make_client, make_server
 from thriftpy.protocol.binary import TBinaryProtocolFactory
 from thriftpy.transport.buffered import TBufferedTransportFactory
-import launcher
-import time
-import wpwithincallbacks
 
-wptypes_thrift = thriftpy.load('wptypes.thrift', module_name="wptypes_thrift")
+from .ttypes import *
+from .converters import ConvertToThrift, ConvertFromThrift
+from .launcher import run_rpc_agent
+from .wpwithincallbacks import WPWithinCallback
+
+thrift_types_path = resource_filename(__name__, 'wptypes.thrift')
+
+wptypes_thrift = thriftpy.load(thrift_types_path,
+                               module_name="wptypes_thrift",
+                               include_dirs=[os.path.dirname(thrift_types_path)])
 
 import wptypes_thrift as wpt
 
-from ttypes import *
-from converters import *
-
 
 class WPWithin(object):
-    def __init__(self, thriftClient):
-        self.thriftClient = thriftClient
+    def __init__(self, thrift_client):
+        self.thrift_client = thrift_client
 
     def setup(self, name, description):
         try:
-            self.thriftClient.setup(name, description)
+            self.thrift_client.setup(name, description)
         except wpt.Error as err:
             raise Error(err.message)
 
     def add_service(self, svc):
         service = ConvertToThrift.service(svc)
         try:
-            self.thriftClient.addService(service)
+            self.thrift_client.addService(service)
         except wpt.Error as err:
             raise Error(err.message)
 
     def remove_service(self, svc):
         service = ConvertToThrift.service(svc)
         try:
-            self.thriftClient.removeService(service)
+            self.thrift_client.removeService(service)
         except wpt.Error as err:
             raise Error(err.message)
 
@@ -50,40 +54,40 @@ class WPWithin(object):
                       psp_config):
         card = ConvertToThrift.hce_card(hce_card)
         try:
-            self.thriftClient.initConsumer(scheme,
-                                           hostname,
-                                           port,
-                                           url_prefix,
-                                           client_id,
-                                           card,
-                                           psp_config)
+            self.thrift_client.initConsumer(scheme,
+                                            hostname,
+                                            port,
+                                            url_prefix,
+                                            client_id,
+                                            card,
+                                            psp_config)
         except wpt.Error as err:
             raise Error(err.message)
 
     def init_producer(self, psp_config):
         try:
-            self.thriftClient.initProducer(psp_config)
+            self.thrift_client.initProducer(psp_config)
         except wpt.Error as err:
             raise Error(err.message)
 
     def get_device(self):
-        return ConvertFromThrift.device(self.thriftClient.getDevice())
+        return ConvertFromThrift.device(self.thrift_client.getDevice())
 
     def start_service_broadcast(self, timeout_ms):
         try:
-            self.thriftClient.startServiceBroadcast(timeout_ms)
+            self.thrift_client.startServiceBroadcast(timeout_ms)
         except wpt.Error as err:
             raise Error(err.message)
 
     def stop_service_broadcast(self):
         try:
-            self.thriftClient.stopServiceBroadcast()
+            self.thrift_client.stopServiceBroadcast()
         except wpt.Error as err:
             raise Error(err.message)
 
     def device_discovery(self, timeout_ms):
         try:
-            service_messages = self.thriftClient.deviceDiscovery(timeout_ms)
+            service_messages = self.thrift_client.deviceDiscovery(timeout_ms)
         except wpt.Error as err:
             raise Error(err.message)
         else:
@@ -94,7 +98,7 @@ class WPWithin(object):
 
     def request_services(self):
         try:
-            service_details = self.thriftClient.requestServices()
+            service_details = self.thrift_client.requestServices()
         except wpt.Error as err:
             raise Error(err.message)
         else:
@@ -105,7 +109,7 @@ class WPWithin(object):
 
     def get_service_prices(self, service_id):
         try:
-            prices = self.thriftClient.getServicePrices(service_id)
+            prices = self.thrift_client.getServicePrices(service_id)
         except wpt.Error as err:
             raise Error(err.message)
         else:
@@ -116,7 +120,7 @@ class WPWithin(object):
 
     def select_service(self, service_id, number_of_units, price_id):
         try:
-            service = self.thriftClient.selectService(service_id, number_of_units, price_id)
+            service = self.thrift_client.selectService(service_id, number_of_units, price_id)
         except wpt.Error as err:
             raise Error(err.message)
         else:
@@ -125,7 +129,7 @@ class WPWithin(object):
     def make_payment(self, request):
         trequest = ConvertToThrift.total_price_response(request)
         try:
-            response = self.thriftClient.makePayment(trequest)
+            response = self.thrift_client.makePayment(trequest)
         except wpt.Error as err:
             raise Error(err.message)
         else:
@@ -134,7 +138,7 @@ class WPWithin(object):
     def begin_service_delivery(self, service_id, service_delivery_token, units_to_supply):
         token = ConvertToThrift.service_delivery_token(service_delivery_token)
         try:
-            token_received = self.thriftClient.beginServiceDelivery(
+            token_received = self.thrift_client.beginServiceDelivery(
                 service_id,
                 token,
                 units_to_supply)
@@ -146,15 +150,14 @@ class WPWithin(object):
     def end_service_delivery(self, service_id, service_delivery_token, units_received):
         token = ConvertToThrift.service_delivery_token(service_delivery_token)
         try:
-            token_received = self.thriftClient.endServiceDelivery(service_id, token, units_received)
+            token_received = self.thrift_client.endServiceDelivery(service_id,
+                                                                   token,
+                                                                   units_received)
         except wpt.Error as err:
             raise Error(err.message)
         else:
             return ConvertFromThrift.service_delivery_token(token_received)
 
-
-def run_rpc_agent(port, rpc_dir="./rpc-agent/", callback_port=None):
-    return launcher.run_rpc_agent(rpc_dir, port, callback_port=callback_port)
 
 def create_client(host,
                   port,
@@ -167,15 +170,18 @@ def create_client(host,
     if start_callback_server and (callback_port is None or callback_service is None):
         raise ValueError('No callback port or service provided')
 
-    wpw_thrift = thriftpy.load('wpwithin.thrift', module_name="wpw_thrift")
+    thrift_wpw_path = resource_filename(__name__, 'wpwithin.thrift')
+    wpw_thrift = thriftpy.load(thrift_wpw_path,
+                               module_name="wpw_thrift",
+                               include_dirs=[os.path.dirname(thrift_types_path)])
 
     return_dict = {}
 
     if start_rpc:
         if rpc_dir is None and not start_callback_server:
-            proc = run_rpc_agent(port)
+            proc = run_rpc_agent(port, rpc_dir="./rpc-agent/")
         elif rpc_dir is None:
-            proc = run_rpc_agent(port, callback_port=callback_port)
+            proc = run_rpc_agent(port, rpc_dir="./rpc-agent/", callback_port=callback_port)
         elif start_callback_server is None:
             proc = run_rpc_agent(port, rpc_dir=rpc_dir)
         else:
@@ -192,7 +198,7 @@ def create_client(host,
 
     if start_callback_server:
         server = make_server(callback_service,
-                             wpwithincallbacks,
+                             WPWithinCallback,
                              host=host,
                              port=callback_port,
                              proto_factory=TBinaryProtocolFactory(),

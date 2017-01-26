@@ -1,6 +1,3 @@
-#!/usr/bin/python
-## Python Launcher
-
 from subprocess import Popen, PIPE
 import sys
 import platform
@@ -26,7 +23,7 @@ def os_platform():
         out = os
     return out
 
-def run_rpc_agent(exec_path, port, callback_port=None):
+def run_rpc_agent(port, rpc_dir, callback_port=None):
     """Run RPC Agent
     Args:
         execPath (string): path to directory with rpc agent launchers
@@ -41,5 +38,5 @@ def run_rpc_agent(exec_path, port, callback_port=None):
     if callback_port is not None:
         flags += '-callbackport='+str(callback_port)
 
-    proc = Popen([exec_path + agent, flags], stdout=PIPE, stderr=PIPE)
+    proc = Popen([rpc_dir + agent, flags], stdout=PIPE, stderr=PIPE)
     return proc

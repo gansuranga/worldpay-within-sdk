@@ -4,10 +4,15 @@
 Converters between thriftpy generated types, and wrapper types in ttypes.py
 """
 
+import os
 import thriftpy
-from ttypes import *
+from pkg_resources import resource_filename
+from .ttypes import *
 
-wptypes_thrift = thriftpy.load('wptypes.thrift', module_name="wptypes_thrift")
+thrift_types_path = resource_filename(__name__, 'wptypes.thrift')
+wptypes_thrift = thriftpy.load(thrift_types_path,
+                               module_name="wptypes_thrift",
+                               include_dirs=[os.path.dirname(thrift_types_path)])
 
 import wptypes_thrift as wpt
 

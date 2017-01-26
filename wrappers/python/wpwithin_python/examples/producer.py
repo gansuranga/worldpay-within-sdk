@@ -1,10 +1,9 @@
 import signal
 import sys
-import ttypes as types
-import wpwithin
+from wpwithin_python import create_client, PricePerUnit, Price, Service
 
 
-out = wpwithin.create_client("127.0.0.1", 9090, True)
+out = create_client("127.0.0.1", 9090, True)
 client = out['client']
 agent = out['rpc']
 
@@ -21,18 +20,18 @@ psp_config = {
 
 client.init_producer(psp_config)
 
-price_per_unit = types.PricePerUnit(amount=650, currency_code="GBP")
+price_per_unit = PricePerUnit(amount=650, currency_code="GBP")
 
-rw_price = types.Price(price_id=1,
-                       description="Car Wash",
-                       price_per_unit=price_per_unit,
-                       unit_id=2,
-                       unit_description="Single wash")
+rw_price = Price(price_id=1,
+                 description="Car Wash",
+                 price_per_unit=price_per_unit,
+                 unit_id=2,
+                 unit_description="Single wash")
 
-service = types.Service(service_id=1,
-                        name="RoboWash",
-                        description="Car washed by robot",
-                        prices={1: rw_price})
+service = Service(service_id=1,
+                  name="RoboWash",
+                  description="Car washed by robot",
+                  prices={1: rw_price})
 
 client.add_service(service)
 
