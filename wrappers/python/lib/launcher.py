@@ -1,9 +1,8 @@
 #!/usr/bin/python
 ## Python Launcher
-from subprocess import call
-from subprocess import Popen,PIPE
+
+from subprocess import Popen, PIPE
 import sys
-import ast
 import platform
 
 def os_arch():
@@ -14,7 +13,7 @@ def os_arch():
         out = '64'
     else:
         out = '32'
-    return out;
+    return out
 
 def os_platform():
     """Give the platform as win, mac or linux"""
@@ -25,11 +24,10 @@ def os_platform():
         out = 'mac'
     else:
         out = os
-    return out;
+    return out
 
-def runRPCAgent(execPath, port, callbackPort=None):
+def run_rpc_agent(exec_path, port, callback_port=None):
     """Run RPC Agent
-    
     Args:
         execPath (string): path to directory with rpc agent launchers
         port (integer): port to run RPC agent on
@@ -38,10 +36,10 @@ def runRPCAgent(execPath, port, callbackPort=None):
     agent = 'rpc-agent-' + os + '-' + os_arch()
     if os == 'win':
         agent += '.exe'
-    
+
     flags = '-port='+str(port)
-    if callbackPort != None:
-        flags += '-callbackport='+str(callbackPort)
-        
-    proc=Popen([execPath + agent, flags], stdout=PIPE, stderr=PIPE)
+    if callback_port is not None:
+        flags += '-callbackport='+str(callback_port)
+
+    proc = Popen([exec_path + agent, flags], stdout=PIPE, stderr=PIPE)
     return proc

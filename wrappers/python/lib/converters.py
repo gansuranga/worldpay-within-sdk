@@ -4,70 +4,143 @@
 Converters between thriftpy generated types, and wrapper types in ttypes.py
 """
 
-try:
-    from ttypes import *
-except ImportError:
-    from .ttypes import *
-
 import thriftpy
+from ttypes import *
 
 wptypes_thrift = thriftpy.load('wptypes.thrift', module_name="wptypes_thrift")
 
 import wptypes_thrift as wpt
 
-def ConvertToThriftPPU(ppu):
-    return wpt.PricePerUnit(amount=ppu.amount, currencyCode=ppu.currencyCode)
 
-def ConvertToThriftPrice(price):
-    ppu = ConvertToThriftPPU(price.pricePerUnit)
-    return wpt.Price(id=price.id, description=price.description, pricePerUnit=ppu, unitId=price.unitId, unitDescription=price.unitDescription)
+class ConvertToThrift(object):
+    @staticmethod
+    def ppu(ppu):
+        return wpt.PricePerUnit(amount=ppu.amount,
+                                currencyCode=ppu.currency_code)
 
-def ConvertToThriftService(service):
-    thriftPrices = {}
-    for key, value in service.prices.items():
-        thriftPrices[key] = ConvertToThriftPrice(value)
-    return wpt.Service(id=service.id, name=service.name, description=service.description, prices=thriftPrices)
+    @classmethod
+    def price(cls, price):
+        ppu = cls.ppu(price.price_per_unit)
+        return wpt.Price(id=price.price_id,
+                         description=price.description,
+                         pricePerUnit=ppu,
+                         unitId=price.unit_id,
+                         unitDescription=price.unit_description)
 
-def ConvertToThriftHCECard(card):
-    return wpt.HCECard(firstName=card.firstName, lastName=card.lastName, expMonth=card.expMonth, expYear=card.expYear, cardNumber=card.cardNumber, type=card.type, cvc=card.cvc)
+    @classmethod
+    def service(cls, service):
+        thrift_prices = {}
+        for key, value in service.prices.items():
+            thrift_prices[key] = cls.price(value)
+        return wpt.Service(id=service.service_id,
+                           name=service.name,
+                           description=service.description,
+                           prices=thrift_prices)
 
-def ConvertToThriftTotalPriceResponse(response):
-    return wpt.TotalPriceResponse(serverId=response.serverId, clientId=response.clientId, priceId=response.priceId, unitsToSupply=response.unitsToSupply, totalPrice=response.totalPrice, paymentReferenceId=response.paymentReferenceId, merchantClientKey=response.merchantClientKey, currencyCode=response.currencyCode)
+    @staticmethod
+    def hce_card(card):
+        return wpt.HCECard(firstName=card.first_name,
+                           lastName=card.last_name,
+                           expMonth=card.exp_month,
+                           expYear=card.exp_year,
+                           cardNumber=card.card_number,
+                           type=card.card_type,
+                           cvc=card.cvc)
 
-def ConvertToThriftServiceDeliveryToken(token):
-    return wpt.ServiceDeliveryToken(key=token.key, issued=token.issued, expiry=token.expiry, refundOnExpiry=token.refundOnExpiry, signature=token.signature)
+    @staticmethod
+    def total_price_response(response):
+        return wpt.TotalPriceResponse(serverId=response.server_id,
+                                      clientId=response.client_id,
+                                      priceId=response.price_id,
+                                      unitsToSupply=response.units_to_supply,
+                                      totalPrice=response.total_price,
+                                      paymentReferenceId=response.payment_reference_id,
+                                      merchantClientKey=response.merchant_client_key,
+                                      currencyCode=response.currency_code)
 
-def ConvertFromThriftPPU(ppu):
-    return PricePerUnit(amount=ppu.amount, currencyCode=ppu.currencyCode)
+    @staticmethod
+    def service_delivery_token(token):
+        return wpt.ServiceDeliveryToken(key=token.key,
+                                        issued=token.issued,
+                                        expiry=token.expiry,
+                                        refundOnExpiry=token.refund_on_expiry,
+                                        signature=token.signature)
 
-def ConvertFromThriftPrice(price):
-    ppu = ConvertFromThriftPPU(price.pricePerUnit)
-    return Price(priceId=price.id, description=price.description, pricePerUnit=ppu, unitId=price.unitId, unitDescription=price.unitDescription)
 
-def ConvertFromThriftService(service):
-    prices = {}
-    for key, value in service.prices.items():
-        prices[key] = ConvertFromThriftPrice(value)
-    return Service(serviceId=service.id, name=service.name, description=service.description, prices=prices)
+class ConvertFromThrift(object):
 
-def ConvertFromThriftDevice(device):
-    services = {}
-    for key, value in device.services.items():
-        services[key] = ConvertFromThriftService(value)
-    return Device(uid=device.uid, name=device.name, description=device.description, services=services, ipv4Address=device.ipv4Address, currencyCode=device.currencyCode)
+    @staticmethod
+    def ppu(ppu):
+        return PricePerUnit(amount=ppu.amount, currency_code=ppu.currencyCode)
 
-def ConvertFromThriftServiceMessage(message):
-    return ServiceMessage(deviceDescription=message.deviceDescription, hostname=message.hostname, portNumber=message.portNumber, serverId=message.serverId, urlPrefix=message.urlPrefix, scheme=message.scheme)
+    @classmethod
+    def price(cls, price):
+        ppu = cls.ppu(price.pricePerUnit)
+        return Price(price_id=price.id,
+                     description=price.description,
+                     price_per_unit=ppu,
+                     unit_id=price.unitId,
+                     unit_description=price.unitDescription)
 
-def ConvertFromThriftServiceDetails(details):
-    return ServiceDetails(serviceId=details.serviceId, serviceDescription=details.serviceDescription)
+    @classmethod
+    def service(cls, service):
+        prices = {}
+        for key, value in service.prices.items():
+            prices[key] = cls.price(value)
+        return Service(service_id=service.id,
+                       name=service.name,
+                       description=service.description,
+                       prices=prices)
 
-def ConvertFromThriftTotalPriceResponse(response):
-    return TotalPriceResponse(serverId=response.serverId, clientId=response.clientId, priceId=response.priceId, unitsToSupply=response.unitsToSupply, totalPrice=response.totalPrice, paymentReferenceId=response.paymentReferenceId, merchantClientKey=response.merchantClientKey, currencyCode=response.currencyCode)
+    @classmethod
+    def device(cls, device):
+        services = {}
+        for key, value in device.services.items():
+            services[key] = cls.service(value)
+        return Device(uid=device.uid,
+                      name=device.name,
+                      description=device.description,
+                      services=services,
+                      ipv4address=device.ipv4Address,
+                      currency_code=device.currencyCode)
 
-def ConvertFromThriftServiceDeliveryToken(token):
-    return ServiceDeliveryToken(key=token.key, issued=token.issued, expiry=token.expiry, refundOnExpiry=token.refundOnExpiry, signature=token.signature)
+    @staticmethod
+    def service_message(message):
+        return ServiceMessage(device_description=message.deviceDescription,
+                              hostname=message.hostname,
+                              port_number=message.portNumber,
+                              server_id=message.serverId,
+                              url_prefix=message.urlPrefix,
+                              scheme=message.scheme)
 
-def ConvertFromThriftPaymentResponse(response):
-    token = ConvertFromThriftServiceDeliveryToken(response.serviceDeliveryToken)
-    return PaymentResponse(serverId=response.serverId, clientId=response.clientId, totalPaid=response.totalPaid, serviceDeliveryToken=token)
+    @staticmethod
+    def service_details(details):
+        return ServiceDetails(service_id=details.serviceId,
+                              service_description=details.serviceDescription)
+
+    @staticmethod
+    def total_price_response(response):
+        return TotalPriceResponse(server_id=response.serverId,
+                                  client_id=response.clientId,
+                                  price_id=response.priceId,
+                                  units_to_supply=response.unitsToSupply,
+                                  total_price=response.totalPrice,
+                                  payment_reference_id=response.paymentReferenceId,
+                                  merchant_client_key=response.merchantClientKey,
+                                  currency_code=response.currencyCode)
+
+    @staticmethod
+    def service_delivery_token(token):
+        return ServiceDeliveryToken(key=token.key,
+                                    issued=token.issued,
+                                    expiry=token.expiry,
+                                    refund_on_expiry=token.refundOnExpiry,
+                                    signature=token.signature)
+
+    @classmethod
+    def payment_response(cls, response):
+        token = cls.service_delivery_token(response.serviceDeliveryToken)
+        return PaymentResponse(server_id=response.serverId,
+                               client_id=response.clientId,
+                               total_paid=response.totalPaid,
+                               service_delivery_token=token)

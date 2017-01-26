@@ -26,149 +26,181 @@ class WPWithin(object):
         except wpt.Error as err:
             raise Error(err.message)
 
-    def addService(self, svc):
-        service = ConvertToThriftService(svc)
+    def add_service(self, svc):
+        service = ConvertToThrift.service(svc)
         try:
             self.thriftClient.addService(service)
         except wpt.Error as err:
             raise Error(err.message)
 
-    def removeService(self, svc):
-        service = ConvertToThriftService(svc)
+    def remove_service(self, svc):
+        service = ConvertToThrift.service(svc)
         try:
             self.thriftClient.removeService(service)
         except wpt.Error as err:
             raise Error(err.message)
 
-    def initConsumer(self, scheme, hostname, port, urlPrefix, clientId, hceCard, pspConfig):
-        card = ConvertToThriftHCECard(hceCard)
+    def init_consumer(self,
+                      scheme,
+                      hostname,
+                      port,
+                      url_prefix,
+                      client_id,
+                      hce_card,
+                      psp_config):
+        card = ConvertToThrift.hce_card(hce_card)
         try:
-            self.thriftClient.initConsumer(scheme, hostname, port, urlPrefix, clientId, card, pspConfig)
+            self.thriftClient.initConsumer(scheme,
+                                           hostname,
+                                           port,
+                                           url_prefix,
+                                           client_id,
+                                           card,
+                                           psp_config)
         except wpt.Error as err:
             raise Error(err.message)
 
-    def initProducer(self, pspConfig):
+    def init_producer(self, psp_config):
         try:
-            self.thriftClient.initProducer(pspConfig)
+            self.thriftClient.initProducer(psp_config)
         except wpt.Error as err:
             raise Error(err.message)
 
-    def getDevice(self):
-        return ConvertFromThriftDevice(self.thriftClient.getDevice())
+    def get_device(self):
+        return ConvertFromThrift.device(self.thriftClient.getDevice())
 
-    def startServiceBroadcast(self, timeoutMillis):
+    def start_service_broadcast(self, timeout_ms):
         try:
-            self.thriftClient.startServiceBroadcast(timeoutMillis)
+            self.thriftClient.startServiceBroadcast(timeout_ms)
         except wpt.Error as err:
             raise Error(err.message)
 
-    def stopServiceBroadcast(self):
+    def stop_service_broadcast(self):
         try:
             self.thriftClient.stopServiceBroadcast()
         except wpt.Error as err:
             raise Error(err.message)
 
-    def deviceDiscovery(self, timeoutMillis):
+    def device_discovery(self, timeout_ms):
         try:
-            serviceMessages = self.thriftClient.deviceDiscovery(timeoutMillis)
+            service_messages = self.thriftClient.deviceDiscovery(timeout_ms)
         except wpt.Error as err:
             raise Error(err.message)
         else:
-            svcMessages = []
-            for val in serviceMessages:
-                svcMessages.append(ConvertFromThriftServiceMessage(val))
-            return svcMessages
+            svc_messages = []
+            for val in service_messages:
+                svc_messages.append(ConvertFromThrift.service_message(val))
+            return svc_messages
 
-    def requestServices(self):
+    def request_services(self):
         try:
-            serviceDetails = self.thriftClient.requestServices()
+            service_details = self.thriftClient.requestServices()
         except wpt.Error as err:
             raise Error(err.message)
         else:
-            svcDetails = []
-            for val in serviceDetails:
-                svcDetails.append(ConvertFromThriftServiceDetails(val))
-            return svcDetails
+            svc_details = []
+            for val in service_details:
+                svc_details.append(ConvertFromThrift.service_details(val))
+            return svc_details
 
-    def getServicePrices(self, serviceId):
+    def get_service_prices(self, service_id):
         try:
-            prices = self.thriftClient.getServicePrices(serviceId)
+            prices = self.thriftClient.getServicePrices(service_id)
         except wpt.Error as err:
             raise Error(err.message)
         else:
             wprices = []
             for val in prices:
-                wprices.append(ConvertFromThriftPrice(val))
+                wprices.append(ConvertFromThrift.price(val))
             return wprices
 
-    def selectService(self, serviceId, numberOfUnits, priceId):
+    def select_service(self, service_id, number_of_units, price_id):
         try:
-            service = self.thriftClient.selectService(serviceId, numberOfUnits, priceId)
+            service = self.thriftClient.selectService(service_id, number_of_units, price_id)
         except wpt.Error as err:
             raise Error(err.message)
         else:
-            return ConvertFromThriftTotalPriceResponse(service)
+            return ConvertFromThrift.total_price_response(service)
 
-    def makePayment(self, request):
-        trequest = ConvertToThriftTotalPriceResponse(request)
+    def make_payment(self, request):
+        trequest = ConvertToThrift.total_price_response(request)
         try:
             response = self.thriftClient.makePayment(trequest)
         except wpt.Error as err:
             raise Error(err.message)
         else:
-            return ConvertFromThriftPaymentResponse(response)
+            return ConvertFromThrift.payment_response(response)
 
-    def beginServiceDelivery(self, serviceId, serviceDeliveryToken, unitsToSupply):
-        token = ConvertToThriftServiceDeliveryToken(serviceDeliveryToken)
+    def begin_service_delivery(self, service_id, service_delivery_token, units_to_supply):
+        token = ConvertToThrift.service_delivery_token(service_delivery_token)
         try:
-            tokenReceived = self.thriftClient.beginServiceDelivery(serviceId, token, unitsToSupply)
+            token_received = self.thriftClient.beginServiceDelivery(
+                service_id,
+                token,
+                units_to_supply)
         except wpt.Error as err:
             raise Error(err.message)
         else:
-            return ConvertFromThriftServiceDeliveryToken(tokenReceived)
+            return ConvertFromThrift.service_delivery_token(token_received)
 
-    def endServiceDelivery(self, serviceId, serviceDeliveryToken, unitsReceived):
-        token = ConvertToThriftServiceDeliveryToken(serviceDeliveryToken)
+    def end_service_delivery(self, service_id, service_delivery_token, units_received):
+        token = ConvertToThrift.service_delivery_token(service_delivery_token)
         try:
-            tokenReceived = self.thriftClient.endServiceDelivery(serviceId, token, unitsReceived)
+            token_received = self.thriftClient.endServiceDelivery(service_id, token, units_received)
         except wpt.Error as err:
             raise Error(err.message)
         else:
-            return ConvertFromThriftServiceDeliveryToken(tokenReceived)
+            return ConvertFromThrift.service_delivery_token(token_received)
 
-def runRPCAgent(port, dir="./rpc-agent/", callbackPort=None):
-    return launcher.runRPCAgent(dir, port, callbackPort=callbackPort)
 
-def createClient(host, port, startRPC, startCallbackServer=False, callbackPort=None, callbackService=None, rpcDir=None):
+def run_rpc_agent(port, rpc_dir="./rpc-agent/", callback_port=None):
+    return launcher.run_rpc_agent(rpc_dir, port, callback_port=callback_port)
 
-    if (startCallbackServer == True) and (callbackPort == None or callbackService == None):
+def create_client(host,
+                  port,
+                  start_rpc,
+                  start_callback_server=False,
+                  callback_port=None,
+                  callback_service=None,
+                  rpc_dir=None):
+
+    if start_callback_server and (callback_port is None or callback_service is None):
         raise ValueError('No callback port or service provided')
 
     wpw_thrift = thriftpy.load('wpwithin.thrift', module_name="wpw_thrift")
 
-    returnDict = {}
+    return_dict = {}
 
-    if startRPC:
-        if rpcDir == None and startCallbackServer == None:
-            proc = runRPCAgent(port)
-        elif rpcDir == None:
-            proc = runRPCAgent(port, callbackPort=callbackPort)
-        elif startCallbackServer == None:
-            proc = runRPCAgent(port, dir=rpcDir)
+    if start_rpc:
+        if rpc_dir is None and not start_callback_server:
+            proc = run_rpc_agent(port)
+        elif rpc_dir is None:
+            proc = run_rpc_agent(port, callback_port=callback_port)
+        elif start_callback_server is None:
+            proc = run_rpc_agent(port, rpc_dir=rpc_dir)
         else:
-            proc = runRPCAgent(port, dir=rpcDir, callbackPort=callbackPort)
-        returnDict['rpc'] = proc
+            proc = run_rpc_agent(port, rpc_dir=rpc_dir, callback_port=callback_port)
+        return_dict['rpc'] = proc
 
     time.sleep(2)
-    # add try ...
-    TClient = make_client(wpw_thrift.WPWithin, host=host, port=port, proto_factory=TBinaryProtocolFactory(), trans_factory=TBufferedTransportFactory())
 
-    if startCallbackServer:
-        server = make_server(callbackService, wpwithincallbacks, host=host, port=callbackPort, proto_factory=TBinaryProtocolFactory(), trans_factory=TBufferedTransportFactory()) 
-        returnDict['server'] = server
+    client = make_client(wpw_thrift.WPWithin,
+                         host=host,
+                         port=port,
+                         proto_factory=TBinaryProtocolFactory(),
+                         trans_factory=TBufferedTransportFactory())
 
-    if len(returnDict) > 0:
-        returnDict['client'] = WPWithin(TClient)
-        return returnDict
+    if start_callback_server:
+        server = make_server(callback_service,
+                             wpwithincallbacks,
+                             host=host,
+                             port=callback_port,
+                             proto_factory=TBinaryProtocolFactory(),
+                             trans_factory=TBufferedTransportFactory())
+        return_dict['server'] = server
 
-    return WPWithin(TClient)
+    if len(return_dict) > 0:
+        return_dict['client'] = WPWithin(client)
+        return return_dict
+
+    return WPWithin(client)
