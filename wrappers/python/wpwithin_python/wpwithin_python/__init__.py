@@ -12,4 +12,4 @@ from .ttypes import Error, \
                     ServiceDeliveryToken, \
                     PaymentResponse
 from .wpwithin import WPWithin, create_client
-from .wpwithincallbacks import WPWithinCallback
+from .wpwithincallbacks import AbstractEventListener

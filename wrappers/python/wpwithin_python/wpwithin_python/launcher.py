@@ -36,7 +36,7 @@ def run_rpc_agent(port, rpc_dir, callback_port=None):
 
     flags = '-port='+str(port)
     if callback_port is not None:
-        flags += '-callbackport='+str(callback_port)
+        flags += ' -callbackport='+str(callback_port)
 
     proc = Popen([rpc_dir + agent, flags], stdout=PIPE, stderr=PIPE)
     return proc

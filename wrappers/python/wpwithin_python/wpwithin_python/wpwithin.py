@@ -9,7 +9,6 @@ from thriftpy.transport.buffered import TBufferedTransportFactory
 from .ttypes import *
 from .converters import ConvertToThrift, ConvertFromThrift
 from .launcher import run_rpc_agent
-from .wpwithincallbacks import WPWithinCallback
 
 thrift_types_path = resource_filename(__name__, 'wptypes.thrift')
 
@@ -164,11 +163,11 @@ def create_client(host,
                   start_rpc,
                   start_callback_server=False,
                   callback_port=None,
-                  callback_service=None,
+                  event_listener=None,
                   rpc_dir=None):
 
-    if start_callback_server and (callback_port is None or callback_service is None):
-        raise ValueError('No callback port or service provided')
+    if start_callback_server and (callback_port is None or event_listener is None):
+        raise ValueError('No callback port or listener provided')
 
     thrift_wpw_path = resource_filename(__name__, 'wpwithin.thrift')
     wpw_thrift = thriftpy.load(thrift_wpw_path,
@@ -197,8 +196,8 @@ def create_client(host,
                          trans_factory=TBufferedTransportFactory())
 
     if start_callback_server:
-        server = make_server(callback_service,
-                             WPWithinCallback,
+        server = make_server(wpw_thrift.WPWithinCallback,
+                             event_listener,
                              host=host,
                              port=callback_port,
                              proto_factory=TBinaryProtocolFactory(),
