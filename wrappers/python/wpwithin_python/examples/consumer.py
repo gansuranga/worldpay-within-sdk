@@ -54,7 +54,7 @@ class SampleConsumer:
         else:
             print("Initialised consumer.")
 
-    def get_available_services(self):
+    def get_first_available_service(self):
         try:
             service_details = self.client.request_services()
         except Error as err:
@@ -62,13 +62,13 @@ class SampleConsumer:
             raise err
         if len(service_details) > 0:
             service = service_details[0]
-            print("Services:")
+            print("Service:")
             print("Id: {0}".format(service.service_id))
             print("Description: {0}".format(service.service_description))
             print("----------")
             return service.service_id
 
-    def get_service_prices(self, service_id):
+    def get_service_first_price(self, service_id):
         try:
             prices = self.client.get_service_prices(service_id)
         except Error as err:
@@ -108,9 +108,9 @@ class SampleConsumer:
 
     def purchase_first_service_first_price(self, number_of_units):
 
-        service_id = self.get_available_services()
+        service_id = self.get_first_available_service()
 
-        price_id = self.get_service_prices(service_id).price_id
+        price_id = self.get_service_first_price(service_id).price_id
 
         price_response = self.get_service_price_quote(service_id, number_of_units, price_id)
 
@@ -124,18 +124,22 @@ class SampleConsumer:
             print("Did not receive correct response to make payment")
             return None
 
-        print_message = """Response from make payment:
-        Server ID: {0.server_id}
-        Client ID: {0.client_id}
-        Total Paid: {0.total_paid}
-        Service Delivery Token:
-        \tKey: {1.key}
-        \tIssued: {1.issued}
-        \tExpiry: {1.expiry}
-        \tRefund on expiry: {1.refund_on_expiry}
-        \tSignature: {1.signature}""".format(response, response.service_delivery_token)
+        self.client.begin_service_delivery(service_id,
+                                           response.service_delivery_token,
+                                           number_of_units)
 
-        print(print_message)
+        # print_message = """Response from make payment:
+        # Server ID: {0.server_id}
+        # Client ID: {0.client_id}
+        # Total Paid: {0.total_paid}
+        # Service Delivery Token:
+        # \tKey: {1.key}
+        # \tIssued: {1.issued}
+        # \tExpiry: {1.expiry}
+        # \tRefund on expiry: {1.refund_on_expiry}
+        # \tSignature: {1.signature}""".format(response, response.service_delivery_token)
+
+        # print(print_message)
 
         print("Shutting down...")
         self.agent.kill()
