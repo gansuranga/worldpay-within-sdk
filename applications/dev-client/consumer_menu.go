@@ -227,6 +227,14 @@ func mAutoConsume() error {
 								return err
 							}
 
+							_, err = sdk.BeginServiceDelivery(serviceDetails[foundDetailsIdx].ServiceID, *payResp.ServiceDeliveryToken, 1)
+
+							if err != nil {
+
+								fmt.Println("Error calling sdk.BeginServiceDelivery()")
+								return err
+							}
+
 							fmt.Printf("Payment of %d made successfully\n", payResp.TotalPaid)
 						}
 					}
