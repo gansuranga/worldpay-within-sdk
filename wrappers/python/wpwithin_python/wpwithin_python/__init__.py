@@ -1,6 +1,15 @@
-from .converters import ConvertToThrift, ConvertFromThrift
+"""
+Python wrapper for the Worldpay Within SDK.
+
+Includes a launcher for the RPC Agent, type wrappers, service wrapper,
+interface for callbacks' event listeners and a method to create thrift client.
+
+Example apps on:
+    https://github.com/WPTechInnovation/worldpay-within-sdk/tree/feature/python-wrapper/wrappers/python/wpwithin_python/examples
+"""
+
 from .launcher import run_rpc_agent
-from .ttypes import Error, \
+from .wpwithin_types import Error, \
                     PricePerUnit, \
                     Price, \
                     Service, \
@@ -11,5 +20,6 @@ from .ttypes import Error, \
                     TotalPriceResponse, \
                     ServiceDeliveryToken, \
                     PaymentResponse
-from .wpwithin import WPWithin, create_client
-from .wpwithincallbacks import AbstractEventListener
+from .wpwithin_service import WPWithin
+from .wpwithin import create_client
+from .wpwithin_callbacks import AbstractEventListener

@@ -1,3 +1,7 @@
+"""
+Wrapper types for all structs used in the WPWithin thrift service.
+"""
+
 class Error(Exception):
     def __init__(self, message):
         super().__init__(message)

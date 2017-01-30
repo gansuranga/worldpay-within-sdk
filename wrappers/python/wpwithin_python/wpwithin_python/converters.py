@@ -7,7 +7,15 @@ Converters between thriftpy generated types, and wrapper types in ttypes.py
 import os
 import thriftpy
 from pkg_resources import resource_filename
-from .ttypes import *
+from .wpwithin_types import PricePerUnit, \
+                    Price, \
+                    Service, \
+                    Device, \
+                    ServiceMessage, \
+                    ServiceDetails, \
+                    TotalPriceResponse, \
+                    ServiceDeliveryToken, \
+                    PaymentResponse
 
 thrift_types_path = resource_filename(__name__, 'wptypes.thrift')
 wptypes_thrift = thriftpy.load(thrift_types_path,
