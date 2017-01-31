@@ -55,8 +55,8 @@
 				]
 			}],
 			"config": {
-				"pspMerchantServiceKey": "T_S_f50ecb46-ca82-44a7-9c40-421818af5996",
-				"pspMerchantClientKey": "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af"
+				"pspMerchantServiceKey": "99999",
+				"pspMerchantClientKey": "8888"
 			}
 		},
 		"consumer": null,

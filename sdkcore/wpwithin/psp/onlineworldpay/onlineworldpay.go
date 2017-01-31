@@ -49,6 +49,8 @@ func NewClient(apiEndpoint string) (psp.PSP, error) {
 // those payment credentials
 func (owp *OnlineWorldpay) GetToken(hceCredentials *wpwithin_types.HCECard, clientKey string, reusableToken bool) (string, error) {
 
+	log.Debug("begin onlineworldpay.GetToken()")
+
 	if reusableToken {
 		// TODO: CH - support reusable token by storing the value (along with merchant client key so link to a merchant) within the car so that token can be re-used if present, or created if not
 		return "", errors.New("Reusable token support not implemented")
@@ -71,6 +73,7 @@ func (owp *OnlineWorldpay) GetToken(hceCredentials *wpwithin_types.HCECard, clie
 		ClientKey:     clientKey,
 	}
 
+	log.Debug("Attempt to marshal token request to JSON")
 	bJSON, err := json.Marshal(tokenRequest)
 
 	if err != nil {
@@ -78,7 +81,7 @@ func (owp *OnlineWorldpay) GetToken(hceCredentials *wpwithin_types.HCECard, clie
 		return "", err
 	}
 
-	log.WithField("TokenRequest", string(bJSON)).Debug("POST Request Token.")
+	log.WithField("Did marshal TokenRequest JSON", string(bJSON)).Debug("POST Request Token.")
 
 	reqURL := fmt.Sprintf("%s/tokens", owp.apiEndpoint)
 
@@ -86,8 +89,12 @@ func (owp *OnlineWorldpay) GetToken(hceCredentials *wpwithin_types.HCECard, clie
 
 	log.WithFields(log.Fields{"Url": reqURL,
 		"RequestJSON": string(bJSON)}).Debug("Sending Token POST request.")
-
 	err = post(reqURL, bJSON, make(map[string]string, 0), &tokenResponse)
+
+	if err != nil {
+
+		log.WithField("Error", err).Error("Error POSTing")
+	}
 
 	return tokenResponse.Token, err
 }
@@ -191,21 +198,26 @@ func post(url string, requestBody []byte, headers map[string]string, v interface
 		return err
 	}
 
+	log.WithField("Code", resp.StatusCode).Debug("Response status code")
+	log.Debug(fmt.Sprintf("Response body: %s", string(respBody)))
+
 	if resp.StatusCode == HTTPOK {
 
-		log.Debug(fmt.Sprintf("Response body: %s", string(respBody)))
-
+		log.Debug("POST response code = HTTPOK, attempting to unmarshal and return")
 		return json.Unmarshal(respBody, &v)
 	}
 
+	log.WithField("HTTP Code", resp.StatusCode).Debug("POST response code != HTTPOK. Attepting to parse error response message")
+
 	wpErr := types.ErrorResponse{}
 
-	if err := json.Unmarshal(respBody, &wpErr); err == nil {
+	err = json.Unmarshal(respBody, &wpErr)
+	if err != nil {
 
-		log.WithFields(log.Fields{"Message": wpErr.Message, "Description": wpErr.Description, "CustomCode": wpErr.CustomCode, "HTTP Status Code": wpErr.HTTPStatusCode, "HelpUrl": wpErr.ErrorHelpURL}).Debug("** POST Response")
-
-		return fmt.Errorf("HTTP Status: %d - CustomCode: %s - Message: %s", wpErr.HTTPStatusCode, wpErr.CustomCode, wpErr.Message)
+		return err
 	}
 
-	return nil
+	log.WithFields(log.Fields{"Message": wpErr.Message, "Description": wpErr.Description, "CustomCode": wpErr.CustomCode, "HTTP Status Code": wpErr.HTTPStatusCode, "HelpUrl": wpErr.ErrorHelpURL}).Debug("** POST Response")
+
+	return fmt.Errorf("HTTP Status: %d - CustomCode: %s - Message: %s", wpErr.HTTPStatusCode, wpErr.CustomCode, wpErr.Message)
 }

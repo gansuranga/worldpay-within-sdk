@@ -40,11 +40,7 @@ func Initialise(ip string, port int, levels []log.Level) error {
 
 	log.AddHook(hook)
 
-	fmt.Println("---------------------------------------------------")
-	fmt.Println("WebSocket logger has been initialised")
-	fmt.Println("To view log output in your browser please visit")
-	fmt.Printf("http://%s:%d\n", hook.ip, hook.port)
-	fmt.Println("---------------------------------------------------")
+	log.Infof("Did set up WebSocket logger @ http://%s:%d", hook.ip, hook.port)
 
 	return nil
 }
@@ -90,7 +86,7 @@ func (hook *WSHook) wsConnect(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 
-		fmt.Println(err.Error())
+		log.WithField("Error", err).Error("Error upgrading HTTP request to WebSocket connection.")
 	}
 
 	hook.wsConn = conn

@@ -5,9 +5,10 @@
 uuid.txt
 *.log
 rpc-agent-bin
+build
 
 ##########################################################################################################
-# GO LANG GITIGNORE FROM :: 
+# GO LANG GITIGNORE FROM ::
 # 								https://github.com/github/gitignore/blob/master/Go.gitignore
 ##########################################################################################################
 
@@ -37,7 +38,7 @@ _testmain.go
 *.prof
 
 ##########################################################################################################
-# JETBRAINS GITIGNORE FROM :: 
+# JETBRAINS GITIGNORE FROM ::
 # 								https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore
 ##########################################################################################################
 

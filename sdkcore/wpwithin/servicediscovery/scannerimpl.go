@@ -2,6 +2,7 @@ package servicediscovery
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"encoding/json"
@@ -59,7 +60,12 @@ func (scanner *scannerImpl) ScanForServices(timeout int) (map[string]types.Broad
 
 		if err != nil {
 
-			log.Error(err)
+			// Want to ignore timeout errors for scanning
+			// Not an error in the sense that a timeout is expected if there is nothing broadcasted.
+			if !strings.Contains(err.Error(), "i/o timeout") {
+
+				log.Error(err)
+			}
 		}
 
 		if nRecv > 0 { /* Did we actually receive any data? */

@@ -72,8 +72,8 @@ class WPWithinWrapperImpl(object):
 	        self.getClient().setup(deviceName, deviceDescription)
 	        logging.info("SHOULD HAVE SETUP DEVICE: (" + str(deviceName) + "), (" + str(deviceDescription) + ")")
         except Exception as e:
-		    logging.info("Error - Failure to setup DEVICE in the wrapper: " + str(e))
-		    raise WWTypes.WPWithinGeneralException("Error - Failure to setup DEVICE in the wrapper: ", e)
+		    logging.info("Error - Failure to setup DEVICE in the wrapper, could be the new config file is missing - gotcha!: " + str(e))
+		    raise WWTypes.WPWithinGeneralException("Error - Failure to setup DEVICE in the wrapper, could be the new config file is missing - gotcha!: ", e)
 
     def addService(self, theService):
         try:
@@ -125,16 +125,16 @@ class WPWithinWrapperImpl(object):
             logging.info("Failed device discovery in wrapper: " + str(e))
             raise WWTypes.WPWithinGeneralException("Failed device discovery in wrapper", e)                     
 
-    def initConsumer(self, scheme, hostname, port, urlPrefix, serverId, hceCard):
+    def initConsumer(self, scheme, hostname, port, urlPrefix, serverId, hceCard, pspConfig):
         try:
-		    self.getClient().initConsumer(scheme, hostname, port, urlPrefix, serverId, ServiceAdapter.convertWWHCECard(hceCard))
+		    self.getClient().initConsumer(scheme, hostname, port, urlPrefix, serverId, ServiceAdapter.convertWWHCECard(hceCard), pspConfig)
         except Exception as e: 
             logging.info("Initiating the consumer failed in the wrapper: " + str(e))
             raise WWTypes.WPWithinGeneralException("Initiating the consumer failed in the wrapper", e)   
 
-    def initProducer(self, clientKey, serviceKey):
+    def initProducer(self, pspConfig):
         try:
-            self.getClient().initProducer(clientKey, serviceKey)
+            self.getClient().initProducer(pspConfig)
             logging.info('SHOULD HAVE INIT THE PRODUCER')
         except Exception as e: 
             logging.info("Initiating the producer failed in the wrapper: " + str(e))

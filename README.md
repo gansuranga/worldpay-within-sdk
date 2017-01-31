@@ -1,4 +1,7 @@
 # worldpay-within-sdk
+
+![Travis Ci Status](https://travis-ci.org/WPTechInnovation/worldpay-within-sdk.svg?branch=master)
+
 Worldpay Within SDK to allow payments within IoT.
 
 The core of this SDK is written in Go with a native Go interface. Along with the native Go interface is an RPC layer (Apache Thrift) to allow communication through other languages.
@@ -11,7 +14,7 @@ Currently, there are wrappers available for the following technologies:
 
 **Note 1**: Please note that if you intend to work with one of the wrapper frameworks, it is not required that you build the Go source code directly. With each release we will bundle pre-built binaries of the RPC-Agent application. The RPC-Agent is an application that starts the Thrift RPC interface into the Go SDK Core. Once this application is up and running the wrapper can communicate with the SDK Core. In the latest release of the SDK, the RPC-Agent is started automatically by the wrapper.
 
-**Note 2**: To enable payments for your instance of the SDK and applications, you will need to create an account at [Worldpay Online Payments](online.worldpay.com). Once the account is created, please navigate to *settings* -> *API Keys* and keep note of the *service key* and *client key* for later. You will need to add these keys into your sample apps when "initialising a producer".
+**Note 2**: To enable payments for your instance of the SDK and applications, you will need to create an account at [Worldpay Online Payments](http://online.worldpay.com). Once the account is created, please navigate to *settings* -> *API Keys* and keep note of the *service key* and *client key* for later. You will need to add these keys into your sample apps when "initialising a producer".
 
 ### Top level directories
 
@@ -55,10 +58,12 @@ If you wish to develop using a wrapper library then please navigate to your chos
 * Install Go dependencies: `cd applications/rpc-agent` then run: `go get ./...`
 
 ### Install the RPC agent
+* Please note that it is recommended to only build the RPC Agent for customisations of the binary. It is strongly recommended to use the RPC-Agent binaries as provided in the releases section of this repository.
 * Change directory to `cd $GOPATH/src/github.com/wptechninnovation/worldpay-within-sdk/applications/rpc-agent`
+* It is advisable to install all dependencies on one shot using `go get ./...`
 * Type `go install`
 * This should build, package up, and install the binary for the rpc-agent into your bin directory `$GOPATH/bin`
-* If there are any errors around missing packages do additional `go get <package-repo-path>`
+* It is worth noting at this point that the SDK wrappers will attempt to find RPC Agent binaries using the filenames outlined at < https://github.com/WPTechInnovation/worldpay-within-sdk/issues/116#issuecomment-277310966 > Please consider this. Alternatively one could start the RPC Agent separate of the SDK wrapper and inform the wrapper to not start the agent.
 * If there are any compile errors, it is likely you are running a version of go that is too old (we have seen this most commonly on Ubuntu Linux)
 
 ### Install the example client app

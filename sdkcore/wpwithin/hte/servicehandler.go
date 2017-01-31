@@ -327,6 +327,10 @@ func (srv *ServiceHandler) Payment(w http.ResponseWriter, r *http.Request) {
 
 			if err != nil {
 
+				log.WithFields(log.Fields{"Error": err, "totalPrice": totalPrice, "orderCurrency": orderCurrency,
+					"paymentRequest.ClientToken": paymentRequest.ClientToken, "Order descripion": orderDescription,
+					"Order UUID": _order.UUID}).Error("Unable to process payment with gateway at this time")
+
 				errorResponse := types.ErrorResponse{
 					Message: "Unable to process payment with gateway at this time",
 				}

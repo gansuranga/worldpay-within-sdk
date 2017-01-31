@@ -8,10 +8,14 @@ package com.worldpay.innovation.wpwithin.test;
 import com.worldpay.innovation.wpwithin.WPWithinGeneralException;
 import com.worldpay.innovation.wpwithin.WPWithinWrapper;
 import com.worldpay.innovation.wpwithin.WPWithinWrapperImpl;
+import com.worldpay.innovation.wpwithin.rpc.launcher.Listener;
 import com.worldpay.innovation.wpwithin.types.WWHCECard;
 import com.worldpay.innovation.wpwithin.types.WWPrice;
 import com.worldpay.innovation.wpwithin.types.WWServiceDetails;
 import com.worldpay.innovation.wpwithin.types.WWServiceMessage;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +36,7 @@ public class WorldpayWithinWrapperTester {
         // ######### SETUP RPC SERVICES ############
         String host = "127.0.0.1";
         Integer port = 9091;
-        WPWithinWrapper sdk = new WPWithinWrapperImpl(host, port, false);
+        WPWithinWrapper sdk = new WPWithinWrapperImpl(host, port, false, rpcAgentListener);
 
         try {
             //        sdk.setupDefaultDevice();
@@ -129,8 +133,9 @@ public class WorldpayWithinWrapperTester {
                 wwHceCard.setFirstName("Kevin");
                 wwHceCard.setLastName("Gordon");
                 wwHceCard.setType("VISA");
+                Map<String, String> pspConfig = new HashMap<>();
                 try {
-                    sdk.initConsumer("http://", svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), svcMsg.getServerId(), wwHceCard);
+                    sdk.initConsumer("http://", svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), svcMsg.getServerId(), wwHceCard, pspConfig);
                 } catch (WPWithinGeneralException ex) {
                     Logger.getLogger(WorldpayWithinWrapperTester.class.getName()).log(Level.SEVERE, "Failed to initiate consumer", ex);
                 }
@@ -166,7 +171,17 @@ public class WorldpayWithinWrapperTester {
         } catch (WPWithinGeneralException ex) {
             Logger.getLogger(WorldpayWithinWrapperTester.class.getName()).log(Level.SEVERE, "Test device Discovery failed", ex);
         }
-
     }
+
+    private static final Listener rpcAgentListener = new Listener() {
+        @Override
+        public void onApplicationExit(int exitCode, String stdOutput, String errOutput) {
+
+            System.out.printf("RPC Agent process did exit.");
+            System.out.printf("ExitCode: %d", exitCode);
+            System.out.printf("stdout: \n%s\n", stdOutput);
+            System.out.printf("stderr: \n%s\n", errOutput);
+        }
+    };
 
 }

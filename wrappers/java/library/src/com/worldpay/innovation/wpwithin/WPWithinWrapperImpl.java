@@ -43,12 +43,12 @@ public class WPWithinWrapperImpl implements WPWithinWrapper {
     private EventServer eventServer;
     private Launcher launcher;
 
-    public WPWithinWrapperImpl(String host, Integer port, boolean startRPCAgent) {
+    public WPWithinWrapperImpl(String host, Integer port, boolean startRPCAgent, Listener launcherListener) {
 
-        this(host, port, startRPCAgent, null, 0);
+        this(host, port, startRPCAgent, null, 0, launcherListener);
     }
 
-    public WPWithinWrapperImpl(String rpcHost, Integer rpcPort, boolean startRPCAgent, EventListener eventListener, int rpcCallbackPort){
+    public WPWithinWrapperImpl(String rpcHost, Integer rpcPort, boolean startRPCAgent, EventListener eventListener, int rpcCallbackPort, Listener launcherListener){
 
         this.hostConfig = rpcHost;
         this.portConfig = rpcPort;
@@ -72,7 +72,7 @@ public class WPWithinWrapperImpl implements WPWithinWrapper {
 
         if(startRPCAgent) {
 
-            startRPCAgent(rpcPort, rpcCallbackPort);
+            startRPCAgent(rpcPort, rpcCallbackPort, launcherListener);
         }
 
         setClientIfNotSet();
@@ -140,9 +140,9 @@ public class WPWithinWrapperImpl implements WPWithinWrapper {
     }
 
     @Override
-    public void initConsumer(String scheme, String hostname, Integer port, String urlPrefix, String serverId, WWHCECard hceCard) throws WPWithinGeneralException {
+    public void initConsumer(String scheme, String hostname, Integer port, String urlPrefix, String serverId, WWHCECard hceCard, Map<String, String> pspConfig) throws WPWithinGeneralException {
         try {
-            getClient().initConsumer(scheme, hostname, port, urlPrefix, serverId, HCECardAdapter.convertWWHCECard(hceCard));
+            getClient().initConsumer(scheme, hostname, port, urlPrefix, serverId, HCECardAdapter.convertWWHCECard(hceCard), pspConfig);
         } catch (TException ex) {
             Logger.getLogger(WPWithinWrapperImpl.class.getName()).log(Level.SEVERE, "Initiating the consumer failed in the wrapper", ex);
             throw new WPWithinGeneralException("Initiating the consumer failed in the wrapper");
@@ -150,9 +150,9 @@ public class WPWithinWrapperImpl implements WPWithinWrapper {
     }
 
     @Override
-    public void initProducer(String merchantClientKey, String merchantServiceKey) throws WPWithinGeneralException {
+    public void initProducer(Map<String, String> pspConfig) throws WPWithinGeneralException {
         try {
-            getClient().initProducer(merchantClientKey, merchantServiceKey);
+            getClient().initProducer(pspConfig);
         } catch (TException ex) {
             Logger.getLogger(WPWithinWrapperImpl.class.getName()).log(Level.SEVERE, "Initiating the producer failed in the wrapper", ex);
             throw new WPWithinGeneralException("Initiating the producer failed in the wrapper");
@@ -284,67 +284,35 @@ public class WPWithinWrapperImpl implements WPWithinWrapper {
         }
     }
 
-    private void startRPCAgent(int port, int callbackPort) {
+    private void startRPCAgent(int port, int callbackPort, Listener launcherListener) {
 
         String flagLogfile = "wpwithin.log";
-        String flagLogLevels = "debug,error,info,warn,fatal";
+        String flagLogLevels = "debug,error,info,warn,fatal,panic";
         String flagCallbackPort = callbackPort > 0 ? "-callbackport="+callbackPort : "";
-        String binBase = System.getenv("WPWBIN") == null ? "./rpc-agent-bin" : System.getenv("WPWBIN");
+        String binBase = System.getenv("WPW_HOME") == null ? "./rpc-agent-bin" : String.format("%s/bin", System.getenv("WPW_HOME"));
 
         launcher = new Launcher();
 
         Map<OS, PlatformConfig> launchConfig = new HashMap<>(3);
 
         PlatformConfig winConfig = new PlatformConfig();
-        winConfig.setCommand(Architecture.IA32, String.format("%s/rpc-agent-win-32 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
-        winConfig.setCommand(Architecture.X86_64, String.format("%s/rpc-agent-win-64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
-        winConfig.setCommand(Architecture.ARM, String.format("%s/rpc-agent-win-arm -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        winConfig.setCommand(Architecture.IA32, String.format("%s/rpc-agent-windows-386 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        winConfig.setCommand(Architecture.X86_64, String.format("%s/rpc-agent-windows-amd64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
         launchConfig.put(OS.WINDOWS, winConfig);
 
         PlatformConfig linuxConfig = new PlatformConfig();
-        linuxConfig.setCommand(Architecture.IA32, String.format("%s/rpc-agent-linux-32 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
-        linuxConfig.setCommand(Architecture.X86_64, String.format("%s/rpc-agent-linux-64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
-        linuxConfig.setCommand(Architecture.ARM, String.format("%s/rpc-agent-linux-arm -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        linuxConfig.setCommand(Architecture.IA32, String.format("%s/rpc-agent-linux-386 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        linuxConfig.setCommand(Architecture.X86_64, String.format("%s/rpc-agent-linux-amd64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        linuxConfig.setCommand(Architecture.ARM32, String.format("%s/rpc-agent-linux-arm32 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        linuxConfig.setCommand(Architecture.ARM64, String.format("%s/rpc-agent-linux-arm64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
         launchConfig.put(OS.LINUX, linuxConfig);
 
 
         PlatformConfig macConfig = new PlatformConfig();
-        macConfig.setCommand(Architecture.IA32, String.format("%s/rpc-agent/rpc-agent-mac-32 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
-        macConfig.setCommand(Architecture.X86_64, String.format("%s/rpc-agent-mac-64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
-        macConfig.setCommand(Architecture.ARM, String.format("%s/rpc-agent-mac-arm -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        macConfig.setCommand(Architecture.IA32, String.format("%s/rpc-agent/rpc-agent-darwin-386 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        macConfig.setCommand(Architecture.X86_64, String.format("%s/rpc-agent-darwin-amd64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
         launchConfig.put(OS.MAC, macConfig);
 
-
-        Listener listener = new Listener() {
-
-            @Override
-            public void onApplicationExit(int exitCode, String stdOutput, String errOutput) {
-
-                System.out.printf("RPC Agent did exit with code: %d\n", exitCode);
-
-                try {
-
-                    String output = launcher.getStdOutput();
-                    String error = launcher.getErrorOutput();
-
-                    System.out.println("Output: " + output);
-                    System.out.println("Error: " + error);
-
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        try {
-
-            launcher.startProcess(launchConfig, listener);
-
-        } catch (WPWithinGeneralException ioe) {
-
-            ioe.printStackTrace();
-        }
+        launcher.startProcess(launchConfig, launcherListener);
     }
 }

@@ -1,11 +1,15 @@
 package com.worldpay.innovation.wpwithin.consumerex;
 
+import com.worldpay.innovation.wpwithin.PSPConfig;
 import com.worldpay.innovation.wpwithin.WPWithinGeneralException;
 import com.worldpay.innovation.wpwithin.WPWithinWrapper;
 import com.worldpay.innovation.wpwithin.WPWithinWrapperImpl;
+import com.worldpay.innovation.wpwithin.rpc.launcher.Listener;
 import com.worldpay.innovation.wpwithin.types.*;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 public class Main {
@@ -17,7 +21,7 @@ public class Main {
 
         System.out.println("Starting Consumer Example Written in Java.");
 
-        wpw = new WPWithinWrapperImpl("127.0.0.1", 8778, true);
+        wpw = new WPWithinWrapperImpl("127.0.0.1", 10001, true, rpcAgentListener);
 
         try {
 
@@ -107,7 +111,19 @@ public class Main {
         card.setType("Card");
         card.setCvc("113");
 
-        wpw.initConsumer(svcMsg.getScheme(), svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), wpwDevice.getUid(), card);
+        Map<String, String> pspConfig = new HashMap<>();
+
+        // Worldpay Online Payments
+//        pspConfig.put(PSPConfig.PSP_NAME, PSPConfig.WORLDPAY_ONLINE_PAYMENTS);
+//        pspConfig.put(PSPConfig.API_ENDPOINT, "https://api.worldpay.com/v1");
+
+        // Worldpay Total US / SecureNet
+        pspConfig.put(PSPConfig.PSP_NAME, PSPConfig.SECURE_NET);
+        pspConfig.put(PSPConfig.API_ENDPOINT, "https://gwapi.demo.securenet.com/api");
+        pspConfig.put(PSPConfig.APP_VERSION, "0.1");
+        pspConfig.put(PSPConfig.DEVELOPER_ID, "12345678");
+
+        wpw.initConsumer(svcMsg.getScheme(), svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), wpwDevice.getUid(), card, pspConfig);
     }
 
     private static Set<WWServiceDetails> getAvailableServices() throws WPWithinGeneralException {
@@ -230,4 +246,15 @@ public class Main {
 
         wpw.endServiceDelivery(serviceID, token, unitsReceived);
     }
+
+    private static final Listener rpcAgentListener = new Listener() {
+        @Override
+        public void onApplicationExit(int exitCode, String stdOutput, String errOutput) {
+
+            System.out.printf("RPC Agent process did exit.");
+            System.out.printf("ExitCode: %d", exitCode);
+            System.out.printf("stdout: \n%s\n", stdOutput);
+            System.out.printf("stderr: \n%s\n", errOutput);
+        }
+    };
 }
