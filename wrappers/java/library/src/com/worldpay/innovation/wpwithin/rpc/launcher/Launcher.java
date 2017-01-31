@@ -51,6 +51,23 @@ public class Launcher {
                     }
                 }).start();
 
+                // Here we will pause for 0.5 seconds to allow the agent to start up and set up the server listener
+                // The reason is that I think there is a race condition where the process has been started and this function returns
+                // but the RPC Agent hasn't yet set up the socket listener to accept connections, but in the mean time this Java
+                // application is proceeding forward in it's flow and attempts to connect to the RPC Agent server, which sometimes has not
+                // yet been setup, in which case results in a refused connection exception.
+
+                // You may ask why this sleep block is here an not somewhere else?
+                // It's because this particular function block is responsible for starting the RPC Agent, which appears to
+                // require 500ms to "warm up". This function is also responsible for ensuring a state where the application can
+                // connect to the RPC Agent once this "start" function returns.
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ie) {
+
+                    ie.printStackTrace();
+                }
+
             } catch (IOException ioe) {
 
                 ioe.printStackTrace();
