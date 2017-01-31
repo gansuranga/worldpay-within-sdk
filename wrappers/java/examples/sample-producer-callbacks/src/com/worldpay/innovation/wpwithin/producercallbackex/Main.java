@@ -5,6 +5,7 @@ import com.worldpay.innovation.wpwithin.WPWithinGeneralException;
 import com.worldpay.innovation.wpwithin.WPWithinWrapper;
 import com.worldpay.innovation.wpwithin.WPWithinWrapperImpl;
 import com.worldpay.innovation.wpwithin.eventlistener.EventListener;
+import com.worldpay.innovation.wpwithin.rpc.launcher.Listener;
 import com.worldpay.innovation.wpwithin.types.WWPrice;
 import com.worldpay.innovation.wpwithin.types.WWPricePerUnit;
 import com.worldpay.innovation.wpwithin.types.WWService;
@@ -21,8 +22,7 @@ public class Main {
 
             System.out.println("WorldpayWithin Sample Producer...");
 
-            WPWithinWrapper wpw = new WPWithinWrapperImpl("127.0.0.1", 10000, false, wpWithinEventListener, 10001);
-//            WPWithinWrapper wpw = new WPWithinWrapperImpl("127.0.0.1", 10000, false);
+            WPWithinWrapper wpw = new WPWithinWrapperImpl("127.0.0.1", 10000, true, wpWithinEventListener, 10001, rpcAgentListener);
 
             wpw.setup("Producer Example", "Example WorldpayWithin producer");
 
@@ -103,6 +103,17 @@ public class Main {
 
                 e.printStackTrace();
             }
+        }
+    };
+
+    private static final Listener rpcAgentListener = new Listener() {
+        @Override
+        public void onApplicationExit(int exitCode, String stdOutput, String errOutput) {
+
+            System.out.printf("RPC Agent process did exit.");
+            System.out.printf("ExitCode: %d", exitCode);
+            System.out.printf("stdout: \n%s\n", stdOutput);
+            System.out.printf("stderr: \n%s\n", errOutput);
         }
     };
 }

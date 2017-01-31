@@ -43,12 +43,12 @@ public class WPWithinWrapperImpl implements WPWithinWrapper {
     private EventServer eventServer;
     private Launcher launcher;
 
-    public WPWithinWrapperImpl(String host, Integer port, boolean startRPCAgent) {
+    public WPWithinWrapperImpl(String host, Integer port, boolean startRPCAgent, Listener launcherListener) {
 
-        this(host, port, startRPCAgent, null, 0);
+        this(host, port, startRPCAgent, null, 0, launcherListener);
     }
 
-    public WPWithinWrapperImpl(String rpcHost, Integer rpcPort, boolean startRPCAgent, EventListener eventListener, int rpcCallbackPort){
+    public WPWithinWrapperImpl(String rpcHost, Integer rpcPort, boolean startRPCAgent, EventListener eventListener, int rpcCallbackPort, Listener launcherListener){
 
         this.hostConfig = rpcHost;
         this.portConfig = rpcPort;
@@ -72,7 +72,7 @@ public class WPWithinWrapperImpl implements WPWithinWrapper {
 
         if(startRPCAgent) {
 
-            startRPCAgent(rpcPort, rpcCallbackPort);
+            startRPCAgent(rpcPort, rpcCallbackPort, launcherListener);
         }
 
         setClientIfNotSet();
@@ -284,7 +284,7 @@ public class WPWithinWrapperImpl implements WPWithinWrapper {
         }
     }
 
-    private void startRPCAgent(int port, int callbackPort) {
+    private void startRPCAgent(int port, int callbackPort, Listener launcherListener) {
 
         String flagLogfile = "wpwithin.log";
         String flagLogLevels = "debug,error,info,warn,fatal";
@@ -314,37 +314,6 @@ public class WPWithinWrapperImpl implements WPWithinWrapper {
         macConfig.setCommand(Architecture.ARM, String.format("%s/rpc-agent-mac-arm -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
         launchConfig.put(OS.MAC, macConfig);
 
-
-        Listener listener = new Listener() {
-
-            @Override
-            public void onApplicationExit(int exitCode, String stdOutput, String errOutput) {
-
-                System.out.printf("RPC Agent did exit with code: %d\n", exitCode);
-
-                try {
-
-                    String output = launcher.getStdOutput();
-                    String error = launcher.getErrorOutput();
-
-                    System.out.println("Output: " + output);
-                    System.out.println("Error: " + error);
-
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        try {
-
-            launcher.startProcess(launchConfig, listener);
-
-        } catch (WPWithinGeneralException ioe) {
-
-            ioe.printStackTrace();
-        }
+        launcher.startProcess(launchConfig, launcherListener);
     }
 }
