@@ -31,7 +31,7 @@ def connectToDevice(svcMsg): # throws WPWithinGeneralException {
     card.setExpYear(2018)
     card.setType("Card")
     card.setCvc("113")
-    wpw.initConsumer("http://", svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), svcMsg.getServerId(), card)
+    wpw.initConsumer("http://", svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), svcMsg.getServerId(), card, {"psp_name":"worldpayonlinepayments","api_endpoint":"https://api.worldpay.com/v1"})
 
 def getAvailableServices(): #throws WPWithinGeneralException {
     services = wpw.requestServices()
