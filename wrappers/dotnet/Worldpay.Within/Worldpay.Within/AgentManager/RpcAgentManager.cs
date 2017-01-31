@@ -36,7 +36,7 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
         private static readonly ILog ThriftRpcLog = LogManager.GetLogger("ThriftRpcAgent");
 
         private Process _thriftRpcProcess;
-        private RpcAgentConfiguration _config;
+        private readonly RpcAgentConfiguration _config;
 
         /// <summary>
         ///     Invoked whenever a message is sent to the RPC Agent process's standard output stream.
@@ -58,6 +58,11 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
         /// </summary>
         public event EventHandler OnExited;
 
+
+        /// <summary>
+        /// No-op except for storing the passed config.
+        /// </summary>
+        /// <param name="config"></param>
         public RpcAgentManager(RpcAgentConfiguration config)
         {
             _config = config;

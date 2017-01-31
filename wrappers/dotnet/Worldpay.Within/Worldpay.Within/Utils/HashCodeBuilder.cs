@@ -1,24 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Worldpay.Innovation.WPWithin
+namespace Worldpay.Innovation.WPWithin.Utils
 {
-    /**
-      * Taken from http://www.jroller.com/DhavalDalal/entry/equals_hashcode_and_tostring_builders
-      * Code licensed under CC-3.0
-      */
+    /// <summary>
+    /// Convenience utility class for building good implementations of <see cref="object.GetHashCode()"/>.
+    /// </summary>
+    /// <remarks>
+    /// Based on http://www.jroller.com/DhavalDalal/entry/equals_hashcode_and_tostring_builders.
+    /// Code licensed under CC-3.0.
+    /// </remarks>
+    /// <typeparam name="T">The type of objects that we want the hash code for.</typeparam>
     public class HashCodeBuilder<T>
     {
-        private readonly T target;
-        private int hashCode = 17;
+        private readonly T _target;
+        private int _hashCode = 17;
 
         public HashCodeBuilder(T target)
         {
-            this.target = target;
+            this._target = target;
         }
 
         public HashCodeBuilder<T> With<TProperty>(Expression<Func<T, TProperty>> propertyOrField)
@@ -29,18 +29,12 @@ namespace Worldpay.Innovation.WPWithin
                 throw new ArgumentException("Expecting Property or Field Expression of an object");
             }
 
-            var func = propertyOrField.Compile();
-            var value = func(target);
-            hashCode += 31 * hashCode + ((value == null) ? 0 : value.GetHashCode());
+            Func<T, TProperty> func = propertyOrField.Compile();
+            TProperty value = func(_target);
+            _hashCode += 31 * _hashCode + ((value == null) ? 0 : value.GetHashCode());
             return this;
         }
 
-        public int HashCode
-        {
-            get
-            {
-                return hashCode;
-            }
-        }
+        public int HashCode => _hashCode;
     }
 }

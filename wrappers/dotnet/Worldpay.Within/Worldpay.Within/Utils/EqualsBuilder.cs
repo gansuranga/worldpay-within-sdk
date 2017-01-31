@@ -1,99 +1,91 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Worldpay.Innovation.WPWithin
+namespace Worldpay.Innovation.WPWithin.Utils
 {
-    /**
-      * Taken from http://www.jroller.com/DhavalDalal/entry/equals_hashcode_and_tostring_builders
-      * Code licensed under CC-3.0
-      */
+
+    /// <summary>
+    /// Convenience utility class for building good implementations of <see cref="object.Equals(object)"/>.
+    /// </summary>
+    /// <remarks>
+    /// Based on http://www.jroller.com/DhavalDalal/entry/equals_hashcode_and_tostring_builders.
+    /// Code licensed under CC-3.0.
+    /// </remarks>
+    /// <typeparam name="T">The type of objects that will be compared.</typeparam>
     public class EqualsBuilder<T>
     {
-        private readonly T left;
-        private readonly object right;
-        private bool areEqual = true;
+        private readonly T _left;
+        private readonly object _right;
+        private bool _areEqual = true;
 
         public EqualsBuilder(T left, object right)
         {
-            this.left = left;
-            this.right = right;
+            this._left = left;
+            this._right = right;
 
             if (ReferenceEquals(left, right))
             {
-                areEqual = true;
+                _areEqual = true;
                 return;
             }
 
             if (ReferenceEquals(left, null))
             {
-                areEqual = false;
+                _areEqual = false;
                 return;
             }
 
             if (ReferenceEquals(right, null))
             {
-                areEqual = false;
+                _areEqual = false;
                 return;
             }
 
             if (left.GetType() != right.GetType())
             {
-                areEqual = false;
+                _areEqual = false;
                 return;
             }
         }
 
         public EqualsBuilder<T> With<TProperty>(Expression<Func<T, TProperty>> propertyOrField)
         {
-            if (!areEqual)
+            if (!_areEqual || _left == null || _right == null)
             {
                 return this;
             }
 
-            if (left == null || right == null)
-            {
-                return this;
-            }
-
-            var expression = propertyOrField.Body as MemberExpression;
+            MemberExpression expression = propertyOrField.Body as MemberExpression;
             if (expression == null)
             {
                 throw new ArgumentException("Expecting Property or Field Expression of an object");
             }
 
             Func<T, TProperty> func = propertyOrField.Compile();
-            TProperty leftValue = func(left);
-            TProperty rightValue = func((T)right);
+            TProperty leftValue = func(_left);
+            TProperty rightValue = func((T)_right);
 
             if (leftValue == null && rightValue == null)
             {
-                areEqual &= true;
+                // _areEqual remains true if both are null
                 return this;
             }
 
-            if (leftValue != null && rightValue == null)
+            if (leftValue == null || rightValue == null)
             {
-                areEqual &= false;
+                // If left or right are null then one must be null and the other isn't, because
+                // we've already testing for both being null.
+                _areEqual = false;
                 return this;
             }
 
-            if (leftValue == null && rightValue != null)
-            {
-                areEqual &= false;
-                return this;
-            }
-
-            areEqual &= leftValue.Equals(rightValue);
+            _areEqual &= leftValue.Equals(rightValue);
             return this;
         }
 
         public bool Equals()
         {
-            return areEqual;
+            return _areEqual;
         }
     }
 }

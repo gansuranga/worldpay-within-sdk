@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using Worldpay.Innovation.WPWithin.AgentManager;
 
 namespace Worldpay.Innovation.WPWithin.Sample.Commands
@@ -36,6 +37,7 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
                 new Command("StartSimpleProducer", "Starts a simple producer", StartSimpleProducer),
                 new Command("StopSimpleProducer", "Starts a simple producer", StopSimpleProducer),
                 new Command("ConsumePurchase", "Consumes a service (first price of first service found)", ConsumePurchase),
+                new Command("FindProducers", "Lists out all the producers that could be found", FindProducers),
             });
 
             // TODO Parameterise these so output can be written to a specific file
@@ -49,6 +51,61 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
                 LogLevel = "panic,fatal,error,warn,info,debug",
                 LogFile = new FileInfo("wpwithin.log")
             };
+        }
+
+        private CommandResult FindProducers(string[] arg)
+        {
+            RpcAgentConfiguration consumerConfig = new RpcAgentConfiguration
+            {
+                LogLevel = "panic,fatal,error,warn,info,debug",
+                LogFile = new FileInfo("WPWithinConsumer.log"),
+                ServicePort = 9096,
+            };
+            RpcAgentManager consumerAgent = new RpcAgentManager(consumerConfig);
+            consumerAgent.StartThriftRpcAgentProcess();
+            try
+            {
+                WPWithinService service = new WPWithinService(consumerConfig);
+                service.SetupDevice("Scanner", $".NET Sample Producer scanner running on ${Dns.GetHostName()}");
+                List<ServiceMessage> devices = service.DeviceDiscovery(10000).ToList();
+
+                _output.WriteLine("Found total of {0} devices", devices.Count);
+                for (int deviceIndex = 0; deviceIndex < devices.Count; deviceIndex++)
+                {
+                    ServiceMessage device = devices[deviceIndex];
+                    _output.WriteLine(
+                        $"Device {deviceIndex}) {device.ServerId} running on {device.Hostname}:{device.PortNumber}");
+                    _output.WriteLine($"\tDescription: {device.DeviceDescription}, URL Prefix: {device.UrlPrefix}");
+                    service.InitConsumer("http://", device.Hostname, device.PortNumber ?? 80, device.UrlPrefix,
+                        device.ServerId,
+                        new HceCard("Bilbo", "Baggins", "Card", "5555555555554444", 11, 2018, "113"));
+                    try
+                    {
+                        List<ServiceDetails> services = service.RequestServices().ToList();
+                        _output.WriteLine("\t{0} services found on device {1}", services.Count, deviceIndex);
+                        for (int serviceIndex = 0; serviceIndex < services.Count; serviceIndex++)
+                        {
+                            ServiceDetails svc = services[serviceIndex];
+                            _output.WriteLine($"\t\tService {serviceIndex}) {svc.ServiceId}: {svc.ServiceDescription}");
+                            List<Price> prices = service.GetServicePrices(svc.ServiceId).ToList();
+                            foreach (Price price in prices)
+                            {
+                                _output.WriteLine("\t\t\tPrice: {0}", price);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _error.WriteLine(ex);
+                    }
+                }
+            }
+            finally
+            {
+                consumerAgent.StopThriftRpcAgentProcess();
+            }
+            return CommandResult.Success;
+
         }
 
         private CommandResult ConsumePurchase(string[] arg)

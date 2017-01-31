@@ -4,6 +4,7 @@ using System.IO;
 using Common.Logging;
 using Thrift.Protocol;
 using Thrift.Transport;
+using Worldpay.Innovation.WPWithin.Utils;
 
 namespace Worldpay.Innovation.WPWithin.AgentManager
 {
@@ -163,8 +164,10 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                     return _rpcAgentPath;
                 }
                 string agentPath = ConfigurationManager.AppSettings[PathPropertyName];
+
                 if (agentPath == null)
                 {
+                    // The RPC Agent Path isn't configured in application config, so go looking for it.
                     DirectoryInfo parent = new DirectoryInfo(".");
                     Log.InfoFormat(
                         "No {0} property found in application configuration, searching for it relative to {1}",
@@ -177,7 +180,7 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                     if (parent == null)
                     {
                         throw new Exception(
-                            $"Unable to locate {sdkDir} override with property {PathPropertyName} property in App.config");
+                            $"Unable to locate {sdkDir} (couldn't find a diredctory called ({sdkDir}), you must override with property {PathPropertyName} property in App.config");
                     }
                     _rpcAgentPath =
                         new FileInfo(string.Join(System.IO.Path.DirectorySeparatorChar.ToString(), parent.FullName,
@@ -185,8 +188,36 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                             "rpc-agent",
                             "rpc-agent.exe")).FullName;
                 }
+                else
+                {
+                    // RPC Agent Path is configured in application config, so set this in the class to it's cached and return
+                    _rpcAgentPath = agentPath;
+                }
                 return _rpcAgentPath;
             }
+        }
+
+        /// <summary>
+        /// Inclues all properties.
+        /// </summary>
+        public override string ToString()
+        {
+            return new ToStringBuilder<RpcAgentConfiguration>(this)
+                .Append(m => m.BufferSize)
+                .Append(m => m.Buffered)
+                .Append(m => m.CallbackPort)
+                .Append(m => m.ConfigFile)
+                .Append(m => m.Framed)
+                .Append(m => m.LogFile)
+                .Append(m => m.LogLevel)
+                .Append(m => m.NamedPipeName)
+                .Append(m => m.Path)
+                .Append(m => m.Protocol)
+                .Append(m => m.Secure)
+                .Append(m => m.ServiceHost)
+                .Append(m => m.ServicePort)
+                .Append(m => m.Transport)
+                .ToString();
         }
 
 
@@ -283,9 +314,9 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
         private string FormatArgument(string argumentName, object argumentValue)
         {
             if (
-                (argumentValue == null) 
+                (argumentValue == null)
                 || (argumentValue is bool && (!(bool)argumentValue))
-                || (argumentValue is int && ((int)argumentValue==0))
+                || (argumentValue is int && ((int)argumentValue == 0))
                )
             {
                 return null;
@@ -332,7 +363,7 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                 case "json":
                     protocol = new TJSONProtocol(transport);
                     break;
-//                case "binary":
+                //                case "binary":
                 default:
                     protocol = new TBinaryProtocol(transport);
                     break;
@@ -376,7 +407,7 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                 case "namedpipe":
                     transport = new TNamedPipeClientTransport(ServiceHost, NamedPipeName);
                     break;
-//                case "socket":
+                //                case "socket":
                 default:
                     transport = new TSocket(ServiceHost, ServicePort);
                     break;
