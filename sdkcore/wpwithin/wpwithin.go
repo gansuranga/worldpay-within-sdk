@@ -101,32 +101,16 @@ func Initialise(name, description string) (WPWithin, error) {
 
 	result.core = core
 
-	// MongoDBLogger Setup
-	mg, err := utils.NewMongoDBLogger()
+	// Parse configuration
+	rawCfg, err1 := configuration.Load("wpwconfig.json")
+	wpwConfig := configuration.WPWithin{}
+	if err1 != nil {
 
-	if err != nil {
-
-		fmt.Printf("Error creating new MongoDBLogger: %s\n", err.Error())
-
+		log.WithField("Error", err1).Error("Unable to load configuration file wpwconfig.json")
 	}
 
-	// Note - we assign MongoDBLogger and also go ahead to log the events
-	// The logger handles cases when there is no MongoDB connection
-	result.core.MongoDBLogger = mg
-	genericEvent(result.core, "WPWithin.initialise", "result", result.core)
-
-	// END MongoDBLogger Setup
-
-	// Parse configuration
-	// rawCfg, err1 := configuration.Load("wpwconfig.json")
-	// wpwConfig := configuration.WPWithin{}
-	// if err1 != nil {
-	//
-	// 	return result, err1
-	// }
-	//
-	// wpwConfig.ParseConfig(rawCfg)
-	// core.Configuration = wpwConfig
+	wpwConfig.ParseConfig(rawCfg)
+	core.Configuration = wpwConfig
 
 	log.Debug("Will call doWebSocketLogSetup()")
 	doWebSocketLogSetup(core.Configuration)
@@ -223,8 +207,6 @@ func (wp *wpWithinImpl) AddService(service *types.Service) error {
 	log.Debug("Adding service to wp.core.Device.Services as it doesn't appear to exist.")
 	wp.core.Device.Services[service.ID] = service
 
-	genericEvent(wp.core, "WPWithin.AddService", "Service", service)
-
 	log.Debug("End wpwithin.AddService()")
 
 	return nil
@@ -246,8 +228,6 @@ func (wp *wpWithinImpl) RemoveService(service *types.Service) error {
 
 		log.Debugf("Calling delete %d from wp.core.Device.Services", service.ID)
 		delete(wp.core.Device.Services, service.ID)
-
-		genericEvent(wp.core, "WPWithin.RemoveService", "Service", service)
 	}
 
 	log.Debug("End wpwithin.RemoveService()")
@@ -316,8 +296,6 @@ func (wp *wpWithinImpl) InitConsumer(scheme, hostname string, portNumber int, ur
 	log.Debug("After call hte.NewClient()")
 
 	wp.core.HTEClient = client
-
-	genericEvent(wp.core, "WPWithin.InitConsumer", "Service", clientID)
 
 	log.Debug("End wpwithin.InitConsumer()")
 	return nil
@@ -408,8 +386,6 @@ func (wp *wpWithinImpl) InitProducer(pspConfig map[string]string) error {
 		log.Debug("Did wait 750ms, no error")
 	}
 
-	genericEvent(wp.core, "WPWithin.initProducer", "producer", svc)
-
 	log.WithField("Error result", startErr).Debug("End wpwithin.InitProducer()")
 
 	return startErr
@@ -425,8 +401,6 @@ func (wp *wpWithinImpl) GetDevice() *types.Device {
 			log.WithField("Stack", string(debug.Stack())).Errorf("Recover: WPWithin.GetDevice()")
 		}
 	}()
-
-	genericEvent(wp.core, "WPWithin.GetDevice", "device", wp.core.Device)
 
 	result := wp.core.Device
 	log.WithField("Device", result).Debug("End wpwithin.GetDevice()")
@@ -487,8 +461,6 @@ func (wp *wpWithinImpl) StartServiceBroadcast(timeoutMillis int) error {
 
 	}
 
-	genericEvent(wp.core, "WPWithin.StartServiceBroadcast", "message", msg)
-
 	log.WithField("Result err", errBroadcast).Debug("End wpwithin.startServiceBroadcast()")
 	return errBroadcast
 }
@@ -515,8 +487,6 @@ func (wp *wpWithinImpl) StopServiceBroadcast() {
 	}
 
 	log.Debug("Did call wp.core.SvcBroadcaster.StopBroadcast()")
-
-	genericEvent(wp.core, "WPWithin.StopServiceBroadcast", "message", "stopping")
 
 	log.Debug("End wpwithin.StopServiceBroadcast()")
 }
@@ -556,8 +526,6 @@ func (wp *wpWithinImpl) DeviceDiscovery(timeoutMillis int) ([]types.BroadcastMes
 		}
 	}
 	log.Debug("After call wp.core.SvcScanner.ScanForService()")
-
-	genericEvent(wp.core, "WPWithin.DeviceDiscovery", "devices", svcResults)
 
 	log.WithField("Search result", svcResults).Debug("End wpwithin.DeviceDiscovery()")
 
@@ -604,8 +572,6 @@ func (wp *wpWithinImpl) GetServicePrices(serviceID int) ([]types.Price, error) {
 		result = append(result, price)
 	}
 
-	genericEvent(wp.core, "WPWithin.GetServicePrices", "prices", result)
-
 	log.WithField("result", result).Debug("End wpwithin.GetServicePrices()")
 
 	return result, nil
@@ -632,8 +598,6 @@ func (wp *wpWithinImpl) SelectService(serviceID, numberOfUnits, priceID int) (ty
 
 		log.WithField("Error", err).Error("Error calling wp.core.HTEClient.NegotiatePrice()")
 	}
-
-	genericEvent(wp.core, "WPWithin.SelectService", "Total Price Response", tpr)
 
 	log.WithFields(log.Fields{"Error": err, "totalPriceResponse": tpr}).Debug("End wpwithin.SelectService()")
 
@@ -677,9 +641,6 @@ func (wp *wpWithinImpl) MakePayment(request types.TotalPriceResponse) (types.Pay
 		log.Debug("Did call wp.core.HTEClient.MakeHtePayment() without error")
 	}
 
-	genericEvent(wp.core, "WPWithin.MakePayment", "Payment Request", request)
-	genericEvent(wp.core, "WPWithin.MakePayment", "Payment Response", paymentResponse)
-
 	log.WithField("PaymentResponse", paymentResponse).Debug("End wpwithin.MakePayment()")
 
 	return paymentResponse, err
@@ -722,8 +683,6 @@ func (wp *wpWithinImpl) RequestServices() ([]types.ServiceDetails, error) {
 
 		result = append(result, svc)
 	}
-
-	genericEvent(wp.core, "WPWithin.RequestServices", "result", result)
 
 	log.WithField("Result", result).Debug("end wpwithin.RequestServices()")
 
@@ -773,8 +732,6 @@ func (wp *wpWithinImpl) BeginServiceDelivery(serviceID int, serviceDeliveryToken
 	}
 	log.WithField("delivery response", deliveryResponse).Debug("Did call wp.core.HTEClient.StartDelivery()")
 
-	genericEvent(wp.core, "WPWithin.BeginServiceDelivery", "DeliveryResponse", deliveryResponse)
-
 	log.Debug("end wpwithin.wpwithinimpl.BeginServiceDelivery()")
 
 	return deliveryResponse.ServiceDeliveryToken, nil
@@ -805,8 +762,6 @@ func (wp *wpWithinImpl) EndServiceDelivery(serviceID int, serviceDeliveryToken t
 		return types.ServiceDeliveryToken{}, err
 	}
 	log.WithField("DeliveryResponse", deliveryResponse).Debug("Did call wp.core.HTEClient.EndDelivery()")
-
-	genericEvent(wp.core, "WPWithin.EndServiceDelivery", "DeliveryResponse", deliveryResponse)
 
 	log.Debug("end wpwithin.wpwithinimpl.EndServiceDelivery()")
 
@@ -889,27 +844,4 @@ func doWebSocketLogSetup(cfg configuration.WPWithin) {
 	}
 
 	log.Debug("End doWebSocketLogSetup()")
-}
-
-func genericEvent(core *core.Core, name string, message string, doc interface{}) {
-
-	log.WithFields(log.Fields{"name": name, "message": message, "doc": doc}).Debug("Begin wpwithin.genericEvent()")
-
-	if core.MongoDBLogger != nil {
-
-		log.Debug("core.MongoDBLogger is set, will attempt to write event")
-
-		err := core.MongoDBLogger.GenericEvent("WPWithin.initialise", "result", doc)
-
-		if err != nil {
-
-			log.WithField("Error", err.Error()).Info("wpwithin.genericEvent:: Error writing event with MongoDBLogger")
-		}
-
-	} else {
-
-		log.Debug("core.MongoDBLogger is not set, not writing event")
-	}
-
-	log.Debug("End wpwithin.genericEvent()")
 }
