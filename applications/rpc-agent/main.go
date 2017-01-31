@@ -14,6 +14,7 @@ import (
 
 var applicationVersion string
 var applicationBuildDate string
+var applicationPlatform string
 
 const applicationName string = "Worldpay Within rpc-agent"
 
@@ -76,8 +77,6 @@ var rpcConfig rpc.Configuration
 
 func main() {
 
-	log.Info(getVersionInfo())
-
 	log.Debug("Before flag.parse()")
 	flag.Parse()
 	log.Debug("After flag.parse()")
@@ -85,6 +84,8 @@ func main() {
 	log.Debug("Will call checkAppInfo()")
 	checkAppInfo()
 	log.Debug("After call checkAppInfo()")
+
+	log.Info(getVersionInfo())
 
 	// Start off by setting logging to a high level
 	// This way we can catch output during initial setup of args and logging via arguments.
@@ -245,5 +246,5 @@ func checkAppInfo() {
 
 func getVersionInfo() string {
 
-	return fmt.Sprintf("\n\n%s v%s (Built on %s)\n\n", applicationName, applicationVersion, applicationBuildDate)
+	return fmt.Sprintf("\n\n%s v%s (Built on %s) (%s)\n\n", applicationName, applicationVersion, applicationBuildDate, applicationPlatform)
 }
