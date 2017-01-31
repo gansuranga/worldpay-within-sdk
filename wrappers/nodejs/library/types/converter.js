@@ -129,7 +129,6 @@ function constructFromThrift() {
     result.clientId = paymentResponse.clientId;
     result.totalPaid = paymentResponse.totalPaid;
     result.serviceDeliveryToken = paymentResponse.serviceDeliveryToken;
-    result.clientUUID = paymentResponse.clientUUID;
 
     return result;
   };
@@ -268,7 +267,6 @@ function constructToThrift() {
     result.clientId = paymentResponse.clientId;
     result.totalPaid = paymentResponse.totalPaid;
     result.serviceDeliveryToken = paymentResponse.serviceDeliveryToken;
-    result.clientUUID = paymentResponse.clientUUID;
 
     return result;
   };
