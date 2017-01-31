@@ -39,7 +39,10 @@ public class Launcher {
 
                             int exitCode = processHandle.waitFor();
 
-                            listener.onApplicationExit(exitCode, stdOutput.toString(), errorOutput.toString());
+                            if(listener != null) {
+
+                                listener.onApplicationExit(exitCode, stdOutput.toString(), errorOutput.toString());
+                            }
 
                         } catch (Exception e) {
 
