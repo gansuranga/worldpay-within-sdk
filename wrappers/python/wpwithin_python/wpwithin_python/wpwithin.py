@@ -1,6 +1,4 @@
-"""
-Create thrift client to be used with Worldpay Within
-"""
+"""Starts thrift client to be used with Worldpay Within."""
 
 import os
 import time
@@ -29,7 +27,18 @@ def create_client(host,
                   callback_port=None,
                   event_listener=None,
                   rpc_dir=None):
+    """Create thrift client for Worldpay Within Service.
 
+    Return a WPWithin instance if start_rpc and start_callback_server are both False.
+    If either is true, return a dictionary:
+        return_dictionary['client'] -> WPWithin instance
+        return_dictionary['rpc'] -> rpc process
+        return_dictionary['server'] -> thriftpy callback server
+
+    If start_callback_server is True, callback_port and event_listener must be specified.
+    event_listener: instance of a class which implements AbstractEventListener.
+    rpc_dir: path to the rpc agent launcher. Defaults to './rpc-agent/'
+    """
     if start_callback_server and (callback_port is None or event_listener is None):
         raise ValueError('No callback port or listener provided')
 
@@ -40,18 +49,24 @@ def create_client(host,
 
     return_dict = {}
 
+    if start_callback_server:
+        if callback_port is None:
+            raise TypeError("You must specify the callback port")
+        elif event_listener is None:
+            raise TypeError("You must provide an event listener")
+
     if start_rpc:
         if rpc_dir is None and not start_callback_server:
             proc = run_rpc_agent(port, rpc_dir="./rpc-agent/")
         elif rpc_dir is None:
             proc = run_rpc_agent(port, rpc_dir="./rpc-agent/", callback_port=callback_port)
-        elif start_callback_server is None:
+        elif not start_callback_server:
             proc = run_rpc_agent(port, rpc_dir=rpc_dir)
         else:
             proc = run_rpc_agent(port, rpc_dir=rpc_dir, callback_port=callback_port)
         return_dict['rpc'] = proc
 
-    time.sleep(2)
+    time.sleep(1)
 
     client = make_client(wpw_thrift.WPWithin,
                          host=host,

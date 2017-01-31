@@ -1,6 +1,4 @@
-"""
-Wrapper types for all structs used in the WPWithin thrift service.
-"""
+"""Wrapper types for all structs used in the WPWithin thrift service."""
 
 class Error(Exception):
     def __init__(self, message):
@@ -10,6 +8,10 @@ class Error(Exception):
 
 class PricePerUnit(object):
     def __init__(self, amount, currency_code):
+        """Create price per unit.
+
+        currency_code: 3 letter currency code
+        """
         self.amount = amount
         self.currency_code = currency_code
 
@@ -21,6 +23,10 @@ class Price(object):
                  price_per_unit,
                  unit_id,
                  unit_description):
+        """Create price for service.
+
+        price_per_unit: instance of PricePerUnit
+        """
         self.price_id = price_id
         self.description = description
         self.price_per_unit = price_per_unit
@@ -30,6 +36,10 @@ class Price(object):
 
 class Service(object):
     def __init__(self, service_id, name, description, prices=None):
+        """Create Service.
+
+        prices: list of instances of Price
+        """
         self.service_id = service_id
         self.name = name
         self.description = description
@@ -62,6 +72,11 @@ class Device(object):
                  services,
                  ipv4address,
                  currency_code):
+        """Create device on the network.
+
+        services: list of instances of Service
+        currency_code: 3 letter currency code
+        """
         self.uid = uid
         self.name = name
         self.description = description

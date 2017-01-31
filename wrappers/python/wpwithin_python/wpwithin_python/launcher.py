@@ -1,6 +1,6 @@
-"""
-Launcher for RPC Agent.
-File name should be rpc-agent-[system]-[architecture]. ie rpc-agent-mac-64
+"""Launcher for RPC Agent.
+
+File name should be rpc-agent-[system]-[architecture], ie rpc-agent-mac-64.
 """
 
 from subprocess import Popen, PIPE
@@ -8,7 +8,7 @@ import sys
 import platform
 
 def os_arch():
-    """Give the architecture as '32' or '64'"""
+    """Return the architecture as '32' or '64'."""
     if platform.machine().lower()[:3] == 'arm':
         out = 'arm'
     elif sys.maxsize > 2**32:
@@ -18,7 +18,7 @@ def os_arch():
     return out
 
 def os_platform():
-    """Give the platform as 'win', 'mac' or 'linux'"""
+    """Return the platform as 'win', 'mac' or 'linux'."""
     os = platform.system().lower()
     if os == 'windows':
         out = 'win'
@@ -29,7 +29,8 @@ def os_platform():
     return out
 
 def run_rpc_agent(port, rpc_dir, callback_port=None):
-    """Run RPC Agent
+    """Run RPC Agent.
+
     Args:
         port (integer): port to run RPC agent on
         rpc_dir (string): path to directory with rpc agent launchers

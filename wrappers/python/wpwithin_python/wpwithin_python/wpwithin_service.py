@@ -1,6 +1,4 @@
-"""
-Wrapper class for WPWithin Service
-"""
+"""Wrapper class for WPWithin Service."""
 
 import os
 from pkg_resources import resource_filename
@@ -15,17 +13,29 @@ wptypes_thrift = thriftpy.load(thrift_types_path,
                                include_dirs=[os.path.dirname(thrift_types_path)])
 import wptypes_thrift as wpt
 
+
 class WPWithin(object):
+    """Wrapper class for thrift generated struct WPWithin."""
+
     def __init__(self, thrift_client):
+        """Create instance of WPWithin.
+
+        thrift_client: client created with wpwithin.create_client()
+        """
         self.thrift_client = thrift_client
 
     def setup(self, name, description):
+        """Setup the thrift client."""
         try:
             self.thrift_client.setup(name, description)
         except wpt.Error as err:
             raise Error(err.message)
 
     def add_service(self, svc):
+        """Add service svc to the client.
+
+        svc: instance of Service.
+        """
         service = ConvertToThrift.service(svc)
         try:
             self.thrift_client.addService(service)
@@ -33,6 +43,10 @@ class WPWithin(object):
             raise Error(err.message)
 
     def remove_service(self, svc):
+        """Remove service svc to the client.
+
+        svc: instance of Service.
+        """
         service = ConvertToThrift.service(svc)
         try:
             self.thrift_client.removeService(service)
@@ -47,6 +61,18 @@ class WPWithin(object):
                       client_id,
                       hce_card,
                       psp_config):
+        """Initialise a consumer on the client.
+
+        hce_card: instance of HCECard
+        psp_config: Payment Service Provider details.
+        Must include psp_name and api_endpoint. Example:
+        {
+           "psp_name": "worldpayonlinepayments",
+           "api_endpoint": "https://api.worldpay.com/v1",
+        }
+        For more details see:
+        https://github.com/WPTechInnovation/worldpay-within-sdk/wiki/Worldpay-Total-US-(SecureNet)-Integration#usage
+        """
         card = ConvertToThrift.hce_card(hce_card)
         try:
             self.thrift_client.initConsumer(scheme,
@@ -60,6 +86,11 @@ class WPWithin(object):
             raise Error(err.message)
 
     def init_producer(self, psp_config):
+        """Initialise a producer on the client.
+
+        psp_config: Payment Service Provider details. For details see:
+        https://github.com/WPTechInnovation/worldpay-within-sdk/wiki/Worldpay-Total-US-(SecureNet)-Integration#usage
+        """
         try:
             self.thrift_client.initProducer(psp_config)
         except wpt.Error as err:
@@ -69,6 +100,10 @@ class WPWithin(object):
         return ConvertFromThrift.device(self.thrift_client.getDevice())
 
     def start_service_broadcast(self, timeout_ms):
+        """Start broadcasting services added to client.
+
+        If timeout_ms=0, broadcasts indefinetely.
+        """
         try:
             self.thrift_client.startServiceBroadcast(timeout_ms)
         except wpt.Error as err:
@@ -81,6 +116,7 @@ class WPWithin(object):
             raise Error(err.message)
 
     def device_discovery(self, timeout_ms):
+        """Return list of ServiceMessage found on the network."""
         try:
             service_messages = self.thrift_client.deviceDiscovery(timeout_ms)
         except wpt.Error as err:
@@ -92,6 +128,7 @@ class WPWithin(object):
             return svc_messages
 
     def request_services(self):
+        """Return list of ServiceDetails found on the network."""
         try:
             service_details = self.thrift_client.requestServices()
         except wpt.Error as err:
@@ -103,6 +140,7 @@ class WPWithin(object):
             return svc_details
 
     def get_service_prices(self, service_id):
+        """Return list of Price for specified service."""
         try:
             prices = self.thrift_client.getServicePrices(service_id)
         except wpt.Error as err:
@@ -114,6 +152,10 @@ class WPWithin(object):
             return wprices
 
     def select_service(self, service_id, number_of_units, price_id):
+        """Send request to buy number_of_units of service_id at price_id.
+
+        Return TotalPriceResponse, to be used as argument for WPWithin.make_payment.
+        """
         try:
             service = self.thrift_client.selectService(service_id, number_of_units, price_id)
         except wpt.Error as err:
@@ -122,6 +164,10 @@ class WPWithin(object):
             return ConvertFromThrift.total_price_response(service)
 
     def make_payment(self, request):
+        """Pay for service.
+
+        request: TotalPriceResponse returned from WPWithin.select_service.
+        """
         trequest = ConvertToThrift.total_price_response(request)
         try:
             response = self.thrift_client.makePayment(trequest)
