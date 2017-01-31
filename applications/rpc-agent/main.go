@@ -12,6 +12,11 @@ import (
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/rpc"
 )
 
+var applicationVersion string
+var applicationBuildDate string
+
+const applicationName string = "Worldpay Within rpc-agent"
+
 /*
 	A simple program to enable the WPWithin Core RPC interface.
 	The intention is that this program is called by language wrappers in order to gain RPC access to the core.
@@ -51,6 +56,7 @@ const argNamePort = "port"
 const argNameSecure = "secure"
 const argNameBuffer = "buffer"
 const argNameCallbackPort = "callbackport"
+const argNameVersion = "version"
 
 var flagLogFile string
 var flagLogLevel string
@@ -62,6 +68,7 @@ var flagPort int
 var flagSecure bool
 var flagBuffer int
 var flagCallbackPort int
+var flagVersion bool
 
 // Globally scoped vars
 var sdk wpwithin.WPWithin
@@ -72,6 +79,10 @@ func main() {
 	log.Debug("Before flag.parse()")
 	flag.Parse()
 	log.Debug("After flag.parse()")
+
+	log.Debug("Will call checkAppInfo()")
+	checkAppInfo()
+	log.Debug("After call checkAppInfo()")
 
 	// Start off by setting logging to a high level
 	// This way we can catch output during initial setup of args and logging via arguments.
@@ -110,6 +121,7 @@ func init() {
 	flag.IntVar(&flagBuffer, argNameBuffer, defaultArgTransportBuffer, "Buffer size.")
 	flag.IntVar(&flagCallbackPort, argNameCallbackPort, defaultArgCallbackPort, "Callback Port")
 
+	flag.BoolVar(&flagVersion, argNameVersion, false, "Print application version info")
 }
 
 func startRPC() {
@@ -211,4 +223,23 @@ func initLogfile(logLevel, logFile string) {
 	}
 
 	log.Debug("End log setup")
+}
+
+func checkAppInfo() {
+
+	log.Debug("Begin checkAppInfo()")
+
+	if flagVersion {
+
+		log.Debug("Printing app version info")
+
+		versionInfo := fmt.Sprintf("\n\n%s v%s (Built on %s)\n\n", applicationName, applicationVersion, applicationBuildDate)
+
+		log.Info(versionInfo)
+		fmt.Println(versionInfo)
+
+		os.Exit(0)
+	}
+
+	log.Debug("End checkAppInfo()")
 }
