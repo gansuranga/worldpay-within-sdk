@@ -76,6 +76,8 @@ var rpcConfig rpc.Configuration
 
 func main() {
 
+	log.Info(getVersionInfo())
+
 	log.Debug("Before flag.parse()")
 	flag.Parse()
 	log.Debug("After flag.parse()")
@@ -231,15 +233,17 @@ func checkAppInfo() {
 
 	if flagVersion {
 
-		log.Debug("Printing app version info")
+		versionInfo := getVersionInfo()
 
-		versionInfo := fmt.Sprintf("\n\n%s v%s (Built on %s)\n\n", applicationName, applicationVersion, applicationBuildDate)
-
-		log.Info(versionInfo)
 		fmt.Println(versionInfo)
 
 		os.Exit(0)
 	}
 
 	log.Debug("End checkAppInfo()")
+}
+
+func getVersionInfo() string {
+
+	return fmt.Sprintf("\n\n%s v%s (Built on %s)\n\n", applicationName, applicationVersion, applicationBuildDate)
 }
