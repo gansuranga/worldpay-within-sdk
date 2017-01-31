@@ -26,7 +26,7 @@ def convertWWDevice(wwDevice):
 
 def convertWWPaymentResponse(wwPaymentResponse):
 	logging.info('convertWWPaymentResponse')
-	return paymentResponse(serverId=wwPaymentResponse.getServerId(), clientId=wwPaymentResponse.getClientId(), totalPaid=wwPaymentResponse.getTotalPaid(), serviceDeliveryToken=convertWWServiceDeliveryToken(wwPaymentResponse.getServiceDeliveryToken()), ClientUUID=wwPaymentResponse.getClientUuid())
+	return paymentResponse(serverId=wwPaymentResponse.getServerId(), clientId=wwPaymentResponse.getClientId(), totalPaid=wwPaymentResponse.getTotalPaid(), serviceDeliveryToken=convertWWServiceDeliveryToken(wwPaymentResponse.getServiceDeliveryToken()))
 
 def convertWWPricePerUnit(wwPricePerUnit):
 	logging.info('convertWWPricePerUnit')
@@ -97,7 +97,6 @@ def convertPaymentResponse(paymentResponse):
     wwPaymentResponse.setClientId(paymentResponse.clientId)
     wwPaymentResponse.setTotalPaid(paymentResponse.totalPaid)
     wwPaymentResponse.setServiceDeliveryToken(paymentResponse.serviceDeliveryToken)
-    wwPaymentResponse.setClientUuid(paymentResponse.ClientUUID)
     return wwPaymentResponse
 
 
@@ -195,5 +194,4 @@ def convertPaymentResponse(paymentResponse):
 	wwPaymentResponse.setClientId(paymentResponse.clientId)
 	wwPaymentResponse.setTotalPaid(paymentResponse.totalPaid)
 	wwPaymentResponse.setServiceDeliveryToken(convertServiceDeliveryToken(paymentResponse.serviceDeliveryToken))
-	wwPaymentResponse.setClientUuid(paymentResponse.ClientUUID)
 	return wwPaymentResponse

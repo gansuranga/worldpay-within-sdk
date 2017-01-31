@@ -140,9 +140,9 @@ public class WPWithinWrapperImpl implements WPWithinWrapper {
     }
 
     @Override
-    public void initConsumer(String scheme, String hostname, Integer port, String urlPrefix, String serverId, WWHCECard hceCard) throws WPWithinGeneralException {
+    public void initConsumer(String scheme, String hostname, Integer port, String urlPrefix, String serverId, WWHCECard hceCard, Map<String, String> pspConfig) throws WPWithinGeneralException {
         try {
-            getClient().initConsumer(scheme, hostname, port, urlPrefix, serverId, HCECardAdapter.convertWWHCECard(hceCard));
+            getClient().initConsumer(scheme, hostname, port, urlPrefix, serverId, HCECardAdapter.convertWWHCECard(hceCard), pspConfig);
         } catch (TException ex) {
             Logger.getLogger(WPWithinWrapperImpl.class.getName()).log(Level.SEVERE, "Initiating the consumer failed in the wrapper", ex);
             throw new WPWithinGeneralException("Initiating the consumer failed in the wrapper");
@@ -150,9 +150,9 @@ public class WPWithinWrapperImpl implements WPWithinWrapper {
     }
 
     @Override
-    public void initProducer(String merchantClientKey, String merchantServiceKey) throws WPWithinGeneralException {
+    public void initProducer(Map<String, String> pspConfig) throws WPWithinGeneralException {
         try {
-            getClient().initProducer(merchantClientKey, merchantServiceKey);
+            getClient().initProducer(pspConfig);
         } catch (TException ex) {
             Logger.getLogger(WPWithinWrapperImpl.class.getName()).log(Level.SEVERE, "Initiating the producer failed in the wrapper", ex);
             throw new WPWithinGeneralException("Initiating the producer failed in the wrapper");

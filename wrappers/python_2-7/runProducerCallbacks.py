@@ -62,7 +62,7 @@ def run():
         prices[ccPrice.getId()] = ccPrice
         svc.setPrices(prices)
         # [ CLIENT KEY, SERVICE KEY] : From online.worldpay.com
-        wpw.initProducer("T_C_97e8cbaa-14e0-4b1c-b2af-469daf8f1356", "T_S_3bdadc9c-54e0-4587-8d91-29813060fecd")
+        wpw.initProducer({"psp_name":"worldpayonlinepayments","hte_public_key":"T_C_97e8cbaa-14e0-4b1c-b2af-469daf8f1356", "hte_private_key": "T_S_3bdadc9c-54e0-4587-8d91-29813060fecd", "api_endpoint":"https://api.worldpay.com/v1", "merchant_client_key": "T_C_97e8cbaa-14e0-4b1c-b2af-469daf8f1356", "merchant_service_key": "T_S_3bdadc9c-54e0-4587-8d91-29813060fecd"})
         wpw.addService(svc)
         broadcastDuration = 20000
         durationSeconds = broadcastDuration / 1000

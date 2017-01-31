@@ -66,7 +66,15 @@ function addService() {
 
 function initProducer() {
 
-  client.initProducer("T_C_03eaa1d3-4642-4079-b030-b543ee04b5af", "T_S_f50ecb46-ca82-44a7-9c40-421818af5996", function(err, response) {
+  var pspConfig = new Array();
+  pspConfig["psp_name"] = "worldpayonlinepayments";
+  pspConfig["api_endpoint"] = "https://api.worldpay.com/v1";
+  pspConfig["hte_public_key"] = "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af"
+  pspConfig["hte_private_key"] = "T_S_f50ecb46-ca82-44a7-9c40-421818af5996"
+  pspConfig["merchant_client_key"] = "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af"
+  pspConfig["merchant_service_key"] = "T_S_f50ecb46-ca82-44a7-9c40-421818af5996"
+
+  client.initProducer(pspConfig, function(err, response) {
 
     console.log("initProducer.callback");
     console.log("initProducer.err: " + err)

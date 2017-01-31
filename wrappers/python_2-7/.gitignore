@@ -8,6 +8,10 @@ __pycache__/
 # C extensions
 *.so
 
+# rpc agent files to ignore
+rpc-agent
+rpc-agent*
+
 # Distribution / packaging
 .Python
 env/

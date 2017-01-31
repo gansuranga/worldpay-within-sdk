@@ -1,0 +1,7 @@
+{
+  "name": "worldpay-within",
+  "version": "0.1.0",
+  "dependencies": {
+    "thrift": "^0.9.3"
+  }
+}

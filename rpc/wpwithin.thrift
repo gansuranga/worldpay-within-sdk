@@ -11,7 +11,6 @@ include "wptypes.thrift"
 namespace csharp Worldpay.Innovation.WPWithin.Rpc
 namespace java com.worldpay.innovation.wpwithin.rpc
 namespace go wpthrift
-namespace js wpthrift
 
 /**
  * WorldpayWithin Service - exposing all WorldpayWithin SDK functionality
@@ -22,8 +21,8 @@ service WPWithin {
 
    void addService(1: wptypes.Service svc) throws (1: wptypes.Error err),
    void removeService(1: wptypes.Service svc) throws (1: wptypes.Error err),
-   void initConsumer(1: string scheme, 2: string hostname, 3: i32 port, 4: string urlPrefix, 5: string clientID, 6: wptypes.HCECard hceCard) throws (1: wptypes.Error err),
-   void initProducer(1: string merchantClientKey, 2: string merchantServiceKey) throws (1: wptypes.Error err),
+   void initConsumer(1: string scheme, 2: string hostname, 3: i32 port, 4: string urlPrefix, 5: string clientID, 6: wptypes.HCECard hceCard, 7: map<string, string> pspConfig) throws (1: wptypes.Error err),
+   void initProducer(1: map<string, string> pspConfig) throws (1: wptypes.Error err),
    wptypes.Device getDevice(),
    void startServiceBroadcast(1: i32 timeoutMillis) throws (1: wptypes.Error err),
    void stopServiceBroadcast() throws (1: wptypes.Error err),

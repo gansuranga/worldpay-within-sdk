@@ -59,19 +59,19 @@ var fnRemoveService = function(service, callback) {
   });
 };
 
-var fnInitConsumer = function(scheme, hostname, port, urlPrefix, serverId, hceCard, callback) {
+var fnInitConsumer = function(scheme, hostname, port, urlPrefix, serverId, hceCard, pspConfig, callback) {
 
   tHCECard = this.converter.toThrift().hceCard(hceCard);
 
-  this.thriftClient.initConsumer(scheme, hostname, port, urlPrefix, serverId, tHCECard, function(err, result) {
+  this.thriftClient.initConsumer(scheme, hostname, port, urlPrefix, serverId, tHCECard, pspConfig, function(err, result) {
 
     callback(err, result);
   });
 };
 
-var fnInitProducer = function(merchantClientKey, merchantServiceKey, callback) {
+var fnInitProducer = function(pspConfig, callback) {
 
-  this.thriftClient.initProducer(merchantClientKey, merchantServiceKey, function(err, result) {
+  this.thriftClient.initProducer(pspConfig, function(err, result) {
 
     callback(err, result);
   });

@@ -1,3 +1,5 @@
+var wpthrift_types = require('../wpwithin-thrift/wptypes_types');
+
 module.exports = {
   toThrift : toThrift,
   fromThrift : fromThrift

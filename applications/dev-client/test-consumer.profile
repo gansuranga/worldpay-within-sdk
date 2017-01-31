@@ -7,8 +7,8 @@
 			"hceCard": {
 				"firstname": "John",
 				"lastname": "Smith",
-				"expMonth": 12,
-				"expYear": 2017,
+				"expMonth": 5,
+				"expYear": 2019,
 				"cardNumber": "5555555555554444",
 				"type": "Card",
 				"cvc": "123"
@@ -17,7 +17,7 @@
 				"deviceDiscoveryTimeout": 20000
 			},
 			"autoConsume": {
-				"deviceUid": "3b0f50f5-c4e6-4d0f-5cbf-52466e858ea3",
+				"deviceUid": "4db8e2e8-36e8-4122-5d93-87ee3b2fd54d",
 				"serviceID": 1,
 				"unitID": 2
 			}

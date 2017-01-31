@@ -9,6 +9,8 @@ import (
 	log "github.com/Sirupsen/logrus"
 	devclienttypes "github.com/wptechinnovation/worldpay-within-sdk/applications/dev-client/types"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp/onlineworldpay"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/rpc"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types"
 )
@@ -131,9 +133,14 @@ func mLoadDeviceProfile() error {
 		return err
 	}
 
-	json.Unmarshal(file, &deviceProfile)
+	err = json.Unmarshal(file, &deviceProfile)
+	if err != nil {
+
+		fmt.Printf("Error parsing deviceProfile: %s", err.Error())
+	}
 
 	if deviceProfile.DeviceEntity != nil {
+
 		if err := initialiseDevice(deviceProfile.DeviceEntity); err != nil {
 			return err
 		}
@@ -141,6 +148,7 @@ func mLoadDeviceProfile() error {
 	}
 
 	if deviceProfile.DeviceEntity.Producer != nil {
+
 		if err := setupProducer(deviceProfile.DeviceEntity.Producer); err != nil {
 			return err
 		}
@@ -152,7 +160,16 @@ func mLoadDeviceProfile() error {
 
 func setupProducer(producer *devclienttypes.Producer) error {
 
-	if err := sdk.InitProducer(producer.ProducerConfig.PspMerchantClientKey, producer.ProducerConfig.PspMerchantServiceKey); err != nil {
+	// Could come from a config file..
+	var pspConfig = make(map[string]string, 0)
+	pspConfig[psp.CfgPSPName] = onlineworldpay.PSPName
+	pspConfig[onlineworldpay.CfgAPIEndpoint] = "https://api.worldpay.com/v1"
+	pspConfig[onlineworldpay.CfgMerchantClientKey] = producer.ProducerConfig.PspMerchantClientKey
+	pspConfig[onlineworldpay.CfgMerchantServiceKey] = producer.ProducerConfig.PspMerchantServiceKey
+	pspConfig[psp.CfgHTEPrivateKey] = producer.ProducerConfig.PspMerchantServiceKey
+	pspConfig[psp.CfgHTEPublicKey] = producer.ProducerConfig.PspMerchantClientKey
+
+	if err := sdk.InitProducer(pspConfig); err != nil {
 		return err
 	}
 
