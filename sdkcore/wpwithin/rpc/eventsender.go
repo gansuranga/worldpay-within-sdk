@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"crypto/tls"
+	"errors"
 	"fmt"
 
 	"git.apache.org/thrift.git/lib/go/thrift"
@@ -150,4 +151,10 @@ func (cb *EventSenderImpl) connectCallbackIfNotConnected() error {
 	}
 
 	return nil
+}
+
+// GenericEvent log a generic event
+func (cb *EventSenderImpl) GenericEvent(name string, message string, data interface{}) error {
+
+	return errors.New("eventsender.GenericEvent() is Not implemented")
 }

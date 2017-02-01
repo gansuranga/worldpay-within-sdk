@@ -14,9 +14,8 @@ namespace Worldpay.Innovation.WPWithin.ThriftAdapters
 
         public static ServiceDetails Create(ThriftServiceDetails tsd)
         {
-            return new ServiceDetails
+            return new ServiceDetails(tsd.ServiceId ?? 0)
             {
-                ServiceId = tsd.ServiceId,
                 ServiceDescription = tsd.ServiceDescription
             };
         }

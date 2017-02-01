@@ -90,8 +90,12 @@ function connectToDevice(serviceMessage) {
   hceCard.type = "Card";
   hceCard.cvc = "123";
 
+  var pspConfig = new Array();
+  pspConfig["psp_name"] = "worldpayonlinepayments";
+  pspConfig["api_endpoint"] = "https://api.worldpay.com/v1";
+
   client.initConsumer(serviceMessage.scheme, serviceMessage.hostname, serviceMessage.portNumber,
-  serviceMessage.urlPrefix, device.uid, hceCard, function(err, response){
+  serviceMessage.urlPrefix, device.uid, hceCard, pspConfig, function(err, response){
 
     console.log("initConsumer.callback.err: %s" + err);
     console.log("initConsumer.callback.response: %j", response);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Thrift.Collections;
 using ThriftPrice = Worldpay.Innovation.WPWithin.Rpc.Types.Price;
@@ -10,7 +9,7 @@ namespace Worldpay.Innovation.WPWithin.ThriftAdapters
     {
         internal static ThriftPrice Create(Price price)
         {
-            return new ThriftPrice()
+            return new ThriftPrice
             {
                 Description = price.Description,
                 Id = price.Id,
@@ -27,11 +26,9 @@ namespace Worldpay.Innovation.WPWithin.ThriftAdapters
 
         private static Price Create(ThriftPrice prices)
         {
-            return new Price()
+            return new Price(prices.Id ?? 0)
             {
                 Description = prices.Description,
-
-                Id = prices.Id,
                 PricePerUnit = PricePerUnitAdapter.Create(prices.PricePerUnit),
                 UnitDescription = prices.UnitDescription,
                 UnitId = prices.UnitId,

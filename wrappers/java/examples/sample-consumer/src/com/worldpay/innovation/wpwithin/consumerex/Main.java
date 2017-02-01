@@ -3,6 +3,7 @@ package com.worldpay.innovation.wpwithin.consumerex;
 import com.worldpay.innovation.wpwithin.WPWithinGeneralException;
 import com.worldpay.innovation.wpwithin.WPWithinWrapper;
 import com.worldpay.innovation.wpwithin.WPWithinWrapperImpl;
+import com.worldpay.innovation.wpwithin.rpc.launcher.Listener;
 import com.worldpay.innovation.wpwithin.types.*;
 
 import java.util.HashMap;
@@ -19,7 +20,7 @@ public class Main {
 
         System.out.println("Starting Consumer Example Written in Java.");
 
-        wpw = new WPWithinWrapperImpl("127.0.0.1", 10000, false);
+        wpw = new WPWithinWrapperImpl("127.0.0.1", 10001, true, rpcAgentListener);
 
         try {
 
@@ -237,4 +238,15 @@ public class Main {
 
         wpw.endServiceDelivery(serviceID, token, unitsReceived);
     }
+
+    private static final Listener rpcAgentListener = new Listener() {
+        @Override
+        public void onApplicationExit(int exitCode, String stdOutput, String errOutput) {
+
+            System.out.printf("RPC Agent process did exit.");
+            System.out.printf("ExitCode: %d", exitCode);
+            System.out.printf("stdout: \n%s\n", stdOutput);
+            System.out.printf("stderr: \n%s\n", errOutput);
+        }
+    };
 }

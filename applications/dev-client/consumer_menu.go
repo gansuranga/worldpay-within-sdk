@@ -7,7 +7,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	devclienttypes "github.com/wptechinnovation/worldpay-within-sdk/applications/dev-client/types"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp"
-	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp/securenet"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp/onlineworldpay"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types"
 )
 
@@ -153,11 +153,8 @@ func mAutoConsume() error {
 
 			// Could come from a config file..
 			var pspConfig = make(map[string]string, 0)
-			pspConfig[psp.CfgPSPName] = securenet.PSPName
-			pspConfig[securenet.CfgAPIEndpoint] = "https://gwapi.demo.securenet.com/api"
-			pspConfig[securenet.CfgAppVersion] = "0.1"
-			pspConfig[securenet.CfgDeveloperID] = "123"
-			pspConfig[securenet.CfgHTTPProxy] = "https://127.0.0.1:7001"
+			pspConfig[psp.CfgPSPName] = onlineworldpay.PSPName
+			pspConfig[onlineworldpay.CfgAPIEndpoint] = "https://api.worldpay.com/v1"
 
 			err := sdk.InitConsumer("http://", services[foundServiceIdx].Hostname, services[foundServiceIdx].PortNumber, services[foundServiceIdx].URLPrefix, services[foundServiceIdx].ServerID, deviceProfile.DeviceEntity.Consumer.HCECard, pspConfig)
 			if err != nil {
@@ -227,6 +224,14 @@ func mAutoConsume() error {
 
 							if err != nil {
 
+								return err
+							}
+
+							_, err = sdk.BeginServiceDelivery(serviceDetails[foundDetailsIdx].ServiceID, *payResp.ServiceDeliveryToken, 1)
+
+							if err != nil {
+
+								fmt.Println("Error calling sdk.BeginServiceDelivery()")
 								return err
 							}
 

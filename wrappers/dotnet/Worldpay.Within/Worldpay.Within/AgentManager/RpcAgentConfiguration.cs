@@ -4,11 +4,12 @@ using System.IO;
 using Common.Logging;
 using Thrift.Protocol;
 using Thrift.Transport;
+using Worldpay.Innovation.WPWithin.Utils;
 
 namespace Worldpay.Innovation.WPWithin.AgentManager
 {
     /// <summary>
-    ///     Manages the configuration of an Thrift RPC Agent.
+    ///     Manages the configuration of an Thrift RPC Agent (passed to <code>rpc-client.exe</code>) or the <see cref="WPWithinService"/> instance that will connect to it.
     /// </summary>
     /// <remarks>
     ///     <para>
@@ -163,8 +164,10 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                     return _rpcAgentPath;
                 }
                 string agentPath = ConfigurationManager.AppSettings[PathPropertyName];
+
                 if (agentPath == null)
                 {
+                    // The RPC Agent Path isn't configured in application config, so go looking for it.
                     DirectoryInfo parent = new DirectoryInfo(".");
                     Log.InfoFormat(
                         "No {0} property found in application configuration, searching for it relative to {1}",
@@ -177,7 +180,7 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                     if (parent == null)
                     {
                         throw new Exception(
-                            $"Unable to locate {sdkDir} override with property {PathPropertyName} property in App.config");
+                            $"Unable to locate {sdkDir} (couldn't find a diredctory called ({sdkDir}), you must override with property {PathPropertyName} property in App.config");
                     }
                     _rpcAgentPath =
                         new FileInfo(string.Join(System.IO.Path.DirectorySeparatorChar.ToString(), parent.FullName,
@@ -185,8 +188,36 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                             "rpc-agent",
                             "rpc-agent.exe")).FullName;
                 }
+                else
+                {
+                    // RPC Agent Path is configured in application config, so set this in the class to it's cached and return
+                    _rpcAgentPath = agentPath;
+                }
                 return _rpcAgentPath;
             }
+        }
+
+        /// <summary>
+        /// Inclues all properties.
+        /// </summary>
+        public override string ToString()
+        {
+            return new ToStringBuilder<RpcAgentConfiguration>(this)
+                .Append(m => m.BufferSize)
+                .Append(m => m.Buffered)
+                .Append(m => m.CallbackPort)
+                .Append(m => m.ConfigFile)
+                .Append(m => m.Framed)
+                .Append(m => m.LogFile)
+                .Append(m => m.LogLevel)
+                .Append(m => m.NamedPipeName)
+                .Append(m => m.Path)
+                .Append(m => m.Protocol)
+                .Append(m => m.Secure)
+                .Append(m => m.ServiceHost)
+                .Append(m => m.ServicePort)
+                .Append(m => m.Transport)
+                .ToString();
         }
 
 
@@ -283,9 +314,9 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
         private string FormatArgument(string argumentName, object argumentValue)
         {
             if (
-                (argumentValue == null) 
+                (argumentValue == null)
                 || (argumentValue is bool && (!(bool)argumentValue))
-                || (argumentValue is int && ((int)argumentValue==0))
+                || (argumentValue is int && ((int)argumentValue == 0))
                )
             {
                 return null;
@@ -332,7 +363,7 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                 case "json":
                     protocol = new TJSONProtocol(transport);
                     break;
-//                case "binary":
+                //                case "binary":
                 default:
                     protocol = new TBinaryProtocol(transport);
                     break;
@@ -341,6 +372,11 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
             return protocol;
         }
 
+        /// <summary>
+        /// Creates an instance of a <see cref="TServerTransport"/> based on the <see cref="Transport"/> property of this instance.
+        /// </summary>
+        /// <remarks>Currently only supports <code>namedpipe</code> and <code>socket</code>.  Any other value will be interpreted as <code>socket</code></remarks>
+        /// <returns>Never returns null.</returns>
         public TServerTransport GetThriftServerTransport()
         {
             TServerTransport transport;
@@ -356,6 +392,13 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
             return transport;
         }
 
+        /// <summary>
+        /// Retrives the correct Thrift transport type based on the value in <see cref="Transport"/>.
+        /// </summary>
+        /// <returns>If <see cref="Transport"/> is <code>namedpipe</code> then a <see cref="TNamedPipeClientTransport"/> is used.  For all other values
+        /// a <see cref="TSocket"/> is returned.  Depending on the value of <see cref="Framed"/> and <see cref="Buffered"/>, appropriate wrappers will be placed
+        /// around the transport.
+        /// </returns>
         public TTransport GetThriftTransport()
         {
             TTransport transport;
@@ -364,7 +407,7 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                 case "namedpipe":
                     transport = new TNamedPipeClientTransport(ServiceHost, NamedPipeName);
                     break;
-//                case "socket":
+                //                case "socket":
                 default:
                     transport = new TSocket(ServiceHost, ServicePort);
                     break;
@@ -383,8 +426,14 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
             return transport;
         }
 
+        /// <summary>
+        /// The name of the named pipe that will be used, if <see cref="Transport"/> is set to <code>namedpipe</code>.
+        /// </summary>
         public string NamedPipeName { get; set; } = "thrift-agent";
 
+        /// <summary>
+        /// The type of transport that will be used to communicate with the RPC Agent.  Default is <code>socket</code>.  Set to <code>nameddpipe</code> to use named pipes.
+        /// </summary>
         public string Transport { get; set; } = "socket";
     }
 }

@@ -18,6 +18,7 @@ public class TotalPriceResponseAdapter {
         wwTotalPriceResponse.setServerId(totalPriceResponse.getServerId());
         wwTotalPriceResponse.setUnitsToSupply(totalPriceResponse.getUnitsToSupply());
         wwTotalPriceResponse.setCurrencyCode(totalPriceResponse.getCurrencyCode());
+        wwTotalPriceResponse.setTotalPrice(totalPriceResponse.getTotalPrice());
 
         return wwTotalPriceResponse;
 

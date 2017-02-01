@@ -1,17 +1,13 @@
-﻿namespace Worldpay.Innovation.WPWithin.ThriftAdapters
+﻿using ThriftPaymentResponse = Worldpay.Innovation.WPWithin.Rpc.Types.PaymentResponse;
+
+namespace Worldpay.Innovation.WPWithin.ThriftAdapters
 {
     internal class PaymentResponseAdapter
     {
-        public static PaymentResponse Create(Rpc.Types.PaymentResponse makePayment)
+        public static PaymentResponse Create(ThriftPaymentResponse makePayment)
         {
-            return new PaymentResponse()
-            {
-                ClientId = makePayment.ClientId,
-                ClientUuid = makePayment.ClientUUID,
-                ServerId = makePayment.ServerId,
-                ServiceDeliveryToken = ServiceDeliveryTokenAdapter.Create(makePayment.ServiceDeliveryToken),
-                TotalPaid = makePayment.TotalPaid
-            };
+            return new PaymentResponse(makePayment.ServerId, makePayment.ClientId, makePayment.TotalPaid,
+                ServiceDeliveryTokenAdapter.Create(makePayment.ServiceDeliveryToken));
         }
     }
 }

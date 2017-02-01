@@ -10,7 +10,7 @@ import (
 	devclienttypes "github.com/wptechinnovation/worldpay-within-sdk/applications/dev-client/types"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp"
-	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp/securenet"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp/onlineworldpay"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/rpc"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types"
 )
@@ -162,16 +162,12 @@ func setupProducer(producer *devclienttypes.Producer) error {
 
 	// Could come from a config file..
 	var pspConfig = make(map[string]string, 0)
-	pspConfig[psp.CfgPSPName] = securenet.PSPName
-	pspConfig[securenet.CfgAPIEndpoint] = "https://gwapi.demo.securenet.com/api"
-	pspConfig[securenet.CfgAppVersion] = "0.1"
-	pspConfig[securenet.CfgDeveloperID] = "123"
-	pspConfig[securenet.CfgPublicKey] = "8c0ce953-455d-4c12-8d14-ff20d565e485"
-	pspConfig[securenet.CfgSecureKey] = "KZ9kWv2EPy7M"
-	pspConfig[securenet.CfgSecureNetID] = "8008609"
-	pspConfig[psp.CfgHTEPrivateKey] = "KZ9kWv2EPy7M"
-	pspConfig[psp.CfgHTEPublicKey] = "8c0ce953-455d-4c12-8d14-ff20d565e485"
-	pspConfig[securenet.CfgHTTPProxy] = "https://127.0.0.1:7001"
+	pspConfig[psp.CfgPSPName] = onlineworldpay.PSPName
+	pspConfig[onlineworldpay.CfgAPIEndpoint] = "https://api.worldpay.com/v1"
+	pspConfig[onlineworldpay.CfgMerchantClientKey] = producer.ProducerConfig.PspMerchantClientKey
+	pspConfig[onlineworldpay.CfgMerchantServiceKey] = producer.ProducerConfig.PspMerchantServiceKey
+	pspConfig[psp.CfgHTEPrivateKey] = producer.ProducerConfig.PspMerchantServiceKey
+	pspConfig[psp.CfgHTEPublicKey] = producer.ProducerConfig.PspMerchantClientKey
 
 	if err := sdk.InitProducer(pspConfig); err != nil {
 		return err
