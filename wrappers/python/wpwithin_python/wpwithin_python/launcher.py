@@ -3,6 +3,7 @@
 File name should be rpc-agent-[system]-[architecture], ie rpc-agent-mac-64.
 """
 
+import time
 from subprocess import Popen, PIPE
 import sys
 import platform
@@ -41,9 +42,10 @@ def run_rpc_agent(port, rpc_dir, callback_port=None):
     if os == 'win':
         agent += '.exe'
 
-    flags = '-port='+str(port)
+    args = [rpc_dir + agent, '-port='+str(port)]
     if callback_port is not None:
-        flags += ' -callbackport='+str(callback_port)
+        args.append('-callbackport='+str(callback_port))
 
-    proc = Popen([rpc_dir + agent, flags], stdout=PIPE, stderr=PIPE)
+    proc = Popen(args, stdout=PIPE, stderr=PIPE)
+    time.sleep(2)
     return proc
