@@ -1,4 +1,7 @@
 # worldpay-within-sdk
+
+![Travis Ci Status](https://travis-ci.org/WPTechInnovation/worldpay-within-sdk.svg?branch=master)
+
 Worldpay Within SDK to allow payments within IoT.
 
 The core of this SDK is written in Go with a native Go interface. Along with the native Go interface is an RPC layer (Apache Thrift) to allow communication through other languages.
