@@ -2,23 +2,21 @@
 
 import os
 import time
+import threading
 from pkg_resources import resource_filename
 import thriftpy
-from thriftpy.rpc import make_client, make_server
+from thriftpy.rpc import make_client
 from thriftpy.protocol.binary import TBinaryProtocolFactory
 from thriftpy.transport.buffered import TBufferedTransportFactory
 
 from .wpwithin_service import WPWithin
 from .launcher import run_rpc_agent
+from .make_simple_server import make_simple_server
 
-thrift_types_path = resource_filename(__name__, 'wptypes.thrift')
 
-wptypes_thrift = thriftpy.load(thrift_types_path,
-                               module_name="wptypes_thrift",
-                               include_dirs=[os.path.dirname(thrift_types_path)])
-
-import wptypes_thrift as wpt
-
+def start_server(server):
+    """Start callback server."""
+    server.serve()
 
 def create_client(host,
                   port,
@@ -33,7 +31,8 @@ def create_client(host,
     If either is true, return a dictionary:
         return_dictionary['client'] -> WPWithin instance
         return_dictionary['rpc'] -> rpc process
-        return_dictionary['server'] -> thriftpy callback server
+        return_dictionary['server'] -> TSimpleServer object with callbacks server
+        return_dictionary['server_thread'] -> thread to start server
 
     If start_callback_server is True, callback_port and event_listener must be specified.
     event_listener: instance of a class which implements AbstractEventListener.
@@ -45,7 +44,7 @@ def create_client(host,
     thrift_wpw_path = resource_filename(__name__, 'wpwithin.thrift')
     wpw_thrift = thriftpy.load(thrift_wpw_path,
                                module_name="wpw_thrift",
-                               include_dirs=[os.path.dirname(thrift_types_path)])
+                               include_dirs=[os.path.dirname(thrift_wpw_path)])
 
     return_dict = {}
 
@@ -75,13 +74,13 @@ def create_client(host,
                          trans_factory=TBufferedTransportFactory())
 
     if start_callback_server:
-        server = make_server(wpw_thrift.WPWithinCallback,
-                             event_listener,
-                             host=host,
-                             port=callback_port,
-                             proto_factory=TBinaryProtocolFactory(),
-                             trans_factory=TBufferedTransportFactory())
+        server = make_simple_server(wpw_thrift.WPWithinCallback,
+                                    event_listener,
+                                    host=host,
+                                    port=callback_port)
         return_dict['server'] = server
+        return_dict['server_thread'] = threading.Thread(target=start_server,
+                                                        args=([server]))
 
     if len(return_dict) > 0:
         return_dict['client'] = WPWithin(client)

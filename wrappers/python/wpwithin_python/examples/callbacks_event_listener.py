@@ -1,7 +1,11 @@
+"""Simple event listener for example producer app with callbacks."""
+
 from wpwithin_python import AbstractEventListener
 
 
 class EventListener(AbstractEventListener):
+    """Simple event listener for example producer app with callbacks."""
+
     def beginServiceDelivery(self, service_id, service_delivery_token, units_to_supply):
         print("Begin Service Delivery")
         print("Service ID: {0}".format(service_id))

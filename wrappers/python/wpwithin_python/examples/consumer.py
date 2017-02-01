@@ -1,3 +1,4 @@
+import time
 from wpwithin_python import Error
 
 
@@ -17,7 +18,6 @@ class SampleConsumer:
             print("Did not discover any devices on the network.")
             return None
 
-        print(service_messages)
         device_count = len(service_messages)
         print("Discovered {0} devices on the network.".format(len(service_messages)))
         print("Devices:")
@@ -124,22 +124,17 @@ class SampleConsumer:
             print("Did not receive correct response to make payment")
             return None
 
-        self.client.begin_service_delivery(service_id,
-                                           response.service_delivery_token,
-                                           number_of_units)
+        time.sleep(15)
 
-        # print_message = """Response from make payment:
-        # Server ID: {0.server_id}
-        # Client ID: {0.client_id}
-        # Total Paid: {0.total_paid}
-        # Service Delivery Token:
-        # \tKey: {1.key}
-        # \tIssued: {1.issued}
-        # \tExpiry: {1.expiry}
-        # \tRefund on expiry: {1.refund_on_expiry}
-        # \tSignature: {1.signature}""".format(response, response.service_delivery_token)
-
-        # print(print_message)
+        print("sending callback")
+        token = self.client.begin_service_delivery(service_id,
+                                                   response.service_delivery_token,
+                                                   number_of_units)
 
         print("Shutting down...")
+
+        self.client.end_service_delivery(service_id,
+                                         token,
+                                         number_of_units)
+
         self.agent.kill()
