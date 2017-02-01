@@ -7,6 +7,8 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp/onlineworldpay"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types"
 )
 
@@ -51,7 +53,11 @@ func main() {
 
 	fmt.Printf("Will select device: [%s] %s\n", sm.ServerID, sm.DeviceDescription)
 
-	err = wpw.InitConsumer(sm.Scheme, sm.Hostname, sm.PortNumber, sm.URLPrefix, wpw.GetDevice().UID, &hceCard)
+	pspConfig := make(map[string]string, 0)
+	pspConfig[psp.CfgPSPName] = onlineworldpay.PSPName
+	pspConfig[onlineworldpay.CfgAPIEndpoint] = "https://api.worldpay.com/v1"
+
+	err = wpw.InitConsumer(sm.Scheme, sm.Hostname, sm.PortNumber, sm.URLPrefix, wpw.GetDevice().UID, &hceCard, pspConfig)
 
 	errCheckExit(err)
 

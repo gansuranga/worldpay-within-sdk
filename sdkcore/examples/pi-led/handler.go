@@ -80,3 +80,9 @@ func (handler *Handler) EndServiceDelivery(serviceID int, serviceDeliveryToken t
 		handler.ledYellow.Low()
 	}
 }
+
+// GenericEvent handle a generic event
+func (handler *Handler) GenericEvent(name string, message string, data interface{}) error {
+
+	return nil
+}
