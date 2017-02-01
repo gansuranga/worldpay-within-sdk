@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp/onlineworldpay"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types"
 )
 
@@ -33,7 +35,15 @@ func main() {
 	errCheck(err, "wpwHandler setup")
 	wpw.SetEventHandler(&wpwHandler)
 
-	err = wpw.InitProducer("T_C_03eaa1d3-4642-4079-b030-b543ee04b5af", "T_S_f50ecb46-ca82-44a7-9c40-421818af5996")
+	pspConfig := make(map[string]string, 0)
+	pspConfig[psp.CfgPSPName] = onlineworldpay.PSPName
+	pspConfig[onlineworldpay.CfgMerchantClientKey] = "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af"
+	pspConfig[onlineworldpay.CfgMerchantServiceKey] = "T_S_f50ecb46-ca82-44a7-9c40-421818af5996"
+	pspConfig[psp.CfgHTEPrivateKey] = "T_S_f50ecb46-ca82-44a7-9c40-421818af5996"
+	pspConfig[psp.CfgHTEPublicKey] = "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af"
+	pspConfig[onlineworldpay.CfgAPIEndpoint] = "https://api.worldpay.com/v1"
+
+	err = wpw.InitProducer(pspConfig)
 
 	errCheck(err, "Init producer")
 
