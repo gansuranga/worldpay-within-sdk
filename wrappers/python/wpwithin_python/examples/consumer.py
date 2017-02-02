@@ -1,5 +1,5 @@
 import time
-from wpwithin_python import Error
+from wpwithin_python import Error, CommonPSPKeys, WorldpayPSPKeys, WP_PSP_NAME
 
 
 class SampleConsumer:
@@ -37,8 +37,8 @@ class SampleConsumer:
 
     def connect_to_device(self, service_message):
         psp_config = {
-            "psp_name": "worldpayonlinepayments",
-            "api_endpoint": "https://api.worldpay.com/v1",
+            CommonPSPKeys.psp_name: WP_PSP_NAME,
+            WorldpayPSPKeys.wp_api_endpoint: "https://api.worldpay.com/v1",
         }
         try:
             self.client.init_consumer('http://',

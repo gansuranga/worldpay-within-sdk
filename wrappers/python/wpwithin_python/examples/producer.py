@@ -1,6 +1,12 @@
 import signal
 import sys
-from wpwithin_python import create_client, PricePerUnit, Price, Service
+from wpwithin_python import create_client,\
+                            PricePerUnit,\
+                            Price,\
+                            Service,\
+                            CommonPSPKeys,\
+                            WorldpayPSPKeys,\
+                            WP_PSP_NAME
 
 
 out = create_client("127.0.0.1", 9090, True)
@@ -10,12 +16,12 @@ agent = out['rpc']
 client.setup("Python3 Device", "Sample Python3 producer device")
 
 psp_config = {
-    "psp_name": "worldpayonlinepayments",
-    "hte_public_key": "T_C_6a38539b-89d0-4db9-bec3-d825779c1809",
-    "hte_private_key": "T_S_6b0f27d5-3787-4304-a596-01160c49a55d",
-    "api_endpoint": "https://api.worldpay.com/v1",
-    "merchant_client_key": "T_C_6a38539b-89d0-4db9-bec3-d825779c1809",
-    "merchant_service_key": "T_S_6b0f27d5-3787-4304-a596-01160c49a55d"
+    CommonPSPKeys.psp_name: WP_PSP_NAME,
+    CommonPSPKeys.hte_public_key: "T_C_6a38539b-89d0-4db9-bec3-d825779c1809",
+    CommonPSPKeys.hte_private_key: "T_S_6b0f27d5-3787-4304-a596-01160c49a55d",
+    WorldpayPSPKeys.wp_api_endpoint: "https://api.worldpay.com/v1",
+    WorldpayPSPKeys.wp_merchant_client_key: "T_C_6a38539b-89d0-4db9-bec3-d825779c1809",
+    WorldpayPSPKeys.wp_merchant_service_key: "T_S_6b0f27d5-3787-4304-a596-01160c49a55d"
 }
 
 client.init_producer(psp_config)

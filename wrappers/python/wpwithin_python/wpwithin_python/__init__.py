@@ -23,3 +23,8 @@ from .wpwithin_types import Error, \
 from .wpwithin_service import WPWithin
 from .wpwithin import create_client
 from .wpwithin_callbacks import AbstractEventListener
+from .psp_fields import CommonPSPKeys,\
+                        WorldpayPSPKeys,\
+                        WP_PSP_NAME,\
+                        SecureNetPSPKeys,\
+                        SECURENET_PSP_NAME
