@@ -39,6 +39,7 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
                 new Command("StopSimpleProducer", "Starts a simple producer", StopSimpleProducer),
                 new Command("ConsumePurchase", "Consumes a service (first price of first service found)", ConsumePurchase),
                 new Command("FindProducers", "Lists out all the producers that could be found", FindProducers),
+                new Command("ShowRpcAgentPath", "Shows where the RPC Agent has been found.", FindRpcAgent), 
             });
 
             // TODO Parameterise these so output can be written to a specific file
@@ -53,6 +54,21 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
                 LogFile = new FileInfo("wpwithin.log"),
 
             };
+        }
+
+        private CommandResult FindRpcAgent(string[] arg)
+        {
+            RpcAgentConfiguration cfg = new RpcAgentConfiguration();
+            try
+            {
+                _output.WriteLine("RPC Agent: " + cfg.Path);
+                return CommandResult.Success;
+            }
+            catch (RpcAgentException)
+            {
+                _error.WriteLine("Unable to find an RPC Agent.  Set WPW_HOME, add to application config or copy in to current directly.");
+                return CommandResult.CriticalError;
+            }
         }
 
         private CommandResult FindProducers(string[] arg)

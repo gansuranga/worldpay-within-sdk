@@ -45,6 +45,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="Thrift, Version=0.10.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\thrift-csharp.0.10.0\lib\Thrift.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -63,6 +67,7 @@
   <ItemGroup>
     <Compile Include="ProducerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RpcAgentConfigurationTest.cs" />
     <Compile Include="StartStopTest.cs" />
     <Compile Include="PspConfigTest.cs" />
   </ItemGroup>

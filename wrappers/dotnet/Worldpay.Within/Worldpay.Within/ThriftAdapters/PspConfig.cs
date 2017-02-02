@@ -21,7 +21,7 @@ namespace Worldpay.Innovation.WPWithin.ThriftAdapters
 
         public string this[string name]
         {
-            get { return _properties[name]; }
+            get { return GetOrNull(name); }
             set { _properties[name] = value; }
         }
 
@@ -36,37 +36,48 @@ namespace Worldpay.Innovation.WPWithin.ThriftAdapters
 
         public string PspName
         {
-            get { return  _properties[PspNameProperty]; }
+            get { return GetOrNull(PspNameProperty); }
             set { _properties[PspNameProperty] = value; }
+        }
+
+        /// <summary>
+        /// Syntactic sugar method to retrieve the named property from the underlying _properties attribute, or null if it doesn't exist.
+        /// </summary>
+        /// <param name="propertyName">Property to retrieve, must not be null.</param>
+        /// <returns>The value of the property, or null if it doesn't exist (avoids <see cref="KeyNotFoundException"/>).</returns>
+        private string GetOrNull(string propertyName)
+        {
+            string propertyValue;
+            return _properties.TryGetValue(propertyName, out propertyValue) ? propertyValue : null;
         }
 
         public string HtePublicKey
         {
-            get { return _properties[HtePublicKeyProperty]; }
+            get { return GetOrNull(HtePublicKeyProperty); }
             set { _properties[HtePublicKeyProperty] = value; }
         }
 
         public string HtePrivateKey
         {
-            get { return _properties[HtePrivateKeyProperty]; }
+            get { return GetOrNull(HtePrivateKeyProperty); }
             set { _properties[HtePrivateKeyProperty] = value; }
         }
 
         public string MerchantClientKey
         {
-            get { return _properties[MerchantClientKeyProperty]; }
+            get { return GetOrNull(MerchantClientKeyProperty); }
             set { _properties[MerchantClientKeyProperty] = value; }
         }
 
         public string MerchantServiceKey
         {
-            get { return _properties[MerchantServiceKeyProperty]; }
+            get { return GetOrNull(MerchantServiceKeyProperty); }
             set { _properties[MerchantServiceKeyProperty] = value; }
         }
 
         public string ApiEndPoint
         {
-            get { return _properties[ApiEndpointProperty]; }
+            get { return GetOrNull(ApiEndpointProperty); }
             set { _properties[ApiEndpointProperty] = value; }
         }
 

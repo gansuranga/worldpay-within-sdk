@@ -28,6 +28,8 @@ namespace Worldpay.Within.Tests
             {
                 MerchantClientKey = "cl_key",
                 MerchantServiceKey = "srv_key",
+                HtePublicKey = "cl_key",
+                HtePrivateKey = "srv_key"
             });
             thriftClient.StartServiceBroadcast(2000);
             IEnumerable<ServiceMessage> svcMsgs = thriftClient.DeviceDiscovery(2000);
