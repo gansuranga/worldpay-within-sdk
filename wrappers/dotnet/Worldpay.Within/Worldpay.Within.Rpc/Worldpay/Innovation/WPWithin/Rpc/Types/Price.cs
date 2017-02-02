@@ -177,7 +177,7 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
         if(!__first) { __sb.Append(", "); }
         __first = false;
         __sb.Append("PricePerUnit: ");
-        __sb.Append(PricePerUnit);
+        __sb.Append(PricePerUnit== null ? "<null>" : PricePerUnit.ToString());
       }
       if (UnitId != null) {
         if(!__first) { __sb.Append(", "); }

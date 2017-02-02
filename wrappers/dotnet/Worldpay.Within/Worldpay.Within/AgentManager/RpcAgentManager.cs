@@ -35,8 +35,24 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
         private static readonly ILog Log = LogManager.GetLogger<RpcAgentManager>();
         private static readonly ILog ThriftRpcLog = LogManager.GetLogger("ThriftRpcAgent");
 
-        private Process _thriftRpcProcess;
+        /// <summary>
+        ///     The name of the environment variable that notes the Worldpay Within home directory.  The RPC Agent binary
+        ///     will be looked for in a bin subdirectory.
+        /// </summary>
+        public static readonly string RpcAgentEnvironmentVariableName = "WPW_HOME";
+
         private readonly RpcAgentConfiguration _config;
+
+        private Process _thriftRpcProcess;
+
+        /// <summary>
+        ///     No-op except for storing the passed config.
+        /// </summary>
+        /// <param name="config"></param>
+        public RpcAgentManager(RpcAgentConfiguration config)
+        {
+            _config = config;
+        }
 
         /// <summary>
         ///     Invoked whenever a message is sent to the RPC Agent process's standard output stream.
@@ -58,16 +74,6 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
         /// </summary>
         public event EventHandler OnExited;
 
-
-        /// <summary>
-        /// No-op except for storing the passed config.
-        /// </summary>
-        /// <param name="config"></param>
-        public RpcAgentManager(RpcAgentConfiguration config)
-        {
-            _config = config;
-        }
-        
         /// <summary>
         ///     Starts the Thrift RPC Agent Process with the configuration passed in the constructor.
         /// </summary>
@@ -83,7 +89,8 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
         public void StartThriftRpcAgentProcess()
         {
             string arguments = _config.ToCommandLineArguments();
-            Log.InfoFormat("Attempting to start Thift RPC Agent process using following command line: {0} {1}", _config.Path, arguments);
+            Log.InfoFormat("Attempting to start Thift RPC Agent process using following command line: {0} {1}",
+                _config.Path, arguments);
 
             Process thriftRpcProcess = new Process
             {
@@ -108,13 +115,9 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
         {
             Process proc = (Process) sender;
             if (proc.ExitCode == 0)
-            {
                 ThriftRpcLog.Info("Thrift RPC Agent has terminated with exit code 0");
-            }
             else
-            {
                 ThriftRpcLog.Fatal($"Thrift RPC Agent has exited abnormally with exit code {proc.ExitCode}");
-            }
             OnExited?.Invoke(this, EventArgs.Empty);
         }
 
@@ -161,7 +164,9 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
             Process process = (Process) sender;
             ThriftRpcLog.Info($"RpcAgent({process.Id}): {e.Data}");
             OnMessage?.Invoke(process, e.Data);
-            const string startString = "Begin parsing log level arguments";
+            /* startString is a magic string that we look for in the RPC Agent startup that lets us know
+             * that it's ready for calls.  This is the last message emitted on successful startup. */
+            const string startString = "Begin log setup";
             if (e.Data != null && e.Data.Contains(startString))
             {
                 Log.InfoFormat("Found magic string \"{0}\" indicating that RPC Agent {1} has started successfully",

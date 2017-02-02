@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Common.Logging;
+using Worldpay.Innovation.WPWithin.ThriftAdapters;
 
 namespace Worldpay.Innovation.WPWithin.Sample.Commands
 {
@@ -70,7 +71,14 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
 
             /* Initialises the producer (but doesn't start it yet) with the service and client keys for the Worldpay Online Payments service.
              */
-            _service.InitProducer("T_C_03eaa1d3-4642-4079-b030-b543ee04b5af", "T_S_f50ecb46-ca82-44a7-9c40-421818af5996");
+            PspConfig config = new PspConfig
+            {
+                HtePublicKey = "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af",
+                HtePrivateKey = "T_S_f50ecb46-ca82-44a7-9c40-421818af5996",
+                MerchantClientKey = "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af",
+                MerchantServiceKey = "T_S_f50ecb46-ca82-44a7-9c40-421818af5996"
+            };
+            _service.InitProducer(config);
 
             Log.Info("Starting service broadcast");
 

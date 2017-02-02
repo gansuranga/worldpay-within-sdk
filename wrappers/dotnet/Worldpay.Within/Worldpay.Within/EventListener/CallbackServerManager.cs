@@ -64,7 +64,7 @@ namespace Worldpay.Innovation.WPWithin.EventListener
         {
             if (_server != null)
             {
-                throw new InvalidOperationException("Cannot start server that has already been started");
+                throw new InvalidOperationException("Cannot start callback server that has already been started");
             }
             WPWithinCallback.Processor processor = new WPWithinCallback.Processor(this);
             TServerTransport serverTransport = _config.GetThriftServerTransport();
@@ -77,9 +77,9 @@ namespace Worldpay.Innovation.WPWithin.EventListener
 
         public void Stop()
         {
-            if (_server == null) throw new InvalidOperationException("Cannot stop server when it has not been started");
+            if (_server == null) throw new InvalidOperationException("Cannot stop callback server when it has not been started");
             _server.Stop();
-            Log.Info("Asked Thrift server to stop, now waiting for task to finish");
+            Log.Info("Asked Thrift callback server to stop, now waiting for task to finish");
             _serverTask.Wait();
         }
     }

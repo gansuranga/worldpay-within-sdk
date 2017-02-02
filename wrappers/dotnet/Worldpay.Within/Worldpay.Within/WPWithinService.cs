@@ -54,7 +54,7 @@ namespace Worldpay.Innovation.WPWithin
         public WPWithinService(RpcAgentConfiguration localAgentConfiguration)
         {
             if (localAgentConfiguration == null)
-                throw new ArgumentNullException("A configuration must be supplied", nameof(localAgentConfiguration));
+                throw new ArgumentNullException(nameof(localAgentConfiguration), "A configuration must be supplied");
             InitClient(localAgentConfiguration);
             if (localAgentConfiguration.CallbackPort > 0)
             {
@@ -139,14 +139,15 @@ namespace Worldpay.Innovation.WPWithin
 
 
         public void InitConsumer(string scheme, string hostname, int port, string urlPrefix, string serviceId,
-            HceCard hceCard)
+            HceCard hceCard, PspConfig pspConfig)
         {
-            _client.initConsumer(scheme, hostname, port, urlPrefix, serviceId, HceCardAdapter.Create(hceCard));
+            _client.initConsumer(scheme, hostname, port, urlPrefix, serviceId, HceCardAdapter.Create(hceCard), pspConfig.ToThriftRepresentation());
         }
 
-        public void InitProducer(string merchantClientKey, string merchantServiceKey)
+        public void InitProducer(PspConfig pspConfig)
         {
-            _client.initProducer(merchantClientKey, merchantServiceKey);
+            Dictionary<string, string> pspConfigMap = pspConfig?.ToThriftRepresentation();
+            _client.initProducer(pspConfigMap);
         }
 
         public Device GetDevice()

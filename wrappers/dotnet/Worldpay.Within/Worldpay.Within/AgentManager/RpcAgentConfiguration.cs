@@ -180,7 +180,7 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                     if (parent == null)
                     {
                         throw new Exception(
-                            $"Unable to locate {sdkDir} (couldn't find a diredctory called ({sdkDir}), you must override with property {PathPropertyName} property in App.config");
+                            $"Unable to locate {sdkDir} (couldn't find a directory called ({sdkDir}), you must override with property {PathPropertyName} property in App.config");
                     }
                     _rpcAgentPath =
                         new FileInfo(string.Join(System.IO.Path.DirectorySeparatorChar.ToString(), parent.FullName,

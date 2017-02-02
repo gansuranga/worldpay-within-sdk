@@ -166,7 +166,7 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
         if(!__first) { __sb.Append(", "); }
         __first = false;
         __sb.Append("ServiceDeliveryToken: ");
-        __sb.Append(ServiceDeliveryToken);
+        __sb.Append(ServiceDeliveryToken== null ? "<null>" : ServiceDeliveryToken.ToString());
       }
       __sb.Append(")");
       return __sb.ToString();

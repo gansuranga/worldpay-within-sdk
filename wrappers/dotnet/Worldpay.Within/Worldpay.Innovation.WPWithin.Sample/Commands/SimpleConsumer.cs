@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Worldpay.Innovation.WPWithin.ThriftAdapters;
 
 namespace Worldpay.Innovation.WPWithin.Sample.Commands
 {
@@ -113,7 +114,7 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
         {
             HceCard card = new HceCard("Bilbo", "Baggins", "Card", "5555555555554444", 11, 2018, "113");
             service.InitConsumer("http://", svcMsg.Hostname, svcMsg.PortNumber ?? 80, svcMsg.UrlPrefix, svcMsg.ServerId,
-                card);
+                card, new PspConfig());
         }
 
         /// <summary>

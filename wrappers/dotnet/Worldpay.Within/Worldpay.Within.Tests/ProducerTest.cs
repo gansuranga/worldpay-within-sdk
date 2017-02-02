@@ -3,6 +3,7 @@ using Common.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Worldpay.Innovation.WPWithin;
 using Worldpay.Innovation.WPWithin.AgentManager;
+using Worldpay.Innovation.WPWithin.ThriftAdapters;
 
 namespace Worldpay.Within.Tests
 {
@@ -16,10 +17,18 @@ namespace Worldpay.Within.Tests
         [TestMethod]
         public void SendSimpleMessage()
         {
-            WPWithinService thriftClient = new WPWithinService(new RpcAgentConfiguration());
+            WPWithinService thriftClient = new WPWithinService(new RpcAgentConfiguration
+            {
+                ServicePort = 9091,
+                LogLevel = "verbose,error,fatal,warn,debug"
+            });
             thriftClient.SetupDevice("DotNet RPC client", "This is coming from C# via Thrift RPC.");
             Log.Info("Initialising Producer");
-            thriftClient.InitProducer("cl_key", "srv_key");
+            thriftClient.InitProducer(new PspConfig
+            {
+                MerchantClientKey = "cl_key",
+                MerchantServiceKey = "srv_key",
+            });
             thriftClient.StartServiceBroadcast(2000);
             IEnumerable<ServiceMessage> svcMsgs = thriftClient.DeviceDiscovery(2000);
 
