@@ -127,7 +127,7 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
         oprot.WriteStructBegin(struc);
         TField field = new TField();
         if (FirstName != null) {
-          field.Name = "FirstName";
+          field.Name = "firstName";
           field.Type = TType.String;
           field.ID = 1;
           oprot.WriteFieldBegin(field);
@@ -135,7 +135,7 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
           oprot.WriteFieldEnd();
         }
         if (LastName != null) {
-          field.Name = "LastName";
+          field.Name = "lastName";
           field.Type = TType.String;
           field.ID = 2;
           oprot.WriteFieldBegin(field);
@@ -143,7 +143,7 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
           oprot.WriteFieldEnd();
         }
         if (ExpMonth != null) {
-          field.Name = "ExpMonth";
+          field.Name = "expMonth";
           field.Type = TType.I32;
           field.ID = 3;
           oprot.WriteFieldBegin(field);
@@ -151,7 +151,7 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
           oprot.WriteFieldEnd();
         }
         if (ExpYear != null) {
-          field.Name = "ExpYear";
+          field.Name = "expYear";
           field.Type = TType.I32;
           field.ID = 4;
           oprot.WriteFieldBegin(field);
@@ -159,7 +159,7 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
           oprot.WriteFieldEnd();
         }
         if (CardNumber != null) {
-          field.Name = "CardNumber";
+          field.Name = "cardNumber";
           field.Type = TType.String;
           field.ID = 5;
           oprot.WriteFieldBegin(field);
@@ -167,7 +167,7 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
           oprot.WriteFieldEnd();
         }
         if (Type != null) {
-          field.Name = "Type";
+          field.Name = "type";
           field.Type = TType.String;
           field.ID = 6;
           oprot.WriteFieldBegin(field);
@@ -175,7 +175,7 @@ namespace Worldpay.Innovation.WPWithin.Rpc.Types
           oprot.WriteFieldEnd();
         }
         if (Cvc != null) {
-          field.Name = "Cvc";
+          field.Name = "cvc";
           field.Type = TType.String;
           field.ID = 7;
           oprot.WriteFieldBegin(field);

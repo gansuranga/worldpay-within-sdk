@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Worldpay.Innovation.WPWithin.AgentManager;
+using Worldpay.Innovation.WPWithin.ThriftAdapters;
 
 namespace Worldpay.Innovation.WPWithin.Sample.Commands
 {
@@ -49,7 +50,8 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
                 ServicePort = 9091,
                 CallbackPort = 9092,
                 LogLevel = "panic,fatal,error,warn,info,debug",
-                LogFile = new FileInfo("wpwithin.log")
+                LogFile = new FileInfo("wpwithin.log"),
+
             };
         }
 
@@ -78,7 +80,8 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
                     _output.WriteLine($"\tDescription: {device.DeviceDescription}, URL Prefix: {device.UrlPrefix}");
                     service.InitConsumer("http://", device.Hostname, device.PortNumber ?? 80, device.UrlPrefix,
                         device.ServerId,
-                        new HceCard("Bilbo", "Baggins", "Card", "5555555555554444", 11, 2018, "113"));
+                        new HceCard("Bilbo", "Baggins", "Card", "5555555555554444", 11, 2018, "113"), 
+                        new PspConfig());
                     try
                     {
                         List<ServiceDetails> services = service.RequestServices().ToList();
