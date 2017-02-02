@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Thrift;
 
 namespace Worldpay.Innovation.WPWithin
 {
@@ -20,6 +21,9 @@ namespace Worldpay.Innovation.WPWithin
 
         public WPWithinException(Exception innerException, String fmt, params Object[] parameters) :
             base(String.Format(fmt, parameters), innerException)
+        { }
+
+        internal WPWithinException(TApplicationException tae) : this(tae, "Exception from WPWithin SDK: {0}", tae.Message)
         { }
     }
 }

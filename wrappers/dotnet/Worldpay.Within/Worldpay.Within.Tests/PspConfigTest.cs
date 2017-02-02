@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using Common.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Thrift;
 using Worldpay.Innovation.WPWithin;
 using Worldpay.Innovation.WPWithin.AgentManager;
 using Worldpay.Innovation.WPWithin.ThriftAdapters;
@@ -22,6 +23,7 @@ namespace Worldpay.Within.Tests
         /// 
         /// </summary>
         [TestMethod]
+        [ExpectedException(typeof(WPWithinException))]
         public void TestMissingHteCredentials()
         {
             WPWithinService thriftClient = new WPWithinService(new RpcAgentConfiguration
@@ -63,6 +65,7 @@ namespace Worldpay.Within.Tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(WPWithinException))]
         public void TestException()
         {
             WPWithinService thriftClient = new WPWithinService(new RpcAgentConfiguration
@@ -72,6 +75,7 @@ namespace Worldpay.Within.Tests
                 LogFile = new FileInfo("testmissinghtecredentials.log"),
             });
             thriftClient.SetupDevice(null, null);
+
             Log.Info("Initialising Producer");
             thriftClient.InitProducer(new PspConfig());
         }

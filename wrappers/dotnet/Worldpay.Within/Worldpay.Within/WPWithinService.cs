@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Common.Logging;
+using Thrift;
 using Thrift.Protocol;
 using Thrift.Transport;
 using Worldpay.Innovation.WPWithin.AgentManager;
@@ -15,14 +16,20 @@ namespace Worldpay.Innovation.WPWithin
     ///     The main Worldpay Within service endpoint.
     /// </summary>
     /// <remarks>
-    ///     <para>To access a Worldpay Within service create an instance of this class, configured with a <see cref="RpcAgentConfiguration"/> instance that informs this instance
-    /// how to connect to the Thrift RPC Agent that manages the communication to remote devices.</para>
-    /// <para>Note that this single service interface is the used for both producing (selling) and consuming (buying) services.</para>
+    ///     <para>
+    ///         To access a Worldpay Within service create an instance of this class, configured with a
+    ///         <see cref="RpcAgentConfiguration" /> instance that informs this instance
+    ///         how to connect to the Thrift RPC Agent that manages the communication to remote devices.
+    ///     </para>
+    ///     <para>
+    ///         Note that this single service interface is the used for both producing (selling) and consuming (buying)
+    ///         services.
+    ///     </para>
     /// </remarks>
     public class WPWithinService : IDisposable
     {
         /// <summary>
-        /// Delegate used for registering handlers for the <see cref="WPWithinService.OnBeginServiceDelivery"/> event.
+        ///     Delegate used for registering handlers for the <see cref="WPWithinService.OnBeginServiceDelivery" /> event.
         /// </summary>
         /// <param name="serviceId">The identity of the service that has begun delivering its service.</param>
         /// <param name="serviceDeliveryToken">A token that can be validated to ensure that origin of the event is genuine.</param>
@@ -31,7 +38,7 @@ namespace Worldpay.Innovation.WPWithin
             int serviceId, ServiceDeliveryToken serviceDeliveryToken, int unitsToSupply);
 
         /// <summary>
-        /// Delegate used for registering handlers for the <see cref="WPWithinService.OnEndServiceDelivery"/> event.
+        ///     Delegate used for registering handlers for the <see cref="WPWithinService.OnEndServiceDelivery" /> event.
         /// </summary>
         /// <param name="serviceId">The identity of the service that has completed delivering its service.</param>
         /// <param name="serviceDeliveryToken">A token that can be validated to ensure that origin of the event is genuine.</param>
@@ -48,13 +55,16 @@ namespace Worldpay.Innovation.WPWithin
         private TTransport _transport;
 
         /// <summary>
-        /// Creates an instance of the service that will communicate with remote devices using the configuration supplied by <paramref name="localAgentConfiguration"/>.
+        ///     Creates an instance of the service that will communicate with remote devices using the configuration supplied by
+        ///     <paramref name="localAgentConfiguration" />.
         /// </summary>
         /// <param name="localAgentConfiguration">Describes how the local Thrift RPC agent (the core SDK) can be communicated with.</param>
         public WPWithinService(RpcAgentConfiguration localAgentConfiguration)
         {
             if (localAgentConfiguration == null)
+            {
                 throw new ArgumentNullException(nameof(localAgentConfiguration), "A configuration must be supplied");
+            }
             InitClient(localAgentConfiguration);
             if (localAgentConfiguration.CallbackPort > 0)
             {
@@ -98,10 +108,13 @@ namespace Worldpay.Innovation.WPWithin
         }
 
         /// <summary>
-        /// Event raised for consumers when a service that has been paid for starts delivering that service.
+        ///     Event raised for consumers when a service that has been paid for starts delivering that service.
         /// </summary>
-        /// <remarks>This event will only be raised if <see cref="RpcAgentConfiguration.CallbackPort"/> has been set, which causes the Thrift RPC Agent to set up a callback
-        /// mechanism.</remarks>
+        /// <remarks>
+        ///     This event will only be raised if <see cref="RpcAgentConfiguration.CallbackPort" /> has been set, which causes the
+        ///     Thrift RPC Agent to set up a callback
+        ///     mechanism.
+        /// </remarks>
         public event BeginServiceDeliveryHandler OnBeginServiceDelivery
         {
             add { _listener.BeginServiceDelivery += value; }
@@ -109,10 +122,13 @@ namespace Worldpay.Innovation.WPWithin
         }
 
         /// <summary>
-        /// Event raised for consumers when a service that has been paid for completes delivering that service.
+        ///     Event raised for consumers when a service that has been paid for completes delivering that service.
         /// </summary>
-        /// <remarks>This event will only be raised if <see cref="RpcAgentConfiguration.CallbackPort"/> has been set, which causes the Thrift RPC Agent to set up a callback
-        /// mechanism.</remarks>
+        /// <remarks>
+        ///     This event will only be raised if <see cref="RpcAgentConfiguration.CallbackPort" /> has been set, which causes the
+        ///     Thrift RPC Agent to set up a callback
+        ///     mechanism.
+        /// </remarks>
         public event EndServiceDeliveryHandler OnEndServiceDelivery
         {
             add { _listener.EndServiceDelivery += value; }
@@ -120,7 +136,7 @@ namespace Worldpay.Innovation.WPWithin
         }
 
         /// <summary>
-        /// Adds a new service to those offered by this producer.
+        ///     Adds a new service to those offered by this producer.
         /// </summary>
         /// <param name="service">The service to add.  Must not be null.</param>
         public void AddService(Service service)
@@ -129,7 +145,7 @@ namespace Worldpay.Innovation.WPWithin
         }
 
         /// <summary>
-        /// Removes a service, so that it is no longer offered by this producer.
+        ///     Removes a service, so that it is no longer offered by this producer.
         /// </summary>
         /// <param name="service">The service to remove.</param>
         public void RemoveService(Service service)
@@ -141,70 +157,162 @@ namespace Worldpay.Innovation.WPWithin
         public void InitConsumer(string scheme, string hostname, int port, string urlPrefix, string serviceId,
             HceCard hceCard, PspConfig pspConfig)
         {
-            _client.initConsumer(scheme, hostname, port, urlPrefix, serviceId, HceCardAdapter.Create(hceCard), pspConfig.ToThriftRepresentation());
+            _client.initConsumer(scheme, hostname, port, urlPrefix, serviceId, HceCardAdapter.Create(hceCard),
+                pspConfig.ToThriftRepresentation());
         }
 
         public void InitProducer(PspConfig pspConfig)
         {
-            Dictionary<string, string> pspConfigMap = pspConfig?.ToThriftRepresentation();
-            _client.initProducer(pspConfigMap);
+            try
+            {
+                Dictionary<string, string> pspConfigMap = pspConfig?.ToThriftRepresentation();
+                try
+                {
+                    _client.initProducer(pspConfigMap);
+                }
+                catch (TApplicationException tae)
+                {
+                    throw new WPWithinException(tae);
+                }
+            }
+            catch (TApplicationException tae)
+            {
+                throw new WPWithinException(tae);
+            }
         }
 
         public Device GetDevice()
         {
-            return DeviceAdapter.Create(_client.getDevice());
+            try
+            {
+                return DeviceAdapter.Create(_client.getDevice());
+            }
+            catch (TApplicationException tae)
+            {
+                throw new WPWithinException(tae);
+            }
         }
 
         public void StopServiceBroadcast()
         {
-            _client.stopServiceBroadcast();
+            try
+            {
+                _client.stopServiceBroadcast();
+            }
+            catch (TApplicationException tae)
+            {
+                throw new WPWithinException(tae);
+            }
         }
 
         public IEnumerable<ServiceMessage> DeviceDiscovery(int timeoutMillis)
         {
-            return ServiceMessageAdapter.Create(_client.deviceDiscovery(timeoutMillis));
+            try
+            {
+                return ServiceMessageAdapter.Create(_client.deviceDiscovery(timeoutMillis));
+            }
+            catch (TApplicationException tae)
+            {
+                throw new WPWithinException(tae);
+            }
         }
 
         public IEnumerable<ServiceDetails> RequestServices()
         {
-            return ServiceDetailsAdapter.Create(_client.requestServices());
+            try
+            {
+                return ServiceDetailsAdapter.Create(_client.requestServices());
+            }
+            catch (TApplicationException tae)
+            {
+                throw new WPWithinException(tae);
+            }
         }
 
         public IEnumerable<Price> GetServicePrices(int serviceId)
         {
-            return PriceAdapter.Create(_client.getServicePrices(serviceId));
+            try
+            {
+                return PriceAdapter.Create(_client.getServicePrices(serviceId));
+            }
+            catch (TApplicationException tae)
+            {
+                throw new WPWithinException(tae);
+            }
         }
 
         public TotalPriceResponse SelectService(int serviceId, int numberOfUnits, int priceId)
         {
-            return TotalPriceResponseAdapter.Create(_client.selectService(serviceId, numberOfUnits, priceId));
+            try
+            {
+                return TotalPriceResponseAdapter.Create(_client.selectService(serviceId, numberOfUnits, priceId));
+            }
+            catch (TApplicationException tae)
+            {
+                throw new WPWithinException(tae);
+            }
         }
 
         public PaymentResponse MakePayment(TotalPriceResponse request)
         {
-            return PaymentResponseAdapter.Create(_client.makePayment(TotalPriceResponseAdapter.Create(request)));
+            try
+            {
+                return PaymentResponseAdapter.Create(_client.makePayment(TotalPriceResponseAdapter.Create(request)));
+            }
+            catch (TApplicationException tae)
+            {
+                throw new WPWithinException(tae);
+            }
         }
 
         public void BeginServiceDelivery(int serviceId, ServiceDeliveryToken serviceDeliveryToken, int unitsToSupply)
         {
-            _client.beginServiceDelivery(serviceId, ServiceDeliveryTokenAdapter.Create(serviceDeliveryToken),
-                unitsToSupply);
+            try
+            {
+                _client.beginServiceDelivery(serviceId, ServiceDeliveryTokenAdapter.Create(serviceDeliveryToken),
+                    unitsToSupply);
+            }
+            catch (TApplicationException tae)
+            {
+                throw new WPWithinException(tae);
+            }
         }
 
         public void EndServiceDelivery(int serviceId, ServiceDeliveryToken serviceDeliveryToken, int unitsReceived)
         {
-            _client.endServiceDelivery(serviceId, ServiceDeliveryTokenAdapter.Create(serviceDeliveryToken),
-                unitsReceived);
+            try
+            {
+                _client.endServiceDelivery(serviceId, ServiceDeliveryTokenAdapter.Create(serviceDeliveryToken),
+                    unitsReceived);
+            }
+            catch (TApplicationException tae)
+            {
+                throw new WPWithinException(tae);
+            }
         }
 
         public void StartServiceBroadcast(int timeoutMillis)
         {
-            _client.startServiceBroadcast(timeoutMillis);
+            try
+            {
+                _client.startServiceBroadcast(timeoutMillis);
+            }
+            catch (TApplicationException tae)
+            {
+                throw new WPWithinException(tae);
+            }
         }
 
         public void SetupDevice(string deviceName, string deviceDescription)
         {
-            _client.setup(deviceName, deviceDescription);
+            try
+            {
+                _client.setup(deviceName, deviceDescription);
+            }
+            catch (TApplicationException tae)
+            {
+                throw new WPWithinException(tae);
+            }
         }
 
         private void InitClient(RpcAgentConfiguration config)
