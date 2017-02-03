@@ -190,9 +190,8 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                 string agentFilename = RpcAgentFilenameGenerator.GetForCurrent();
                 Log.Info("Searching for " + agentFilename);
 
-                _rpcAgentPath = LookForRpcAgentIn(".") ??
+                _rpcAgentPath = LookForRpcAgentIn("wpw-bin") ??
                                 LookForRpcAgentIn(GetPathFromApplicationConfig()) ??
-                                LookForRpcAgentIn(GetPathFromSearchForSdk()) ??
                                 LookForRpcAgentIn(GetPathFromEnvironment());
 
                 if (_rpcAgentPath == null)
