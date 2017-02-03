@@ -30,6 +30,7 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
     {
         private static readonly ILog Log = LogManager.GetLogger<RpcAgentConfiguration>();
 
+
         /// <summary>
         ///     The name of the environment variable that contains the home directory for the Worldpay Within SDK.
         ///     The RPC Agent will be looked for under the "bin" subdirectory.
@@ -186,7 +187,7 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                     return _rpcAgentPath;
                 }
 
-                string agentFilename = GetRpcAgentExecutableFilename();
+                string agentFilename = RpcAgentFilenameGenerator.GetForCurrent();
                 Log.Info("Searching for " + agentFilename);
 
                 _rpcAgentPath = LookForRpcAgentIn(".") ??
