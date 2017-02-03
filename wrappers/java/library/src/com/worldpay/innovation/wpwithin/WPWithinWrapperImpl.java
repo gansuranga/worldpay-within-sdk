@@ -287,7 +287,7 @@ public class WPWithinWrapperImpl implements WPWithinWrapper {
     private void startRPCAgent(int port, int callbackPort, Listener launcherListener) {
 
         String flagLogfile = "wpwithin.log";
-        String flagLogLevels = "debug,error,info,warn,fatal";
+        String flagLogLevels = "debug,error,info,warn,fatal,panic";
         String flagCallbackPort = callbackPort > 0 ? "-callbackport="+callbackPort : "";
         String binBase = System.getenv("WPWBIN") == null ? "./rpc-agent-bin" : System.getenv("WPWBIN");
 
