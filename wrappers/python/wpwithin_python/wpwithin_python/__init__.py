@@ -8,7 +8,6 @@ Example apps on:
     https://github.com/WPTechInnovation/worldpay-within-sdk/tree/feature/python-wrapper/wrappers/python/wpwithin_python/examples
 """
 
-from .launcher import run_rpc_agent
 from .wpwithin_types import Error, \
                     PricePerUnit, \
                     Price, \
@@ -20,8 +19,7 @@ from .wpwithin_types import Error, \
                     TotalPriceResponse, \
                     ServiceDeliveryToken, \
                     PaymentResponse
-from .wpwithin_service import WPWithin
-from .wpwithin import create_client
+from .wpwithin import WPWithin
 from .wpwithin_callbacks import AbstractEventListener
 from .psp_fields import CommonPSPKeys,\
                         WorldpayPSPKeys,\
