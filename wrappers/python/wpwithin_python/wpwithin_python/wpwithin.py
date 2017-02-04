@@ -53,18 +53,18 @@ class WPWithin(object):
         if start_callback_server and (callback_port is None or event_listener is None):
             raise ValueError('No callback port or listener provided')
 
-        self._thrift_client = make_client(wpw_thrift.WPWithin,
-                                          host=host,
-                                          port=port,
-                                          proto_factory=TBinaryProtocolFactory(),
-                                          trans_factory=TBufferedTransportFactory())
-
         if start_rpc:
             self._rpc = run_rpc_agent(port,
                                       rpc_dir,
                                       start_callback_server,
                                       callback_port)
             time.sleep(1)
+
+        self._thrift_client = make_client(wpw_thrift.WPWithin,
+                                          host=host,
+                                          port=port,
+                                          proto_factory=TBinaryProtocolFactory(),
+                                          trans_factory=TBufferedTransportFactory())
 
         if start_callback_server:
             self._server = make_simple_server(wpw_thrift.WPWithinCallback,
@@ -95,7 +95,7 @@ class WPWithin(object):
         """Setup the thrift client."""
         try:
             self._thrift_client.setup(name, description)
-        except wptypes_thrift as err:
+        except wptypes_thrift.Error as err:
             raise Error(err.message)
 
     def add_service(self, svc):
@@ -106,7 +106,7 @@ class WPWithin(object):
         service = ConvertToThrift.service(svc)
         try:
             self._thrift_client.addService(service)
-        except wptypes_thrift as err:
+        except wptypes_thrift.Error as err:
             raise Error(err.message)
 
     def remove_service(self, svc):
@@ -117,7 +117,7 @@ class WPWithin(object):
         service = ConvertToThrift.service(svc)
         try:
             self._thrift_client.removeService(service)
-        except wptypes_thrift as err:
+        except wptypes_thrift.Error as err:
             raise Error(err.message)
 
     def init_consumer(self,
@@ -149,7 +149,7 @@ class WPWithin(object):
                                              client_id,
                                              card,
                                              psp_config)
-        except wptypes_thrift as err:
+        except wptypes_thrift.Error as err:
             raise Error(err.message)
 
     def init_producer(self, psp_config):
@@ -160,7 +160,7 @@ class WPWithin(object):
         """
         try:
             self._thrift_client.initProducer(psp_config)
-        except wptypes_thrift as err:
+        except wptypes_thrift.Error as err:
             raise Error(err.message)
 
     def get_device(self):
@@ -173,20 +173,20 @@ class WPWithin(object):
         """
         try:
             self._thrift_client.startServiceBroadcast(timeout_ms)
-        except wptypes_thrift as err:
+        except wptypes_thrift.Error as err:
             raise Error(err.message)
 
     def stop_service_broadcast(self):
         try:
             self._thrift_client.stopServiceBroadcast()
-        except wptypes_thrift as err:
+        except wptypes_thrift.Error as err:
             raise Error(err.message)
 
     def device_discovery(self, timeout_ms):
         """Return list of ServiceMessage found on the network."""
         try:
             service_messages = self._thrift_client.deviceDiscovery(timeout_ms)
-        except wptypes_thrift as err:
+        except wptypes_thrift.Error as err:
             raise Error(err.message)
         else:
             svc_messages = []
@@ -198,7 +198,7 @@ class WPWithin(object):
         """Return list of ServiceDetails found on the network."""
         try:
             service_details = self._thrift_client.requestServices()
-        except wptypes_thrift as err:
+        except wptypes_thrift.Error as err:
             raise Error(err.message)
         else:
             svc_details = []
@@ -210,7 +210,7 @@ class WPWithin(object):
         """Return list of Price for specified service."""
         try:
             prices = self._thrift_client.getServicePrices(service_id)
-        except wptypes_thrift as err:
+        except wptypes_thrift.Error as err:
             raise Error(err.message)
         else:
             wprices = []
@@ -225,7 +225,7 @@ class WPWithin(object):
         """
         try:
             service = self._thrift_client.selectService(service_id, number_of_units, price_id)
-        except wptypes_thrift as err:
+        except wptypes_thrift.Error as err:
             raise Error(err.message)
         else:
             return ConvertFromThrift.total_price_response(service)
@@ -238,7 +238,7 @@ class WPWithin(object):
         trequest = ConvertToThrift.total_price_response(request)
         try:
             response = self._thrift_client.makePayment(trequest)
-        except wptypes_thrift as err:
+        except wptypes_thrift.Error as err:
             raise Error(err.message)
         else:
             return ConvertFromThrift.payment_response(response)
@@ -250,7 +250,7 @@ class WPWithin(object):
                 service_id,
                 token,
                 units_to_supply)
-        except wptypes_thrift as err:
+        except wptypes_thrift.Error as err:
             raise Error(err.message)
         else:
             return ConvertFromThrift.service_delivery_token(token_received)
@@ -261,7 +261,7 @@ class WPWithin(object):
             token_received = self._thrift_client.endServiceDelivery(service_id,
                                                                     token,
                                                                     units_received)
-        except wptypes_thrift as err:
+        except wptypes_thrift.Error as err:
             raise Error(err.message)
         else:
             return ConvertFromThrift.service_delivery_token(token_received)
