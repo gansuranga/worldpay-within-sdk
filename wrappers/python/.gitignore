@@ -89,6 +89,6 @@ ENV/
 .ropeproject
 
 # RPC Agent
-wpwithin_python/examples/rpc-agent/
+wpwithin_python/examples/wpw-bin/
 wpwithin_python/examples/uuid.txt
 wpwithin_python/examples/wpwconfig.json

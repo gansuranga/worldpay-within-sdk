@@ -1,6 +1,6 @@
 import signal
 import sys
-from wpwithin_python import create_client,\
+from wpwithin_python import WPWithin,\
                             PricePerUnit,\
                             Price,\
                             Service,\
@@ -9,9 +9,9 @@ from wpwithin_python import create_client,\
                             WP_PSP_NAME
 
 
-out = create_client("127.0.0.1", 9090, True)
-client = out['client']
-agent = out['rpc']
+client = WPWithin("127.0.0.1",
+                  9090,
+                  True)
 
 client.setup("Python3 Device", "Sample Python3 producer device")
 
@@ -46,8 +46,7 @@ client.start_service_broadcast(0)
 
 def signal_handler(signal_number, stack_frame):
     print("shutting down...")
-    agent.kill()
-    sys.exit(0)
+    client.shutdown()
 
 signal.signal(signal.SIGINT, signal_handler)
 

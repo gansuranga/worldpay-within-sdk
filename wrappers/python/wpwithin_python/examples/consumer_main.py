@@ -1,5 +1,5 @@
 from consumer import SampleConsumer
-from wpwithin_python import HCECard, create_client, WPWithin
+from wpwithin_python import WPWithin, HCECard
 
 hce_card = HCECard(first_name='Bilbo',
                    last_name='Baggins',
@@ -9,12 +9,9 @@ hce_card = HCECard(first_name='Bilbo',
                    card_type='Card',
                    cvc='113')
 
-out = create_client("127.0.0.1", 8778, True)
+client = WPWithin("127.0.0.1", 8778, True)
 
-client = out['client']
-agent = out['rpc']
-
-consumer = SampleConsumer(client, agent, hce_card)
+consumer = SampleConsumer(client, hce_card)
 
 consumer.client.setup("Python3 test consumer", "Python3 sample consumer device")
 
@@ -39,3 +36,5 @@ ipv4: {0.ipv4address}"""
     if service_message is not None:
         consumer.connect_to_device(service_message)
         consumer.purchase_first_service_first_price(1)
+
+consumer.client.shutdown()

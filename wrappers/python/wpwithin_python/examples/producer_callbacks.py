@@ -3,7 +3,7 @@ import time
 import signal
 import sys
 from callbacks_event_listener import EventListener
-from wpwithin_python import create_client,\
+from wpwithin_python import WPWithin,\
                             PricePerUnit,\
                             Price,\
                             Service,\
@@ -12,17 +12,12 @@ from wpwithin_python import create_client,\
                             WP_PSP_NAME
 
 
-out = create_client("127.0.0.1",
-                    9090,
-                    True,
-                    True,
-                    9092,
-                    EventListener())
-
-client = out['client']
-agent = out['rpc']
-server_thread = out['server_thread']
-server = out['server']
+client = WPWithin("127.0.0.1",
+                  9090,
+                  True,
+                  start_callback_server=True,
+                  callback_port=9092,
+                  event_listener=EventListener())
 
 client.setup("Python3 Device", "Sample Python3 producer device")
 
@@ -52,33 +47,14 @@ service = Service(service_id=1,
 
 client.add_service(service)
 
-server_thread.daemon = True
-server_thread.start()
+print("Start service broadcast for 20 seconds")
+client.start_service_broadcast(20000)
 
-print("Start service broadcast")
-client.start_service_broadcast(0)
-
-should_run = True
 def signal_handler(signal_number, stack_frame):
     print("shutting down...")
-
-    global should_run
-
-    server.close()
-
-    agent.kill()
-
-    should_run = False
-
-    sys.exit(0)
+    client.shutdown()
 
 signal.signal(signal.SIGINT, signal_handler)
 
-time.sleep(20)
-print("stop broadcast")
-client.stop_service_broadcast()
-
-while should_run:
+while True:
     pass
-
-sys.exit(0)

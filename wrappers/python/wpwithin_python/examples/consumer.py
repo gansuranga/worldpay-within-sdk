@@ -3,9 +3,8 @@ from wpwithin_python import Error, CommonPSPKeys, WorldpayPSPKeys, WP_PSP_NAME
 
 
 class SampleConsumer:
-    def __init__(self, client, agent, hce_card):
+    def __init__(self, client, hce_card):
         self.client = client
-        self.agent = agent
         self.hce_card = hce_card
 
     def get_device_details(self):
@@ -126,15 +125,13 @@ class SampleConsumer:
 
         time.sleep(15)
 
-        print("sending callback")
+        print("Send begin service delivery")
         token = self.client.begin_service_delivery(service_id,
                                                    response.service_delivery_token,
                                                    number_of_units)
 
-        print("Shutting down...")
+        print("Send end service delivery")
 
         self.client.end_service_delivery(service_id,
                                          token,
                                          number_of_units)
-
-        self.agent.kill()
