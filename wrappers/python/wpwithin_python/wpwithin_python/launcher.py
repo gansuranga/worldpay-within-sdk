@@ -60,14 +60,14 @@ def run_rpc_agent(port,
         if os.path.isfile(normpath(join(DEFAULT_PATH, agent))):
             rpc_dir = DEFAULT_PATH
         elif os.getenv(DEFAULT_ENV, default=False):
-            env_path = join(os.getenv(DEFAULT_ENV), '/bin/')
+            env_path = join(os.getenv(DEFAULT_ENV), 'bin')
             if os.path.isfile(normpath(join(env_path, agent))):
                 rpc_dir = env_path
         else:
             raise ValueError('RPC Agent binary not found at the default locations,\
  please specify a directory.')
 
-    args = [rpc_dir + agent,
+    args = [normpath(join(rpc_dir, agent)),
             '-port='+str(port),
             '-logfile=wpwithin.log',
             '-loglevel=debug,error,warn,info,fatal']
