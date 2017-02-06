@@ -12,7 +12,7 @@ class WorldpayPSPKeys():
     """PSP Config map keys specific to Worldpay."""
 
     wp_merchant_client_key = "merchant_client_key"
-    wp_merchant_service_key = "merchant_client_key"
+    wp_merchant_service_key = "merchant_service_key"
     wp_api_endpoint = "api_endpoint"
 
 
