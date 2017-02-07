@@ -58,6 +58,7 @@ If you wish to develop using a wrapper library then please navigate to your chos
 * Install Go dependencies: `cd applications/rpc-agent` then run: `go get ./...`
 
 ### Install the RPC agent
+* Please note that it is recommended to only build the RPC Agent for customisations of the binary. It is strongly recommended to use the RPC-Agent binaries as provided in the releases section of this repository.
 * Change directory to `cd $GOPATH/src/github.com/wptechninnovation/worldpay-within-sdk/applications/rpc-agent`
 * It is advisable to install all dependencies on one shot using `go get ./...`
 * Type `go install`
