@@ -7,6 +7,7 @@ public enum Architecture {
 
     IA32,
     X86_64,
-    ARM,
+    ARM32,
+    ARM64,
     UNKNOWN
 }

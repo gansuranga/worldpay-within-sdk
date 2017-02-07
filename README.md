@@ -59,9 +59,10 @@ If you wish to develop using a wrapper library then please navigate to your chos
 
 ### Install the RPC agent
 * Change directory to `cd $GOPATH/src/github.com/wptechninnovation/worldpay-within-sdk/applications/rpc-agent`
+* It is advisable to install all dependencies on one shot using `go get ./...`
 * Type `go install`
 * This should build, package up, and install the binary for the rpc-agent into your bin directory `$GOPATH/bin`
-* If there are any errors around missing packages do additional `go get <package-repo-path>`
+* It is worth noting at this point that the SDK wrappers will attempt to find RPC Agent binaries using the filenames outlined at < https://github.com/WPTechInnovation/worldpay-within-sdk/issues/116#issuecomment-277310966 > Please consider this. Alternatively one could start the RPC Agent separate of the SDK wrapper and inform the wrapper to not start the agent.
 * If there are any compile errors, it is likely you are running a version of go that is too old (we have seen this most commonly on Ubuntu Linux)
 
 ### Install the example client app
