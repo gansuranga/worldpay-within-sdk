@@ -108,11 +108,7 @@ func (wp *WPWithinHandler) InitProducer(pspConfig map[string]string) (err error)
 
 	log.Debug("RPC.WPWithinHandler.InitProducer()")
 
-	go func() {
-
-		wp.wpwithin.InitProducer(pspConfig)
-
-	}()
+	wp.wpwithin.InitProducer(pspConfig)
 
 	return nil
 }
