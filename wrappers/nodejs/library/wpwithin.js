@@ -227,23 +227,23 @@ function launchRPCAgent(port, callbackPort, callback) {
   var flagLogFile = "wpwithin.log"
   var flagLogLevels = "debug,error,info,warn,fatal"
   var flagCallbackPort = callbackPort > 0 ? "-callbackport="+callbackPort : ""
-  var binBase = process.env.WPWBIN == "" ? "./rpc-agent-bin" : process.env.WPWBIN
+  var binBase = process.env.WPW_HOME == "" ? "./rpc-agent-bin" : process.env.WPW_HOME + "/bin"
 
   var config = {
   	"windows": {
-  		"x64": util.format("%s/rpc-agent-win-64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogFile, flagLogLevels, flagCallbackPort),
-  		"ia32": util.format("%s/rpc-agent-win-32 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogFile, flagLogLevels, flagCallbackPort),
+  		"x64": util.format("%s/rpc-agent-win-amd64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogFile, flagLogLevels, flagCallbackPort),
+  		"ia32": util.format("%s/rpc-agent-win-386 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogFile, flagLogLevels, flagCallbackPort),
   		"arm": null
   	},
   	"darwin": {
-  		"x64": util.format("%s/rpc-agent-mac-64 -port %d -logfile %s -loglevel %s %s", binBase, port, flagLogFile, flagLogLevels, flagCallbackPort),
-  		"ia32": util.format("%s/rpc-agent-mac-32 -port %d -logfile %s -loglevel %s %s", binBase, port, flagLogFile, flagLogLevels, flagCallbackPort),
+  		"x64": util.format("%s/rpc-agent-darwin-amd64 -port %d -logfile %s -loglevel %s %s", binBase, port, flagLogFile, flagLogLevels, flagCallbackPort),
+  		"ia32": util.format("%s/rpc-agent-darwin-386 -port %d -logfile %s -loglevel %s %s", binBase, port, flagLogFile, flagLogLevels, flagCallbackPort),
   		"arm": null
   	},
   	"linux": {
-  		"x64": util.format("%s/rpc-agent-linux-64 -port %d -logfile %s -loglevel %s %s",binBase, port, flagLogFile, flagLogFile, flagCallbackPort),
-  		"ia32": util.format("%s/rpc-agent-linux-32 -port %d -logfile %s -loglevel %s %s",binBase, port, flagLogFile, flagLogFile, flagCallbackPort),
-  		"arm": util.format("%s/rpc-agent-linux-arm -port %d -logfile %s -loglevel %s %s",binBase, port, flagLogFile, flagLogFile, flagCallbackPort),
+  		"x64": util.format("%s/rpc-agent-linux-amd64 -port %d -logfile %s -loglevel %s %s",binBase, port, flagLogFile, flagLogFile, flagCallbackPort),
+  		"ia32": util.format("%s/rpc-agent-linux-386 -port %d -logfile %s -loglevel %s %s",binBase, port, flagLogFile, flagLogFile, flagCallbackPort),
+  		"arm": util.format("%s/rpc-agent-linux-arm32 -port %d -logfile %s -loglevel %s %s",binBase, port, flagLogFile, flagLogFile, flagCallbackPort),
   	}
   };
 
