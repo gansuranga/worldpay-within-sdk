@@ -227,7 +227,7 @@ function launchRPCAgent(port, callbackPort, callback) {
   var flagLogFile = "wpwithin.log"
   var flagLogLevels = "debug,error,info,warn,fatal"
   var flagCallbackPort = callbackPort > 0 ? "-callbackport="+callbackPort : ""
-  var binBase = process.env.WPW_HOME == "" ? "./rpc-agent-bin" : process.env.WPW_HOME + "/bin"
+  var binBase = process.env.WPW_HOME == "" || process.env.WPW_HOME == undefined ? "./rpc-agent-bin" : process.env.WPW_HOME + "/bin"
 
   var config = {
   	"windows": {
