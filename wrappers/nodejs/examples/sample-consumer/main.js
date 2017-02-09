@@ -91,8 +91,14 @@ function connectToDevice(serviceMessage) {
   hceCard.cvc = "123";
 
   var pspConfig = new Array();
-  pspConfig["psp_name"] = "worldpayonlinepayments";
-  pspConfig["api_endpoint"] = "https://api.worldpay.com/v1";
+
+  // Worldpay Online Payments
+  // pspConfig["psp_name"] = "worldpayonlinepayments";
+  // pspConfig["api_endpoint"] = "https://api.worldpay.com/v1";
+
+  // Worldpay Total US / SecureNet
+  pspConfig["psp_name"] = "securenet"
+  pspConfig["api_endpoint"] = "https://gwapi.demo.securenet.com/api"
 
   client.initConsumer(serviceMessage.scheme, serviceMessage.hostname, serviceMessage.portNumber,
   serviceMessage.urlPrefix, device.uid, hceCard, pspConfig, function(err, response){

@@ -89,12 +89,25 @@ function addService() {
 function initProducer() {
 
   var pspConfig = new Array();
-  pspConfig["psp_name"] = "worldpayonlinepayments";
-  pspConfig["api_endpoint"] = "https://api.worldpay.com/v1";
-  pspConfig["hte_public_key"] = "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af"
-  pspConfig["hte_private_key"] = "T_S_f50ecb46-ca82-44a7-9c40-421818af5996"
-  pspConfig["merchant_client_key"] = "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af"
-  pspConfig["merchant_service_key"] = "T_S_f50ecb46-ca82-44a7-9c40-421818af5996"
+
+  // Worldpay Online Payments
+  // pspConfig["psp_name"] = "worldpayonlinepayments";
+  // pspConfig["api_endpoint"] = "https://api.worldpay.com/v1";
+  // pspConfig["hte_public_key"] = "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af"
+  // pspConfig["hte_private_key"] = "T_S_f50ecb46-ca82-44a7-9c40-421818af5996"
+  // pspConfig["merchant_client_key"] = "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af"
+  // pspConfig["merchant_service_key"] = "T_S_f50ecb46-ca82-44a7-9c40-421818af5996"
+
+  // Worldpay Total US / SecureNet
+  pspConfig["psp_name"] = "securenet"
+  pspConfig["api_endpoint"] = "https://gwapi.demo.securenet.com/api"
+  pspConfig["hte_public_key"] = "8c0ce953-455d-4c12-8d14-ff20d565e485"
+  pspConfig["hte_private_key"] = "KZ9kWv2EPy7M"
+  pspConfig["developer_id"] = "12345678"
+  pspConfig["app_version"] = "0.1"
+  pspConfig["public_key"] = "8c0ce953-455d-4c12-8d14-ff20d565e485"
+  pspConfig["secure_key"] = "KZ9kWv2EPy7M"
+  pspConfig["secure_net_id"] = "8008609"
 
   client.initProducer(pspConfig, function(err, response) {
 
