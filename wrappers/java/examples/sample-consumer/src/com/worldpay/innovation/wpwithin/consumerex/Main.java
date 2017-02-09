@@ -111,9 +111,14 @@ public class Main {
         card.setCvc("113");
 
         Map<String, String> pspConfig = new HashMap<>();
-        pspConfig.put("psp_name", "worldpayonlinepayments");
-        pspConfig.put("api_endpoint", "https://api.worldpay.com/v1");
 
+        // Worldpay Online Payments
+//        pspConfig.put("psp_name", "worldpayonlinepayments");
+//        pspConfig.put("api_endpoint", "https://api.worldpay.com/v1");
+
+        // Worldpay Total US / SecureNet
+        pspConfig.put("psp_name", "securenet");
+        pspConfig.put("api_endpoint", "https://gwapi.demo.securenet.com/api");
 
         wpw.initConsumer(svcMsg.getScheme(), svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), wpwDevice.getUid(), card, pspConfig);
     }

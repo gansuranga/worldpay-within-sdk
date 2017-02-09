@@ -49,12 +49,25 @@ public class Main {
             wpw.addService(svc);
 
             Map<String, String> pspConfig = new HashMap<>();
-            pspConfig.put("psp_name", "worldpayonlinepayments");
-            pspConfig.put("hte_public_key", "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af");
-            pspConfig.put("hte_private_key", "T_S_f50ecb46-ca82-44a7-9c40-421818af5996");
-            pspConfig.put("api_endpoint", "https://api.worldpay.com/v1");
-            pspConfig.put("merchant_client_key", "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af");
-            pspConfig.put("merchant_service_key", "T_S_f50ecb46-ca82-44a7-9c40-421818af5996");
+
+            // Worldpay Online Payments
+//            pspConfig.put("psp_name", "worldpayonlinepayments");
+//            pspConfig.put("hte_public_key", "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af");
+//            pspConfig.put("hte_private_key", "T_S_f50ecb46-ca82-44a7-9c40-421818af5996");
+//            pspConfig.put("api_endpoint", "https://api.worldpay.com/v1");
+//            pspConfig.put("merchant_client_key", "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af");
+//            pspConfig.put("merchant_service_key", "T_S_f50ecb46-ca82-44a7-9c40-421818af5996");
+
+            // Worldpay Total US / SecureNet
+            pspConfig.put("psp_name", "securenet");
+            pspConfig.put("api_endpoint", "https://gwapi.demo.securenet.com/api");
+            pspConfig.put("hte_public_key", "8c0ce953-455d-4c12-8d14-ff20d565e485");
+            pspConfig.put("hte_private_key", "KZ9kWv2EPy7M");
+            pspConfig.put("developer_id", "12345678");
+            pspConfig.put("app_version", "0.1");
+            pspConfig.put("public_key", "8c0ce953-455d-4c12-8d14-ff20d565e485");
+            pspConfig.put("secure_key", "KZ9kWv2EPy7M");
+            pspConfig.put("secure_net_id", "8008609");
 
             wpw.initProducer(pspConfig);
 
