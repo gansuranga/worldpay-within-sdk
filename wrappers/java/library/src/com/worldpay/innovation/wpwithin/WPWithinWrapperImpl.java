@@ -309,8 +309,8 @@ public class WPWithinWrapperImpl implements WPWithinWrapper {
 
 
         PlatformConfig macConfig = new PlatformConfig();
-        macConfig.setCommand(Architecture.IA32, String.format("%s/rpc-agent/rpc-agent-mac-386 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
-        macConfig.setCommand(Architecture.X86_64, String.format("%s/rpc-agent-mac-amd64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        macConfig.setCommand(Architecture.IA32, String.format("%s/rpc-agent/rpc-agent-darwin-386 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        macConfig.setCommand(Architecture.X86_64, String.format("%s/rpc-agent-darwin-amd64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
         launchConfig.put(OS.MAC, macConfig);
 
         launcher.startProcess(launchConfig, launcherListener);
