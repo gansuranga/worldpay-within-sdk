@@ -289,7 +289,7 @@ public class WPWithinWrapperImpl implements WPWithinWrapper {
         String flagLogfile = "wpwithin.log";
         String flagLogLevels = "debug,error,info,warn,fatal,panic";
         String flagCallbackPort = callbackPort > 0 ? "-callbackport="+callbackPort : "";
-        String binBase = System.getenv("WPWBIN") == null ? "./rpc-agent-bin" : System.getenv("WPWBIN");
+        String binBase = System.getenv("WPW_HOME") == null ? "./rpc-agent-bin" : String.format("%s/bin", System.getenv("WPW_HOME"));
 
         launcher = new Launcher();
 
