@@ -62,6 +62,7 @@ class SampleConsumer:
         if len(service_details) > 0:
             service = service_details[0]
             print("Service:")
+            print("Name: {0}".format(service.service_name))
             print("Id: {0}".format(service.service_id))
             print("Description: {0}".format(service.service_description))
             print("----------")

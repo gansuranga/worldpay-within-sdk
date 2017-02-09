@@ -139,7 +139,8 @@ class ConvertFromThrift(object):
     def service_details(details):
         """Convert to wpwithin_types.ServiceDetails."""
         return ServiceDetails(service_id=details.serviceId,
-                              service_description=details.serviceDescription)
+                              service_description=details.serviceDescription,
+                              service_name=details.serviceName)
 
     @staticmethod
     def total_price_response(response):

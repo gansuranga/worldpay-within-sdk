@@ -102,9 +102,10 @@ class ServiceMessage(object):
 
 
 class ServiceDetails(object):
-    def __init__(self, service_id, service_description):
+    def __init__(self, service_id, service_description, service_name):
         self.service_id = service_id
         self.service_description = service_description
+        self.service_name = service_name
 
 
 class TotalPriceResponse(object):
