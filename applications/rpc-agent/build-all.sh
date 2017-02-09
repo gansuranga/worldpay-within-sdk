@@ -40,3 +40,6 @@ echo "Target WINDOWS, 32bit "
 env GOOS=windows GOARCH=386 go build -ldflags "-X main.applicationVersion=$version -X main.applicationBuildDate=`date -u +%d-%m-%Y@%H:%M:%S` -X main.applicationPlatform=WIN_386" -o build/rpc-agent-windows-386.exe main.go
 echo "Target WINDOWS, 64bit"
 env GOOS=windows GOARCH=amd64 go build -ldflags "-X main.applicationVersion=$version -X main.applicationBuildDate=`date -u +%d-%m-%Y@%H:%M:%S` -X main.applicationPlatform=WIN_AMD64" -o build/rpc-agent-windows-amd64.exe main.go
+
+cd build && zip -r -X rpc-agent-bins-$version.zip * && cd ../
+cd build && tar czf rpc-agent-bins-$version.tar.gz * && cd ../
