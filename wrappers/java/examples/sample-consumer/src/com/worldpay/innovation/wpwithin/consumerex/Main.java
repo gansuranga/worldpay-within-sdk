@@ -1,5 +1,6 @@
 package com.worldpay.innovation.wpwithin.consumerex;
 
+import com.worldpay.innovation.wpwithin.PSPConfig;
 import com.worldpay.innovation.wpwithin.WPWithinGeneralException;
 import com.worldpay.innovation.wpwithin.WPWithinWrapper;
 import com.worldpay.innovation.wpwithin.WPWithinWrapperImpl;
@@ -113,12 +114,12 @@ public class Main {
         Map<String, String> pspConfig = new HashMap<>();
 
         // Worldpay Online Payments
-//        pspConfig.put("psp_name", "worldpayonlinepayments");
-//        pspConfig.put("api_endpoint", "https://api.worldpay.com/v1");
+//        pspConfig.put(PSPConfig.PSP_NAME, PSPConfig.WORLDPAY_ONLINE_PAYMENTS);
+//        pspConfig.put(PSPConfig.API_ENDPOINT, "https://api.worldpay.com/v1");
 
         // Worldpay Total US / SecureNet
-        pspConfig.put("psp_name", "securenet");
-        pspConfig.put("api_endpoint", "https://gwapi.demo.securenet.com/api");
+        pspConfig.put(PSPConfig.PSP_NAME, PSPConfig.SECURE_NET);
+        pspConfig.put(PSPConfig.API_ENDPOINT, "https://gwapi.demo.securenet.com/api");
 
         wpw.initConsumer(svcMsg.getScheme(), svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), wpwDevice.getUid(), card, pspConfig);
     }
