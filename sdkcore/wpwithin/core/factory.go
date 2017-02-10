@@ -122,7 +122,7 @@ func (factory *SDKFactoryImpl) GetPSPMerchant(pspConfig map[string]string) (psp.
 			return nil, fmt.Errorf("Error parsing developerID as int")
 		}
 
-		return securenet.NewSecureNetMerchant(pspConfig[securenet.CfgSecureNetID], pspConfig[securenet.CfgSecureKey], pspConfig[securenet.CfgPublicKey], pspConfig[securenet.CfgAppVersion], pspConfig[securenet.CfgAppVersion], int32(devID), pspConfig[securenet.CfgHTTPProxy])
+		return securenet.NewSecureNetMerchant(pspConfig[securenet.CfgSecureNetID], pspConfig[securenet.CfgSecureKey], pspConfig[securenet.CfgPublicKey], pspConfig[securenet.CfgAPIEndpoint], pspConfig[securenet.CfgAppVersion], int32(devID), pspConfig[securenet.CfgHTTPProxy])
 	}
 
 	return nil, fmt.Errorf("Unknown PSP: %s", pspConfig[psp.CfgPSPName])
