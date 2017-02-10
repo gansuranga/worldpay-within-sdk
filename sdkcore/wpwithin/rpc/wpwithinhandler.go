@@ -108,9 +108,7 @@ func (wp *WPWithinHandler) InitProducer(pspConfig map[string]string) (err error)
 
 	log.Debug("RPC.WPWithinHandler.InitProducer()")
 
-	wp.wpwithin.InitProducer(pspConfig)
-
-	return nil
+	return wp.wpwithin.InitProducer(pspConfig)
 }
 
 // GetDevice returns details of the running device
