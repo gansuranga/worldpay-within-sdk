@@ -261,7 +261,7 @@ function launchRPCAgent(port, callbackPort, callback) {
   launcher.startProcess(config, launchCallback);
 
   var sleep = require('sleep');
-  sleep.usleep(750);
+  sleep.msleep(750);
   callback(null, null, null);
 };
 
