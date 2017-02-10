@@ -1,11 +1,6 @@
 import WPWithinWrapperImpl
 import WWTypes
 import time
-import os
-
-# Handy method to kill any rpc-agent that still exists
-def clearDownRpc():
-   os.system('killall rpc-agent') 
 
 def run():
 	try:
@@ -31,7 +26,7 @@ def run():
 		svc.setPrices(prices)
 		print "WorldpayWithin Sample Producer: About to init the producer with crendentials"
 		# [ CLIENT KEY, SERVICE KEY] : From online.worldpay.com
-		wpw.initProducer({"psp_name":"securenet","developer_id":"12345678", "secure_key": "<secure_key>", "api_endpoint":"https://gwapi.demo.securenet.com/api/", "public_key": "<public_key>", "secure_net_id":"<secure_net_id>", "app_version":"0.1", "merchant_client_key": "<public_key>", "merchant_service_key": "<secure_key>","hte_public_key":"<public_key>", "hte_private_key": "<secure_key>"})
+		wpw.initProducer({"psp_name":"worldpayonlinepayments","hte_public_key":"T_C_97e8cbaa-14e0-4b1c-b2af-469daf8f1356", "hte_private_key": "T_S_3bdadc9c-54e0-4587-8d91-29813060fecd", "api_endpoint":"https://api.worldpay.com/v1", "merchant_client_key": "T_C_97e8cbaa-14e0-4b1c-b2af-469daf8f1356", "merchant_service_key": "T_S_3bdadc9c-54e0-4587-8d91-29813060fecd"})
 		print "WorldpayWithin Sample Producer: Adding service"
 		wpw.addService(svc)
 		broadcastDuration = 20000
@@ -52,5 +47,4 @@ def run():
 	except WWTypes.WPWithinGeneralException as e:
 		print e
 
-clearDownRpc()
 run()

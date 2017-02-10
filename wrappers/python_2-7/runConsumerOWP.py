@@ -3,7 +3,6 @@ import WPWithinWrapperImpl
 import WWTypes
 import time
 
-
 def discoverDevices(): # throws WPWithinGeneralException {
     devices = wpw.deviceDiscovery(8000)
     if devices != None and len(devices) > 0: 
@@ -25,14 +24,14 @@ def discoverDevices(): # throws WPWithinGeneralException {
 
 def connectToDevice(svcMsg): # throws WPWithinGeneralException {
     card = WWTypes.WWHCECard()
-    card.setFirstName("Joe")
-    card.setLastName("Bloggs")
-    card.setCardNumber("3434343434343434")
-    card.setExpMonth(12)
-    card.setExpYear(2020)
+    card.setFirstName("Bilbo")
+    card.setLastName("Baggins")
+    card.setCardNumber("5555555555554444")
+    card.setExpMonth(11)
+    card.setExpYear(2018)
     card.setType("Card")
-    card.setCvc("123")
-    wpw.initConsumer("http://", svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), svcMsg.getServerId(), card, {"psp_name":"securenet","api_endpoint":"https://gwapi.demo.securenet.com/api/", "developer_id":"12345678", "app_version":"0.1"})
+    card.setCvc("113")
+    wpw.initConsumer("http://", svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), svcMsg.getServerId(), card, {"psp_name":"worldpayonlinepayments","api_endpoint":"https://api.worldpay.com/v1"})
 
 def getAvailableServices(): #throws WPWithinGeneralException {
     services = wpw.requestServices()
@@ -152,5 +151,6 @@ def run():
         wpw.stopRPCAgent()
     except WWTypes.WPWithinGeneralException as wpge:
         print wpge
+
 
 run()

@@ -93,3 +93,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Files with RPC credentials in
+runConsumerWSN.py
+runProducerWSN.py
+runProducerCallbacksWSN.py
+runProducerDebb.py
