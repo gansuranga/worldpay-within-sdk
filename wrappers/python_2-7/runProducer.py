@@ -3,7 +3,7 @@ import WWTypes
 import time
 import os
 
-# Handy method to kill any rpc-agent that still exists
+# Handy method to kill any rpc-agent that still exists -- clean up later
 def clearDownRpc():
    os.system('killall rpc-agent') 
 
