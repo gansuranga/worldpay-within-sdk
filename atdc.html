@@ -62,14 +62,26 @@
 <li>Change to the develop branch <code>git checkout develop</code></li>
 <li>Pull the latest code <code>git pull</code></li>
 <li>Get the latest RPC-agent for Raspberry pi <code>wget http://bit.ly/wpwlinarm32</code></li>
+</lo>
+<h4>How to setup the python 2.7 wrapper</h4>
+<ol>
 <li>If you want to use the 2.7 python wrapper, then download apache thrift 0.10.0 (latest version)</li>
 <li>Extract it and change to the <code>lib/py/</code> directory</li>
 <li>Run the following command <code>sudo python setup.py install</code></li>
 <li>Place the RPC-agent in the python wrapper directory: <code>~/go/src/github.com/wptechinnovation/worldpay-within-sdk/wrappers/python_2-7</code></li>
-<li>Rename to <code>rpc-agent</code>, run <code>sudo chmod ugo+x rpc-agent</code>, and test run it with <code>./rpc-agent -port 9018</code></li>
+<li>Rename to <code>rpc-agent</code>, run <code>sudo chmod ugo+x rpc-agent</code></li>
+<li>Test run it with <code>./rpc-agent -port 9018, then close it using ctrl-C and make sure it is killed using <code>ps -e | grep rpc-agent</code> and if it's still running do a <code>Kill <process-id></code></li>
 <li>You're now ready to provision your device with your securenet credentials, and the run the example apps</li>
 </ol>
-
+<p><a href="./python27.html">More info about the python 2.7 wrapper</a></p>
+<h4>How to setup the other wrappers</h4>
+<p>If you want to use the Java, Node.js, Python 3 or .Net wrappers then here is further information about the setup:</p>
+<ol>
+<li>Java wrapper - talk to Conor or Kevin, you'll need to setup a project with the source and pull in the libs</li>
+<li><a href="./nodejs.html">Node.js</a> - or talk to Conor</li>
+<li>Python 3 - talk to Kevin (HINT: once you've got this wrapper, theres a self contained setup.py)</li>
+<li><a href="./dotnet.html">.net wrapper</a> - or talk to Conor or Kevin</li>
+</ol>
 
 <h3>Support</h3>
 <p>Any issues with setting up Worldpay Within (and the wrappers) on your Rasbperry Pi or Development machine please reach out to Conor Hackett or Kevin Gordon, who will be able to support you over this weekend. They've familiar with a few gotchas, and will be able to get you up and running in no time!</p>
