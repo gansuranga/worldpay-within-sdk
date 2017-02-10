@@ -10,7 +10,6 @@ import (
 	"github.com/wptechinnovation/worldpay-within-sdk/applications/dev-client/types"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp"
-	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp/onlineworldpay"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp/securenet"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types"
 )
@@ -36,7 +35,7 @@ func main() {
 	wp.SetEventHandler(&eh)
 
 	pspConfig := make(map[string]string, 0)
-	pspConfig[psp.CfgPSPName] = onlineworldpay.PSPName
+	pspConfig[psp.CfgPSPName] = securenet.PSPName
 	pspConfig[psp.CfgHTEPrivateKey] = "KZ9kWv2EPy7M"
 	pspConfig[psp.CfgHTEPublicKey] = "8c0ce953-455d-4c12-8d14-ff20d565e485"
 	pspConfig[securenet.CfgAppVersion] = "0.1"
