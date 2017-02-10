@@ -73,6 +73,7 @@ struct ServiceDetails {
 
 	1: i32 serviceId
 	2: string serviceDescription
+	3: string serviceName
 }
 
 struct TotalPriceResponse {

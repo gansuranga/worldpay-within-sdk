@@ -1,4 +1,5 @@
 var wpwithin = require('../../library/wpwithin');
+var wpwConstants = require('../../library/constants');
 var types = require('../../library/types/types');
 var typesConverter = require('../../library/types/converter');
 var client;
@@ -67,12 +68,25 @@ function addService() {
 function initProducer() {
 
   var pspConfig = new Array();
-  pspConfig["psp_name"] = "worldpayonlinepayments";
-  pspConfig["api_endpoint"] = "https://api.worldpay.com/v1";
-  pspConfig["hte_public_key"] = "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af"
-  pspConfig["hte_private_key"] = "T_S_f50ecb46-ca82-44a7-9c40-421818af5996"
-  pspConfig["merchant_client_key"] = "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af"
-  pspConfig["merchant_service_key"] = "T_S_f50ecb46-ca82-44a7-9c40-421818af5996"
+
+  // Worldpay Online Payments
+  // pspConfig[wpwConstants.PSP_NAME] = wpwConstants.WORLDPAY_ONLINE_PAYMENTS
+  // pspConfig[wpwConstants.API_ENDPOINT] = "https://api.worldpay.com/v1";
+  // pspConfig[wpwConstants.HTE_PUBLIC_KEY] = "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af"
+  // pspConfig[wpwConstants.HTE_PRIVATE_KEY] = "T_S_f50ecb46-ca82-44a7-9c40-421818af5996"
+  // pspConfig[wpwConstants.MERCHANT_CLIENT_KEY] = "T_C_03eaa1d3-4642-4079-b030-b543ee04b5af"
+  // pspConfig[wpwConstants.MERCHANT_SERVICE_KEY] = "T_S_f50ecb46-ca82-44a7-9c40-421818af5996"
+
+  // Worldpay Total US / SecureNet
+  pspConfig[wpwConstants.PSP_NAME] = wpwConstants.SECURE_NET
+  pspConfig[wpwConstants.API_ENDPOINT] = "https://gwapi.demo.securenet.com/api"
+  pspConfig[wpwConstants.HTE_PUBLIC_KEY] = "8c0ce953-455d-4c12-8d14-ff20d565e485"
+  pspConfig[wpwConstants.HTE_PRIVATE_KEY] = "KZ9kWv2EPy7M"
+  pspConfig[wpwConstants.DEVELOPER_ID] = "12345678"
+  pspConfig[wpwConstants.APP_VERSION] = "0.1"
+  pspConfig[wpwConstants.PUBLIC_KEY] = "8c0ce953-455d-4c12-8d14-ff20d565e485"
+  pspConfig[wpwConstants.SECURE_KEY] = "KZ9kWv2EPy7M"
+  pspConfig[wpwConstants.SECURE_NET_ID] = "8008609"
 
   client.initProducer(pspConfig, function(err, response) {
 

@@ -1,4 +1,5 @@
 var wpwithin = require('../../library/wpwithin');
+var wpwConstants = require('../../library/constants');
 var types = require('../../library/types/types');
 var typesConverter = require('../../library/types/converter');
 var client;
@@ -91,8 +92,14 @@ function connectToDevice(serviceMessage) {
   hceCard.cvc = "123";
 
   var pspConfig = new Array();
-  pspConfig["psp_name"] = "worldpayonlinepayments";
-  pspConfig["api_endpoint"] = "https://api.worldpay.com/v1";
+
+  // Worldpay Online Payments
+  // pspConfig[wpwConstants.PSP_NAME] = wpwConstants.WORLDPAY_ONLINE_PAYMENTS
+  // pspConfig[wpwConstants.API_ENDPOINT] = "https://api.worldpay.com/v1"
+
+  // Worldpay Total US / SecureNet
+  pspConfig[wpwConstants.PSP_NAME] = wpwConstants.SECURE_NET
+  pspConfig[wpwConstants.API_ENDPOINT] = "https://gwapi.demo.securenet.com/api"
 
   client.initConsumer(serviceMessage.scheme, serviceMessage.hostname, serviceMessage.portNumber,
   serviceMessage.urlPrefix, device.uid, hceCard, pspConfig, function(err, response){
