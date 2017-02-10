@@ -120,6 +120,8 @@ public class Main {
         // Worldpay Total US / SecureNet
         pspConfig.put(PSPConfig.PSP_NAME, PSPConfig.SECURE_NET);
         pspConfig.put(PSPConfig.API_ENDPOINT, "https://gwapi.demo.securenet.com/api");
+        pspConfig.put(PSPConfig.APP_VERSION, "0.1");
+        pspConfig.put(PSPConfig.DEVELOPER_ID, "12345678");
 
         wpw.initConsumer(svcMsg.getScheme(), svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), wpwDevice.getUid(), card, pspConfig);
     }
