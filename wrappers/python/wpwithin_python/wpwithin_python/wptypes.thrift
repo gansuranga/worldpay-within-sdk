@@ -9,7 +9,6 @@
 namespace csharp Worldpay.Innovation.WPWithin.Rpc.Types
 namespace java com.worldpay.innovation.wpwithin.rpc.types
 namespace go wpthrift_types
-namespace js wpthrift_types
 
 exception Error {
 
@@ -74,6 +73,7 @@ struct ServiceDetails {
 
 	1: i32 serviceId
 	2: string serviceDescription
+	3: string serviceName
 }
 
 struct TotalPriceResponse {
