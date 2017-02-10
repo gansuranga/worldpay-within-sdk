@@ -1,0 +1,110 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setting up your Pi for Worldpay Within - Worldpay Within @ ATDC hackathon</title>
+    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/app.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">    
+  </head>
+  <body>
+    <div class="row">
+      <div class="large-12 columns">
+        <img style="padding-top: 5px; padding-bottom: 5px;" src="images/worldpaylogosmall.png" alt="Worldpay Logo"/>
+        <div style="padding-left: 5px; color: white; background-color: red;"><a class="whiteLink" href="index.html"><h1 style="font-size: 1.8em !important;">Worldpay Within Documentation</h1></a></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <div class="callout">
+          
+
+          <!--
+                <form>
+                  <div class="row">
+                    <div class="large-12 columns">
+                      <label>Search for a topic or question</label>
+                    </div>
+                    <div class="large-12 columns">
+                      <input type="text" placeholder="Search for a topic or question" />
+                    </div>
+                  </div>
+                </form>
+-->
+
+              <div class="row">
+            
+                    <div class="large-12 columns">
+<!-- Insert page content below -->
+
+
+
+
+<h2>Setting up your Pi for Worldpay Within @ ATDC hackathon</h2>
+
+<h3>Quick start</h3>
+
+<ol>
+   <li>Get a pre-provisioned SD card, which should put you on the 'Connectify' network</li>
+   <li>The go, and RPi Python wrapper should be ready to go, the RPC agent is available for you to provision the other wrappers too. Speak to Conor or Kevin for help with this</li>
+</ol>
+
+
+<h3>Self provision the Raspberry Pi</h3>
+
+<ol>
+<li>Get the Pi to the provisioning team so they can get it on the Connectify network, or choose Connectify with password: wpt1c123</li>
+<li>You should now be able to do the rest yourself, by ssh-ing to the device at <code>ssh pi@wppi##</code> e.g. for the Pi number 40: <code>ssh pi@wppi40</code></li>
+<li>Change to the directory with the Worldpay Within SDK in it: <code>~/go/src/github.com/wptechinnovation/worldpay-within-sdk/</code></li>
+<li>Change to the develop branch <code>git checkout develop</code></li>
+<li>Pull the latest code <code>git pull</code></li>
+<li>Get the latest RPC-agent for Raspberry pi <code>wget http://bit.ly/wpwlinarm32</code></li>
+<li>If you want to use the 2.7 python wrapper, then download apache thrift 0.10.0 (latest version)</li>
+<li>Extract it and change to the <code>lib/py/</code> directory</li>
+<li>Run the following command <code>sudo python setup.py install</code></li>
+<li>Place the RPC-agent in the python wrapper directory: <code>~/go/src/github.com/wptechinnovation/worldpay-within-sdk/wrappers/python_2-7</code></li>
+<li>Rename to <code>rpc-agent</code>, run <code>sudo chmod ugo+x rpc-agent</code>, and test run it with <code>./rpc-agent -port 9018</code></li>
+<li>You're now ready to provision your device with your securenet credentials, and the run the example apps</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+<!-- Insert page content above -->
+                    </div>                       
+              </div>
+            </div>
+        </div>
+     </div>
+
+
+
+
+
+
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/what-input.js"></script>
+    <script src="js/vendor/foundation.js"></script>
+    <script src="js/app.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-91392512-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>
