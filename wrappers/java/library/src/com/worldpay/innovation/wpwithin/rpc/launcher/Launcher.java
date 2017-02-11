@@ -124,7 +124,7 @@ public class Launcher {
             return Architecture.X86_64;
         } else if (arch.toLowerCase().contains("arm")) {
 
-            return Architecture.ARM;
+            return Architecture.ARM32;
         } else if (arch.toLowerCase().equals("x86")) {
 
             return Architecture.IA32;

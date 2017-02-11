@@ -41,7 +41,7 @@ func (wp *WPWithinHandler) Setup(name, description string) (err error) {
 
 	if err != nil {
 
-		log.Debug("Error initialising WPWithin. Error = %s", err.Error())
+		log.Debugf("Error initialising WPWithin. Error = %s", err.Error())
 
 		return err
 	}
@@ -108,13 +108,7 @@ func (wp *WPWithinHandler) InitProducer(pspConfig map[string]string) (err error)
 
 	log.Debug("RPC.WPWithinHandler.InitProducer()")
 
-	go func() {
-
-		wp.wpwithin.InitProducer(pspConfig)
-
-	}()
-
-	return nil
+	return wp.wpwithin.InitProducer(pspConfig)
 }
 
 // GetDevice returns details of the running device

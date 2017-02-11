@@ -1,0 +1,2 @@
+include wpwithin_python/wptypes.thrift
+include wpwithin_python/wpwithin.thrift

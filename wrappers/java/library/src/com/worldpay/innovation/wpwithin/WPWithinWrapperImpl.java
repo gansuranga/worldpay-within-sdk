@@ -287,31 +287,30 @@ public class WPWithinWrapperImpl implements WPWithinWrapper {
     private void startRPCAgent(int port, int callbackPort, Listener launcherListener) {
 
         String flagLogfile = "wpwithin.log";
-        String flagLogLevels = "debug,error,info,warn,fatal";
+        String flagLogLevels = "debug,error,info,warn,fatal,panic";
         String flagCallbackPort = callbackPort > 0 ? "-callbackport="+callbackPort : "";
-        String binBase = System.getenv("WPWBIN") == null ? "./rpc-agent-bin" : System.getenv("WPWBIN");
+        String binBase = System.getenv("WPW_HOME") == null ? "./rpc-agent-bin" : String.format("%s/bin", System.getenv("WPW_HOME"));
 
         launcher = new Launcher();
 
         Map<OS, PlatformConfig> launchConfig = new HashMap<>(3);
 
         PlatformConfig winConfig = new PlatformConfig();
-        winConfig.setCommand(Architecture.IA32, String.format("%s/rpc-agent-win-32 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
-        winConfig.setCommand(Architecture.X86_64, String.format("%s/rpc-agent-win-64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
-        winConfig.setCommand(Architecture.ARM, String.format("%s/rpc-agent-win-arm -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        winConfig.setCommand(Architecture.IA32, String.format("%s/rpc-agent-windows-386 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        winConfig.setCommand(Architecture.X86_64, String.format("%s/rpc-agent-windows-amd64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
         launchConfig.put(OS.WINDOWS, winConfig);
 
         PlatformConfig linuxConfig = new PlatformConfig();
-        linuxConfig.setCommand(Architecture.IA32, String.format("%s/rpc-agent-linux-32 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
-        linuxConfig.setCommand(Architecture.X86_64, String.format("%s/rpc-agent-linux-64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
-        linuxConfig.setCommand(Architecture.ARM, String.format("%s/rpc-agent-linux-arm -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        linuxConfig.setCommand(Architecture.IA32, String.format("%s/rpc-agent-linux-386 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        linuxConfig.setCommand(Architecture.X86_64, String.format("%s/rpc-agent-linux-amd64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        linuxConfig.setCommand(Architecture.ARM32, String.format("%s/rpc-agent-linux-arm32 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        linuxConfig.setCommand(Architecture.ARM64, String.format("%s/rpc-agent-linux-arm64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
         launchConfig.put(OS.LINUX, linuxConfig);
 
 
         PlatformConfig macConfig = new PlatformConfig();
-        macConfig.setCommand(Architecture.IA32, String.format("%s/rpc-agent/rpc-agent-mac-32 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
-        macConfig.setCommand(Architecture.X86_64, String.format("%s/rpc-agent-mac-64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
-        macConfig.setCommand(Architecture.ARM, String.format("%s/rpc-agent-mac-arm -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        macConfig.setCommand(Architecture.IA32, String.format("%s/rpc-agent/rpc-agent-darwin-386 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
+        macConfig.setCommand(Architecture.X86_64, String.format("%s/rpc-agent-darwin-amd64 -port=%d -logfile=%s -loglevel=%s %s", binBase, port, flagLogfile, flagLogLevels, flagCallbackPort));
         launchConfig.put(OS.MAC, macConfig);
 
         launcher.startProcess(launchConfig, launcherListener);

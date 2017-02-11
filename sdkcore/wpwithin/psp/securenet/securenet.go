@@ -10,6 +10,7 @@ import (
 	sntypes "github.com/wptechinnovation/worldpay-securenet-lib-go/sdk/types"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types"
+	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/utils"
 )
 
 // SecureNet supports processing of payments using the Secure Net service
@@ -90,10 +91,16 @@ func (sn *SecureNet) GetToken(hceCredentials *types.HCECard, clientKey string, r
 }
 
 // MakePayment charges a payment token as if it was a payment credential
-func (sn *SecureNet) MakePayment(amount int, currencyCode, clientToken, orderDescription, customerOrderCode string) (string, error) {
+func (sn *SecureNet) MakePayment(iAmount int, currencyCode, clientToken, orderDescription, customerOrderCode string) (string, error) {
+
+	// Need to convert the amount which is minor units (integer) into a value that
+	// represents major units (float)
+	minor := float32((iAmount % 100)) / 100
+	major := float32(iAmount / 100)
+	converted := utils.ToFixed(float64(major+minor), 2)
 
 	reqChargeToken := cardnotpresent.ChargeTokenRequest{}
-	reqChargeToken.Amount = float32(amount / 100) // I should take more care here...
+	reqChargeToken.Amount = float32(converted)
 	reqChargeToken.DeveloperApplication = &sn.developerApp
 	reqChargeToken.PaymentVaultToken = &sntypes.PaymentVaultToken{}
 	reqChargeToken.PaymentVaultToken.CustomerID = customerOrderCode
