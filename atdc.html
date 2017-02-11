@@ -52,6 +52,9 @@
    <li>The go, and RPi Python wrapper should be ready to go, the RPC agent is available for you to provision the other wrappers too. Speak to Conor or Kevin for help with this</li>
 </ol>
 
+<h3>How to see my transactions on Worldpay total?</h3>
+<p>Don't get this confused with the global/european system, for this hackathon you can view the transactions through the virtual terminal here: <a href="https://terminal.demo.securenet.com">terminal.demo.securenet.com</a> - login credentials from Clint</p> 
+
 <h3>Android wrapper ?</h3>
 <p>We have not developed an Android wrapper, however there is one in development on the 'native-interface' branch, which allows you to call into the RPC-agent/SDC by going directly without need for RPC. This partially works, and is not certified, and is on older code, but you are free to experiment with this.</p>
 <p>Probably better is to use a 'proxy' Pi as your consumer, and expose each step / feature as a simple RESTful api, which the Android can call to orchestrate the flow, the business logic can then all be included in the Android app, with the Worldpay Within SDK running on the Pi. Please discuss with Conor for any more help on this topic</p>
@@ -95,6 +98,19 @@
 <li><code>./rpc-agent-bin/rpc-agent-darwin-amd64</code></li>
 </ul>
 
+<h3>Deploying the Java wrapper to the Pi</h3>
+<ol>
+<li>Assuming you have the consumer or producer app setup in your favourite IDE</li>
+<li>Do a clean build of the consumer app to generate a dist directory</li>
+<li>Create a <code>distribtopi</code> directory</li>
+<li>Copy the contents of <code>dist</code> into the <code>distribtopi</code></li>
+<li>In this directory create a subdirectory called <code>rpc-agent-bin</code></li>
+<li>From the latest release, get the Raspberry pi rpc-agent <code>rpc-agent-linux-arm32<code></li>
+<li>Zip up this package and put onto your Pi however you prefer</li>
+<li>Unzip on the Pi</li>
+<li>Run the program with <code>java -jar <Name-of-your-app>.jar</li>
+<li>Any issues you can't debug, come and have a chat with Kevin or Conor we're happy to help</li>
+</ol>
 
 <h3>Support</h3>
 <p>Any issues with setting up Worldpay Within (and the wrappers) on your Rasbperry Pi or Development machine please reach out to Conor Hackett or Kevin Gordon, who will be able to support you over this weekend. They've familiar with a few gotchas, and will be able to get you up and running in no time!</p>
