@@ -52,6 +52,9 @@
    <li>The go, and RPi Python wrapper should be ready to go, the RPC agent is available for you to provision the other wrappers too. Speak to Conor or Kevin for help with this</li>
 </ol>
 
+<h3>Android wrapper ?</h3>
+<p>We have not developed an Android wrapper, however there is one in development on the 'native-interface' branch, which allows you to call into the RPC-agent/SDC by going directly without need for RPC. This partially works, and is not certified, and is on older code, but you are free to experiment with this.</p>
+<p>Probably better is to use a 'proxy' Pi as your consumer, and expose each step / feature as a simple RESTful api, which the Android can call to orchestrate the flow, the business logic can then all be included in the Android app, with the Worldpay Within SDK running on the Pi. Please discuss with Conor for any more help on this topic</p>
 
 <h3>Self provision the Raspberry Pi</h3>
 
