@@ -23,15 +23,37 @@ def discoverDevices(): # throws WPWithinGeneralException {
     return devices
 
 def connectToDevice(svcMsg): # throws WPWithinGeneralException {
-    card = WWTypes.WWHCECard()
-    card.setFirstName("Bilbo")
-    card.setLastName("Baggins")
-    card.setCardNumber("5555555555554444")
-    card.setExpMonth(11)
-    card.setExpYear(2018)
-    card.setType("Card")
-    card.setCvc("113")
-    wpw.initConsumer("http://", svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), svcMsg.getServerId(), card, {"psp_name":"worldpayonlinepayments","api_endpoint":"https://api.worldpay.com/v1"})
+    ####################################################
+    # For Worldpay online.worldpay.com - UNCOMMENT BELOW
+    ####################################################
+    # card = WWTypes.WWHCECard()
+    # card.setFirstName("Bilbo")
+    # card.setLastName("Baggins")
+    # card.setCardNumber("5555555555554444")
+    # card.setExpMonth(11)
+    # card.setExpYear(2018)
+    # card.setType("Card")
+    # card.setCvc("113")
+    # consumerCredentials = {"psp_name":"worldpayonlinepayments","api_endpoint":"https://api.worldpay.com/v1"}
+    # consumerCredentials = onlineworldpayCredentials
+    ####################################################
+
+    ####################################################
+    # For Worldpay Total / Securenet - UNCOMMENT BELOW
+    ####################################################
+    # card = WWTypes.WWHCECard()
+    # card.setFirstName("Joe")
+    # card.setLastName("Bloggs")
+    # card.setCardNumber("3434343434343434")
+    # card.setExpMonth(12)
+    # card.setExpYear(2020)
+    # card.setType("Card")
+    # card.setCvc("123")
+    # securenetCredentials = {"psp_name":"securenet","api_endpoint":"https://gwapi.demo.securenet.com/api/", "developer_id":"12345678", "app_version":"0.1"}
+    # consumerCredentials = securenetCredentials
+    ####################################################
+    
+    wpw.initConsumer("http://", svcMsg.getHostname(), svcMsg.getPortNumber(), svcMsg.getUrlPrefix(), svcMsg.getServerId(), card, consumerCredentials)
 
 def getAvailableServices(): #throws WPWithinGeneralException {
     services = wpw.requestServices()
