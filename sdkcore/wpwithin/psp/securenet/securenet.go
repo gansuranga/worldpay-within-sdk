@@ -3,6 +3,7 @@ package securenet
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	snclient "github.com/wptechinnovation/worldpay-securenet-lib-go/sdk/client"
 	"github.com/wptechinnovation/worldpay-securenet-lib-go/sdk/service/cardnotpresent"
@@ -110,12 +111,15 @@ func (sn *SecureNet) MakePayment(iAmount int, currencyCode, clientToken, orderDe
 
 	respCharge, err := sn.snclient.CardNotPresentService().ChargeUsingToken(&reqChargeToken)
 
-	var transactionID string
+	if err != nil {
 
-	if err == nil {
-
-		transactionID = strconv.Itoa(respCharge.Transaction.TransactionID)
+		return "", err
 	}
 
-	return transactionID, err
+	if strings.EqualFold(respCharge.Result, "APPROVED") {
+
+		return strconv.Itoa(respCharge.Transaction.TransactionID), nil
+	}
+
+	return "", fmt.Errorf("%s - %s", respCharge.Result, respCharge.Messages)
 }
