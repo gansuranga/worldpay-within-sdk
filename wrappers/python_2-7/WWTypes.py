@@ -259,9 +259,6 @@ class WWPaymentResponse(object):
     def setServiceDeliveryToken(self, serviceDeliveryToken):
         self.serviceDeliveryToken = serviceDeliveryToken
 
-    def setClientUuid(self, clientUuid):
-        self.clientUuid = clientUuid
-
     def getServerId(self):
         return self.serverId
 
@@ -273,9 +270,6 @@ class WWPaymentResponse(object):
 
     def getServiceDeliveryToken(self):
         return self.serviceDeliveryToken
-
-    def getClientUuid(self):
-        return self.clientUuid
 
 
 class WWHCECard(object):
