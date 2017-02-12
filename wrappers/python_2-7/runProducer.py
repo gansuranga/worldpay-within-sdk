@@ -76,9 +76,9 @@ def run():
         # For Worldpay Total / Securenet - UNCOMMENT BELOW
         ####################################################
         # secureNetId = "<securenetid>"
-        # secureKey = "<secure-key>"
-        # publicKey = "<public-key>"
-        # apiEndpoint = "https://api.worldpay.com/v1"
+        # secureKey = "<securekey>"
+        # publicKey = "<publickey>"
+        # apiEndpoint = "https://gwapi.demo.securenet.com/api/"
         # securenetCredentials = {"psp_name":"securenet","developer_id":"12345678", "secure_key": secureKey, "api_endpoint":apiEndpoint, "public_key": publicKey, "secure_net_id":secureNetId, "app_version":"0.1", "merchant_client_key": publicKey, "merchant_service_key": secureKey,"hte_public_key":publicKey, "hte_private_key": secureKey}
         # producerCredentials = securenetCredentials
         ####################################################
