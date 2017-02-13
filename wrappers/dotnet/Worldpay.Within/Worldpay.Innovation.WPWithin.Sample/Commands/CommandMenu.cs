@@ -191,7 +191,10 @@ namespace Worldpay.Innovation.WPWithin.Sample.Commands
                 _error.WriteLine("Thrift RPC Agent already active.  Stop it before trying to start a new one");
                 return CommandResult.NonCriticalError;
             }
-            _rpcManager = new RpcAgentManager(new RpcAgentConfiguration());
+            _rpcManager = new RpcAgentManager(new RpcAgentConfiguration
+            {
+                LogLevel = RpcAgentConfiguration.LogLevelAll
+            });
             _rpcManager.StartThriftRpcAgentProcess();
             _service = new WPWithinService(_defaultAgentConfig);
             return CommandResult.Success;

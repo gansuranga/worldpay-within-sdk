@@ -29,7 +29,7 @@ namespace Worldpay.Within.Tests
             WPWithinService thriftClient = new WPWithinService(new RpcAgentConfiguration
             {
                 ServicePort = 9091,
-                LogLevel = "verbose,error,fatal,warn,debug",
+                LogLevel = RpcAgentConfiguration.LogLevelAll,
                 LogFile = new FileInfo("testmissinghtecredentials.log"),
             });
 //            thriftClient.SetupDevice("DotNet RPC client", "This is coming from C# via Thrift RPC.");

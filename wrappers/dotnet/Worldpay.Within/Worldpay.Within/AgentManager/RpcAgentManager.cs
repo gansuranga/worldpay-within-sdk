@@ -89,7 +89,7 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
         public void StartThriftRpcAgentProcess()
         {
             string arguments = _config.ToCommandLineArguments();
-            Log.InfoFormat("Attempting to start Thift RPC Agent process using following command line: {0} {1}",
+            Log.InfoFormat("Launching Thift RPC Agent with args: {0} {1}",
                 _config.Path, arguments);
 
             Process thriftRpcProcess = new Process

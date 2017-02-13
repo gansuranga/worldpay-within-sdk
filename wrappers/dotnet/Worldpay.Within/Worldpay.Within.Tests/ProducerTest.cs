@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using Common.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Worldpay.Innovation.WPWithin;
@@ -19,7 +20,6 @@ namespace Worldpay.Within.Tests
         {
             WPWithinService thriftClient = new WPWithinService(new RpcAgentConfiguration
             {
-                ServicePort = 9091,
                 LogLevel = "verbose,error,fatal,warn,debug"
             });
             thriftClient.SetupDevice("DotNet RPC client", "This is coming from C# via Thrift RPC.");
@@ -49,18 +49,41 @@ namespace Worldpay.Within.Tests
             Log.Info("All done, closing transport");
         }
 
+
+        [TestMethod]
+        public void TestStopServiceBroadcast()
+        {
+            WPWithinService wpWithin = new WPWithinService(new RpcAgentConfiguration
+            {
+                LogLevel = "verbose,error,fatal,warn,debug"
+            });
+            wpWithin.SetupDevice("DotNet RPC client", "This is coming from C# via Thrift RPC.");
+            Log.Info("Initialising Producer");
+            wpWithin.InitProducer(new PspConfig
+            {
+                MerchantClientKey = "cl_key",
+                MerchantServiceKey = "srv_key",
+                HtePublicKey = "cl_key",
+                HtePrivateKey = "srv_key"
+            });
+            wpWithin.StartServiceBroadcast(10000);
+            Thread.Sleep(2000);
+            wpWithin.StopServiceBroadcast();
+        }
+
         [TestInitialize]
         public void StartThriftRpcService()
         {
             _mgr = new RpcAgentManager(new RpcAgentConfiguration());
-            _mgr.StartThriftRpcAgentProcess();
+//            _mgr.StartThriftRpcAgentProcess();
         }
 
         [TestCleanup]
         public void StopThriftRpcService()
         {
-            _mgr.StopThriftRpcAgentProcess();
+//            _mgr.StopThriftRpcAgentProcess();
         }
+
     }
 }
 

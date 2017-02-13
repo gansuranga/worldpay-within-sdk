@@ -218,7 +218,8 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
         public FileInfo LogFile { get; set; }
 
         /// <summary>
-        ///     The logging level that the launched RPC Agent will output.  Valid values are shown in the list below.
+        ///     The logging level that the launched RPC Agent will output.  Valid values are shown in the list below.  Use commas
+        ///     to separate if you want multiple levels.
         ///     <list type="bullet">
         ///         <item>
         ///             <term>
@@ -292,6 +293,11 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
         public string Transport { get; set; } = "socket";
 
         /// <summary>
+        /// Handy constant, for use with <see cref="LogLevel"/>, to tell the RPC Agent to log all levels of messages.
+        /// </summary>
+        public static string LogLevelAll => "verbose,error,fatal,panic,warn,debug";
+
+        /// <summary>
         ///     Looks for a file with name matching the RPC Agent for this architecture in the diredctory passed.
         /// </summary>
         /// <param name="dirToLookIn">The directory to look in, if null this returns null.</param>
@@ -315,31 +321,7 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
             return agentPath;
         }
 
-        private string GetPathFromSearchForSdk()
-        {
-            // The RPC Agent Path isn't configured in application config, so go looking for it.
-            DirectoryInfo parent = new DirectoryInfo(".");
-            Log.InfoFormat(
-                "No {0} property found in application configuration, searching for it relative to {1}",
-                PathPropertyName, parent.FullName);
-            const string sdkDir = "worldpay-within-sdk";
-            while (parent != null && !parent.Name.Equals(sdkDir))
-            {
-                parent = parent.Parent;
-            }
-            if (parent == null)
-            {
-                return null;
-            }
-            FileInfo path =
-                new FileInfo(string.Join(System.IO.Path.DirectorySeparatorChar.ToString(),
-                    parent.FullName,
-                    "applications",
-                    "rpc-agent"));
-            return path.FullName;
-        }
-
-
+        
         private bool DoesFileExist(FileInfo file)
         {
             string filename = file.FullName;
