@@ -321,7 +321,6 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
             return agentPath;
         }
 
-        
         private bool DoesFileExist(FileInfo file)
         {
             string filename = file.FullName;
