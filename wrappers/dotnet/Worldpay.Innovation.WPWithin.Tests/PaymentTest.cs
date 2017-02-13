@@ -28,15 +28,16 @@ namespace Worldpay.Within.Tests
                 LogLevel = "verbose,error,fatal,warn,debug"
             };
             RpcAgentManager producerAgent = new RpcAgentManager(producerAgentConfig);
+
             RpcAgentConfiguration consumerAgentConfig = new RpcAgentConfiguration
             {
                 ServicePort = 9092,
-                LogFile = new FileInfo("testSinglePayment_Producer.log"),
+                LogFile = new FileInfo("testSinglePayment_Consunmer.log"),
                 LogLevel = "verbose,error,fatal,warn,debug"
             };
             RpcAgentManager consumerAgent = new RpcAgentManager(consumerAgentConfig);
 
-            producerAgent.StopThriftRpcAgentProcess();
+            producerAgent.StartThriftRpcAgentProcess();
             try
             {
                 consumerAgent.StartThriftRpcAgentProcess();
@@ -48,7 +49,6 @@ namespace Worldpay.Within.Tests
                         {
                             producer.SetupDevice("DotNetProducer", "TestSinglePayment Producer Unit Test");
                             consumer.SetupDevice("DotNetConsumer", "TestSinglePayment Consumer Unit Test");
-                            
                         }
                     }
                 }

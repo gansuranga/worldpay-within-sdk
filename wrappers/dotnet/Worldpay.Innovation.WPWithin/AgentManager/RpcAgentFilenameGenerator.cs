@@ -23,31 +23,31 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
         ///     running.
         /// </summary>
         /// <remarks>
-        ///     The existing available RPC Agents are:
+        ///     The existing available RPC Agents (from the 0.4 build) are:
         ///     <list type="bullet">
         ///         <item>
-        ///             <term>rpc-agent-linux-arm</term>
+        ///             <term>rpc-agent-linux-amd64</term>
         ///         </item>
         ///         <item>
-        ///             <term>rpc-agent-linux-32</term>
+        ///             <term>rpc-agent-linux-arm32</term>
         ///         </item>
         ///         <item>
-        ///             <term>rpc-agent-linux-64</term>
+        ///             <term>rpc-agent-linux-arm64</term>
         ///         </item>
         ///         <item>
-        ///             <term>rpc-agent-mac-32</term>
+        ///             <term>rpc-agent-darwin-386</term>
         ///         </item>
         ///         <item>
-        ///             <term>rpc-agent-mac-64</term>
+        ///             <term>rpc-agent-darwin-amd64</term>
         ///         </item>
         ///         <item>
-        ///             <term>rpc-agent-mac-arm-32</term>
+        ///             <term>rpc-agent-linux-386</term>
         ///         </item>
         ///         <item>
-        ///             <term>rpc-agent-win-32.exe</term>
+        ///             <term>rpc-agent-windows-386.exe</term>
         ///         </item>
         ///         <item>
-        ///             <term>rpc-agent-win-64.exe</term>
+        ///             <term>rpc-agent-windows-amd64.exe</term>
         ///         </item>
         ///     </list>
         /// </remarks>
@@ -65,31 +65,31 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
         ///     Determines the correct RPC Agent filename based on a platform, architecture and address size passed.
         /// </summary>
         /// <remarks>
-        ///     The existing avaialble RPC Agents are:
+        ///     The existing available RPC Agents (from the 0.4 build) are:
         ///     <list type="bullet">
         ///         <item>
-        ///             <term>rpc-agent-linux-arm</term>
+        ///             <term>rpc-agent-linux-amd64</term>
         ///         </item>
         ///         <item>
-        ///             <term>rpc-agent-linux-32</term>
+        ///             <term>rpc-agent-linux-arm32</term>
         ///         </item>
         ///         <item>
-        ///             <term>rpc-agent-linux-64</term>
+        ///             <term>rpc-agent-linux-arm64</term>
         ///         </item>
         ///         <item>
-        ///             <term>rpc-agent-mac-32</term>
+        ///             <term>rpc-agent-darwin-386</term>
         ///         </item>
         ///         <item>
-        ///             <term>rpc-agent-mac-64</term>
+        ///             <term>rpc-agent-darwin-amd64</term>
         ///         </item>
         ///         <item>
-        ///             <term>rpc-agent-mac-arm-32</term>
+        ///             <term>rpc-agent-linux-386</term>
         ///         </item>
         ///         <item>
-        ///             <term>rpc-agent-win-32.exe</term>
+        ///             <term>rpc-agent-windows-386.exe</term>
         ///         </item>
         ///         <item>
-        ///             <term>rpc-agent-win-64.exe</term>
+        ///             <term>rpc-agent-windows-amd64.exe</term>
         ///         </item>
         ///     </list>
         /// </remarks>
@@ -102,25 +102,23 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
             PlatformID platformId,
             bool is64Bit)
         {
-            string is64BitSuffix = is64Bit ? "-64" : "-32";
-
             string platformSuffix;
             string executableSuffix;
             switch (platformId)
             {
                 case PlatformID.MacOSX:
-                    platformSuffix = "-mac";
+                    platformSuffix = "darwin";
                     executableSuffix = null;
                     break;
                 case PlatformID.Unix:
-                    platformSuffix = "-linux";
+                    platformSuffix = "linux";
                     executableSuffix = null;
                     break;
                 case PlatformID.Win32S:
                 case PlatformID.Win32Windows:
                 case PlatformID.Win32NT:
                 case PlatformID.WinCE:
-                    platformSuffix = "-win";
+                    platformSuffix = "windows";
                     executableSuffix = ".exe";
                     break;
                 default:
@@ -131,16 +129,14 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
             switch (architecture)
             {
                 case ProcessorArchitecture.Arm:
-                    architectureSuffix = "-arm";
-                    // For some reason, ARM agents don't have the suffix, so null it
-                    is64BitSuffix = null;
+                    architectureSuffix = "arm" + (is64Bit ? "64" : "32");
                     break;
                 default:
-                    architectureSuffix = "";
+                    architectureSuffix = (is64Bit ? "amd64" : "386");
                     break;
             }
 
-            string rpcAgentFilename = $"rpc-agent{platformSuffix}{architectureSuffix}{is64BitSuffix}{executableSuffix}";
+            string rpcAgentFilename = $"rpc-agent-{platformSuffix}-{architectureSuffix}{executableSuffix}";
 
             Log.InfoFormat("RPC Agent for this platform and architecture is {0}", rpcAgentFilename);
 

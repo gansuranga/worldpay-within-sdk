@@ -76,13 +76,13 @@ namespace Worldpay.Within.Tests
         public void StartThriftRpcService()
         {
             _mgr = new RpcAgentManager(new RpcAgentConfiguration());
-//            _mgr.StartThriftRpcAgentProcess();
+            _mgr.StartThriftRpcAgentProcess();
         }
 
         [TestCleanup]
         public void StopThriftRpcService()
         {
-//            _mgr.StopThriftRpcAgentProcess();
+            _mgr.StopThriftRpcAgentProcess();
         }
 
     }

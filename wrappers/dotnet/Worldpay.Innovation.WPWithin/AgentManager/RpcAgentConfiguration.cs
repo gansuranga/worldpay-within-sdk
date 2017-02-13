@@ -310,7 +310,7 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
             }
             FileInfo fi =
                 new FileInfo(string.Join(System.IO.Path.DirectorySeparatorChar.ToString(), dirToLookIn,
-                    GetRpcAgentExecutableFilename()));
+                    RpcAgentFilenameGenerator.GetForCurrent()));
             return DoesFileExist(fi) ? fi.FullName : null;
         }
 
@@ -364,19 +364,6 @@ namespace Worldpay.Innovation.WPWithin.AgentManager
                 return null;
             }
             return binDir.FullName;
-        }
-
-        /// <summary>
-        ///     Returns the file name of the RPC Agent executable, based on the architecture of the OS.
-        /// </summary>
-        /// <remarks>
-        ///     Note that if we want to port to dotnet core we'll have to redo this based on detecting the OS, for
-        ///     now we assume Windows.
-        /// </remarks>
-        /// <returns>An RPC agent filename.</returns>
-        private string GetRpcAgentExecutableFilename()
-        {
-            return "rpc-agent-win-" + (Environment.Is64BitOperatingSystem ? "64" : "32") + ".exe";
         }
 
         /// <summary>
