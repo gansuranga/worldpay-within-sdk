@@ -94,7 +94,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Worldpay.Within.Rpc\Worldpay.Innovation.WPWithin.Rpc.csproj">
+    <ProjectReference Include="..\Worldpay.Innovation.WPWithin.Rpc\Worldpay.Innovation.WPWithin.Rpc.csproj">
       <Project>{240c090a-c10a-457d-99e2-3beb1828226d}</Project>
       <Name>Worldpay.Innovation.WPWithin.Rpc</Name>
     </ProjectReference>
