@@ -1,7 +1,9 @@
 import logging
 
+
 class WWTotalPriceResponse(object):
-    logging.basicConfig(filename='worldpay-within-wrapper.log',level=logging.DEBUG)
+
+    logging.basicConfig(filename='worldpay-within-wrapper.log', level=logging.DEBUG)
 
     def __init__(self):
         logging.info('initialised WWPrice')
@@ -50,7 +52,8 @@ class WWTotalPriceResponse(object):
 
 
 class WWServiceMessage(object):
-    logging.basicConfig(filename='worldpay-within-wrapper.log',level=logging.DEBUG)
+
+    logging.basicConfig(filename='worldpay-within-wrapper.log', level=logging.DEBUG)
 
     def __init__(self):
         logging.info('initialised WWServiceMessage')
@@ -93,7 +96,8 @@ class WWServiceMessage(object):
 
 
 class WWServiceDetails(object):
-    logging.basicConfig(filename='worldpay-within-wrapper.log',level=logging.DEBUG)
+
+    logging.basicConfig(filename='worldpay-within-wrapper.log', level=logging.DEBUG)
 
     def __init__(self):
         logging.info('initialised WWServiceDetails')
@@ -112,8 +116,9 @@ class WWServiceDetails(object):
 
 
 class WWServiceDeliveryToken(object):
-    logging.basicConfig(filename='worldpay-within-wrapper.log',level=logging.DEBUG)
-    
+
+    logging.basicConfig(filename='worldpay-within-wrapper.log', level=logging.DEBUG)
+
     def __init__(self):
         logging.info('initialised WWService')
 
@@ -149,13 +154,8 @@ class WWServiceDeliveryToken(object):
 
 
 class WWService(object):
-    logging.basicConfig(filename='worldpay-within-wrapper.log',level=logging.DEBUG)
-    # name = None
-    # description = None
-    # theId = None
-    # prices = None
-    # name = None
-    # description = None
+
+    logging.basicConfig(filename='worldpay-within-wrapper.log', level=logging.DEBUG)
 
     def __init__(self):
         logging.info('initialised WWService')
@@ -186,7 +186,8 @@ class WWService(object):
 
 
 class WWPricePerUnit(object):
-    logging.basicConfig(filename='worldpay-within-wrapper.log',level=logging.DEBUG)
+
+    logging.basicConfig(filename='worldpay-within-wrapper.log', level=logging.DEBUG)
 
     def __init__(self):
         logging.info('initialised WWPricePerUnit')
@@ -205,7 +206,8 @@ class WWPricePerUnit(object):
 
 
 class WWPrice(object):
-    logging.basicConfig(filename='worldpay-within-wrapper.log',level=logging.DEBUG)
+
+    logging.basicConfig(filename='worldpay-within-wrapper.log', level=logging.DEBUG)
 
     def __init__(self):
         logging.info('initialised WWPrice')
@@ -214,7 +216,7 @@ class WWPrice(object):
         self.id = id
 
     def setDescription(self, description):
-        self.description  = description
+        self.description = description
 
     def setUnitDescription(self, unitDescription):
         self.unitDescription = unitDescription
@@ -242,7 +244,8 @@ class WWPrice(object):
 
 
 class WWPaymentResponse(object):
-    logging.basicConfig(filename='worldpay-within-wrapper.log',level=logging.DEBUG)
+
+    logging.basicConfig(filename='worldpay-within-wrapper.log', level=logging.DEBUG)
 
     def __init__(self):
         logging.info('initialised WWPaymentResponse')
@@ -273,7 +276,8 @@ class WWPaymentResponse(object):
 
 
 class WWHCECard(object):
-    logging.basicConfig(filename='worldpay-within-wrapper.log',level=logging.DEBUG)
+
+    logging.basicConfig(filename='worldpay-within-wrapper.log', level=logging.DEBUG)
 
     def __init__(self):
         logging.info('initialised WWHCECard')
@@ -322,7 +326,8 @@ class WWHCECard(object):
 
 
 class WWDevice(object):
-    logging.basicConfig(filename='worldpay-within-wrapper.log',level=logging.DEBUG)
+
+    logging.basicConfig(filename='worldpay-within-wrapper.log', level=logging.DEBUG)
 
     def __init__(self):
         logging.info('initialised WWDevice')
@@ -334,7 +339,7 @@ class WWDevice(object):
         self.name = name
 
     def setDescription(self, description):
-        self.description  = description
+        self.description = description
 
     def setServices(self, services):
         self.services = services
@@ -368,8 +373,10 @@ class WWDevice(object):
 
 
 class WPWithinGeneralException(Exception):
+
     def __init__(self, message, errors):
+
         # Call the base class constructor with the parameters it needs
         super(Exception, self).__init__(message)
-        # Now for your custom code...
+        # Here is some custom code - TODO: Shouldn't this do more?
         self.errors = errors
