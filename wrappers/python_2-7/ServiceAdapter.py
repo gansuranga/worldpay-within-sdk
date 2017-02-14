@@ -1,6 +1,5 @@
 import WWTypes
 
-from wpthrift_types import ttypes
 from wpthrift_types.ttypes import Device
 from wpthrift_types.ttypes import HCECard
 from wpthrift_types.ttypes import PaymentResponse
@@ -14,11 +13,12 @@ from wpthrift_types.ttypes import ServiceDeliveryToken
 
 import logging
 
-logging.basicConfig(filename='worldpay-within-wrapper.log',level=logging.DEBUG)
+logging.basicConfig(filename='worldpay-within-wrapper.log', level=logging.DEBUG)
+
 
 def convertWWHCECard(wwHceCard):
-	logging.info('convertWWHCECard')
-	return HCECard(FirstName=wwHceCard.getFirstName(), LastName=wwHceCard.getLastName(), ExpMonth=wwHceCard.getExpMonth(), ExpYear=wwHceCard.getExpYear(), CardNumber=wwHceCard.getCardNumber(), Type=wwHceCard.getType(), Cvc=wwHceCard.getCvc())
+    logging.info('convertWWHCECard')
+    return HCECard(FirstName=wwHceCard.getFirstName(), LastName=wwHceCard.getLastName(), ExpMonth=wwHceCard.getExpMonth(), ExpYear=wwHceCard.getExpYear(), CardNumber=wwHceCard.getCardNumber(), Type=wwHceCard.getType(), Cvc=wwHceCard.getCvc())
 
 def convertWWDevice(wwDevice):
 	logging.info('convertWWDevice')
@@ -26,7 +26,7 @@ def convertWWDevice(wwDevice):
 
 def convertWWPaymentResponse(wwPaymentResponse):
 	logging.info('convertWWPaymentResponse')
-	return paymentResponse(serverId=wwPaymentResponse.getServerId(), clientId=wwPaymentResponse.getClientId(), totalPaid=wwPaymentResponse.getTotalPaid(), serviceDeliveryToken=convertWWServiceDeliveryToken(wwPaymentResponse.getServiceDeliveryToken()))
+	return PaymentResponse(serverId=wwPaymentResponse.getServerId(), clientId=wwPaymentResponse.getClientId(), totalPaid=wwPaymentResponse.getTotalPaid(), serviceDeliveryToken=convertWWServiceDeliveryToken(wwPaymentResponse.getServiceDeliveryToken()))
 
 def convertWWPricePerUnit(wwPricePerUnit):
 	logging.info('convertWWPricePerUnit')
