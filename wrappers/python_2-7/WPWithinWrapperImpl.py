@@ -48,15 +48,18 @@ class WPWithinWrapperImpl(object):
                 if d is not None:
                     logging.debug(json.dumps(d))
                     rpcAgents = d['track']
+                    print rpcAgents
                     for i in rpcAgents:
+                       print i
                        if i['rpcAgentName'] == programmeName: 
                           # kill the rpc agent
-                          logging.info("An orphaned RpcAgent process ' + str(i['rpcProcess']) + ' was found from " + programmeName + ", attempting to kill")
+                          logging.info("An orphaned RpcAgent process " + str(i['rpcProcess']) + " was found from " + programmeName + ", attempting to kill")
                           os.system('ps -f -p ' + str(i['rpcProcess']) + ' | grep rpc-agent > /dev/null && kill ' + str(i['rpcProcess']))
                 else:
                     logging.info("No orphaned RpcAgent processes from " + programmeName + " - couldn't read any Json data")
             else:
                 logging.info("No orphaned RpcAgent processes from " + programmeName + " - no data in tracker file")
+            json_data.close()
 
     def setClientIfNotSet(self):
         if self.cachedClient is None:
@@ -73,27 +76,33 @@ class WPWithinWrapperImpl(object):
 
 
     def logRpcAgent(self, rpcProcessId, programmeName):
-        jsonFile = 'track-rpc-agent.json'
+        jsonFile = './track-rpc-agent.json'
         fileSize = os.stat(jsonFile).st_size
+
+        d1 = None
+        with open(jsonFile) as json_data_read:
+            if fileSize != 0:
+                d1 = json.load(json_data_read)
+        json_data_read.close()
+
         with open(jsonFile, 'w+') as json_data:
-            if fileSize != 0 and json_data is not None:
-                isJason = True
-                d = None
-                try:
-                    d = json.load(json_data)
-                except ValueError, e:
-                    isJson = False 
-                if d is not None: 
-                    logging.debug("Adding process Id")
-                    rpcAgents = d['track']
+            logging.debug("Opening json file for writing to")
+            if fileSize != 0:
+                if d1 is not None: 
+                    logging.debug("Appending the new rpc agent details")
+                    rpcAgents = d1['track']
                     rpcAgents.append({ "rpcAgentName": programmeName, "rpcProcess": rpcProcessId }) 
+                    logging.debug("Should have appended")
                 else:
                     logging.debug("Overwriting process Id")
                     rpcAgents = { "rpcAgentName": programmeName, "rpcProcess": rpcProcessId }
-                json.dump({"track": [ rpcAgents ]}, json_data)
+                json.dump({"track": rpcAgents }, json_data)
+                logging.debug("Should have output data")
             else:
                 rpcAgents = { "rpcAgentName": programmeName, "rpcProcess": rpcProcessId } 
-                json.dump({"track": [ rpcAgents ]}, json_data)
+                json.dump({"track": rpcAgents }, json_data)
+                logging.debug("Should have output data 2")
+            json_data.close()
 
     def getClient(self):
         self.setClientIfNotSet()
