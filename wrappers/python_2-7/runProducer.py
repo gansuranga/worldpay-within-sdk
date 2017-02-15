@@ -43,7 +43,7 @@ def run():
         # add listeners to the events
         # wpWithinEventListener.onBeginServiceDelivery += doBeginServiceDelivery
         # wpWithinEventListener.onEndServiceDelivery += doEndServiceDelivery		
-        wpw = WPWithinWrapperImpl.WPWithinWrapperImpl('127.0.0.1', 9055, True, wpWithinEventListener, 9095)
+        wpw = WPWithinWrapperImpl.WPWithinWrapperImpl(__file__, '127.0.0.1', 9055, True, wpWithinEventListener, 9095)
         wpw.setup("Producer Example", "Example WorldpayWithin producer")		
         svc = WWTypes.WWService();
         svc.setName("Car charger")

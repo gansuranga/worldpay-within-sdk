@@ -10,6 +10,8 @@ from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 import WWTypes
 import logging
+import json
+import os
 
 
 class WPWithinWrapperImpl(object):
@@ -17,8 +19,11 @@ class WPWithinWrapperImpl(object):
     cachedClient = None
     logging.basicConfig(filename='worldpay-within-wrapper.log', level=logging.DEBUG)
 
-    def __init__(self, ipAddress, portNumber, startRpcCallbackAgent=False, wpWithinEventListener=None, eventListenerPort=0):
 
+
+    def __init__(self, programmeName, ipAddress, portNumber, startRpcCallbackAgent=False, wpWithinEventListener=None, eventListenerPort=0):
+
+        self.killOrphanedRpcAgents(programmeName)
         self.portNumber = portNumber
         self.ipAddress = ipAddress
         self.eventListenerPort = eventListenerPort
@@ -29,7 +34,29 @@ class WPWithinWrapperImpl(object):
             EventServer.EventServer(wpWithinEventListener, self.ipAddress, eventListenerPort)
         self.rpcRunning = False
         self.rpcProcess = self.startRpc(self.ipAddress, self.portNumber, self.eventListenerPort)
+        self.logRpcAgent(self.rpcProcess.pid, programmeName)
         self.setClientIfNotSet()
+
+    def killOrphanedRpcAgents(self, programmeName):
+        jsonFile = './track-rpc-agent.json'
+        fileSize = os.stat(jsonFile).st_size
+        logging.info('size of track file: ' + str(fileSize))
+        with open(jsonFile) as json_data:
+            logging.info('size of track file: ' + str(fileSize))
+            if fileSize != 0:
+                d = json.load(json_data)
+                if d is not None:
+                    logging.debug(json.dumps(d))
+                    rpcAgents = d['track']
+                    for i in rpcAgents:
+                       if i['rpcAgentName'] == programmeName: 
+                          # kill the rpc agent
+                          logging.info("An orphaned RpcAgent process ' + str(i['rpcProcess']) + ' was found from " + programmeName + ", attempting to kill")
+                          os.system('ps -f -p ' + str(i['rpcProcess']) + ' | grep rpc-agent > /dev/null && kill ' + str(i['rpcProcess']))
+                else:
+                    logging.info("No orphaned RpcAgent processes from " + programmeName + " - couldn't read any Json data")
+            else:
+                logging.info("No orphaned RpcAgent processes from " + programmeName + " - no data in tracker file")
 
     def setClientIfNotSet(self):
         if self.cachedClient is None:
@@ -43,6 +70,22 @@ class WPWithinWrapperImpl(object):
             # Give time for the service to start
             time.sleep(5)
             return process
+
+
+    def logRpcAgent(self, rpcProcessId, programmeName):
+        jsonFile = 'track-rpc-agent.json'
+        with open(jsonFile, 'w+') as json_data:
+            if json_data is not None and os.stat(jsonFile).st_size != 0:
+                d = json.load(json_data)
+                if d is not None: 
+                    rpcAgents = d.rpcagentdetails
+                    rpcAgents.append({ "rpcAgentName": programmeName, "rpcProcess": rpcProcessId }) 
+                else:
+                    rpcAgents = { "rpcAgentName": programmeName, "rpcProcess": rpcProcessId }
+                json.dump({"track": [ rpcAgents ]}, json_data)
+            else:
+                rpcAgents = { "rpcAgentName": programmeName, "rpcProcess": rpcProcessId } 
+                json.dump({"track": [ rpcAgents ]}, json_data)
 
     def getClient(self):
         self.setClientIfNotSet()
