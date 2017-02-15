@@ -74,13 +74,21 @@ class WPWithinWrapperImpl(object):
 
     def logRpcAgent(self, rpcProcessId, programmeName):
         jsonFile = 'track-rpc-agent.json'
+        fileSize = os.stat(jsonFile).st_size
         with open(jsonFile, 'w+') as json_data:
-            if json_data is not None and os.stat(jsonFile).st_size != 0:
-                d = json.load(json_data)
+            if fileSize != 0 and json_data is not None:
+                isJason = True
+                d = None
+                try:
+                    d = json.load(json_data)
+                except ValueError, e:
+                    isJson = False 
                 if d is not None: 
-                    rpcAgents = d.rpcagentdetails
+                    logging.debug("Adding process Id")
+                    rpcAgents = d['track']
                     rpcAgents.append({ "rpcAgentName": programmeName, "rpcProcess": rpcProcessId }) 
                 else:
+                    logging.debug("Overwriting process Id")
                     rpcAgents = { "rpcAgentName": programmeName, "rpcProcess": rpcProcessId }
                 json.dump({"track": [ rpcAgents ]}, json_data)
             else:

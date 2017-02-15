@@ -133,7 +133,7 @@ def endServiceDelivery(serviceID, token, unitsReceived): # throws WPWithinGenera
 def run():
     print 'Starting Consumer Example Written in Python.'
     global wpw
-    wpw = WPWithinWrapperImpl.WPWithinWrapperImpl('127.0.0.1', 8778, False)
+    wpw = WPWithinWrapperImpl.WPWithinWrapperImpl(__file__, '127.0.0.1', 8778, False)
     try:
         wpw.setup("my-device", "an example consumer device")
         wpwDevice = wpw.getDevice()
