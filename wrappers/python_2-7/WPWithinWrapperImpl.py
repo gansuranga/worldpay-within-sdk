@@ -37,6 +37,9 @@ class WPWithinWrapperImpl(object):
         self.logRpcAgent(self.rpcProcess.pid, programmeName)
         self.setClientIfNotSet()
 
+    ###################################################
+    # Issue #100 resolved - management of rpc processes
+    ###################################################
     def killOrphanedRpcAgents(self, programmeName):
         jsonFile = './track-rpc-agent.json'
         fileSize = os.stat(jsonFile).st_size
@@ -75,6 +78,9 @@ class WPWithinWrapperImpl(object):
             return process
 
 
+    ###################################################
+    # Issue #100 resolved - management of rpc processes
+    ###################################################
     def logRpcAgent(self, rpcProcessId, programmeName):
         jsonFile = './track-rpc-agent.json'
         fileSize = os.stat(jsonFile).st_size
