@@ -35,102 +35,47 @@
 
                               <h3>Getting started</h3>
 
-                              <p>You will at the very least need to install Go and the Golang SDK, thereafter you can code against the raw Go SDK or alterantively against one of the mulitple language wrappers, which give access to the SDK. The Golang SDK communicates with these other languages using RPC calls (in both directions), and the wrappers in the background interface using Thrift, this is not exposed to you as a developer, you work with the Interface layer in your language of choice.</p>
-      
-                              <h3>The binaries (if you don't want to build from source)</h3>
+<p>We are an open source project, and some of our internal dev terms may spill out to the external SDK - apologies for this. But think of the SDK you download as being the API to a set of really cool services that allow smart devices to pay for services from oneanother</p>
 
-                              <p>Please see the releases section of GitHub for access to pre-built binaries of the RPC Agent and Dev Client apps. Both of the apps have been built for 32bit and 64bit architectures on Windows, MacOS, Linux and Linux (ARM).</p>
+<p>What you get from the SDK you download from our git repo, is access to the API in all the supported languages (we refer this as the 'wrapper'), you will still need to get the core IoT component from the releases (we refer to this as the 'RPC-agent'). <a href="internal-structure.html">If you're interested further on the internal architectcure of the project check this out</a>.
 
-                              <p>While the RPC Agent can be run from anywhere it makes sense to add it to the directory of the application which will call it. The reason for this is that each application needs it own running instance of the RPC Agent and it can easily get confusing when there are multiple applications and agents deployed.</p>
+<h3>1. Get the SDK (software development kit) from the Github repository</h3>
+<p>Please either download the repo, or clone the repo from Github, <a href="https://github.com/WPTechInnovation/worldpay-within-sdk">the github repo for Worldpay Within can be found here</a></p>
 
-                              <p>Please see the examples in both the Java and Node.JS wrappers. these examples currently hold binaries for MacOS x64. I suggest replacing that binary with an alternate build, if required.</p>
+<h3>2. Download the core Iot component</h3>
 
-                              <p>The dev client can really be run from anywhere as it is not coupled with anything else.</p>
+<p>The Iot core component is sometimes called the "RPC-Agent" (and sometimes referred to as the binaries) from the Github Repository</p>
+<ol>
+<li>Go to the releases page here <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/releases">https://github.com/WPTechInnovation/worldpay-within-sdk/releases</a></li>
+<li>Download the zip file entitled 'wpwithin-&lt;version_number&gt;-bins.tar.gz' e.g. wpwithin-0.4-bins.tar.gz - make sure to get the latest one though!</li>
+<li>You don't need all the files in this download! Oh no, you'll just need the ones for the computer that you are developing on, and thing (smart device) that you are going to run it on.</li>
+<li>Unzip the file rpc-agent-bins-&lt;version_number&gt;.tar.gz</li>
+<li>Choose the RPC-agent file appropriate to your Thing or development machine.<!--, e.g. choose ******* chat to Conor******--></li>
+</ol>
+<!--
+***** wget this*****
+Have a download on deve machine flow
+vs
+download on RPi flow.....
+-->
 
-                              <h4>Usage</h4>
+<h3>3. Setup your environment Worldpay Within</h3>
+<p>You'll need to drop the core IoT component (RPC-agent file) into the appropriate place in the SDK (or wrapper directory).</p>
+<p>Follow the instructions for each supported language on where to place the core IoT component (RPC-agent file) and what to call it. The instructions will also let you know if there are any other pre-requisites to install on your device before you get started.</p>
+<ul>
+<li><a href="https://github.com/WPTechInnovation/worldpay-within-sdk/tree/master/wrappers/java">Java</a></li>
+<li><a href="dotnet.html">.NET</a></li>
+<li><a href="getting-started-with-go.html">Go (no wrapper required, you work directly with Go!)</a></li>
+<li><a href="nodejs.html">Node.js</a></li>
+<li><a href="python27.html">Python (2.7)</a></li>
+</ul>
 
-                              <li>RPC Agent <code>./rpc-agent -configfile <filename></code>. Please see explanation of rpc-agent config file for further info.</li>
-                              <li>Dev Client <code>./dev-client</code></li>
-
-
-
-
-
-                              <h3>Install - if you want to go from the Go source files!</h3>
-
-                              <div class="callout">
-                              <ol>
-                              <li>Install Go command line</li>
-                              <li>Set up the environmental variables correctly; you only need to set $GOPATH, and that should be set as //, where is wherever you want the code, is /src/innovation.worldpay.com</li>
-                              <li>clone the repo to $GOPATH/src/innovation.worldpay.com</li>
-                              <li>Get the dependencies; go get github.com/Sirupsen/logrus</li>
-                              <li>Get the dependencies; go get github.com/gorilla/mux</li>
-                              <li>Get the dependencies; go get github.com/nu7hatch/gouuid</li>
-                              <li>Get the dependencies; go get git.apache.org/thrift.git/lib/go/thrift</li>
-                              </ol>
-                              </div>
-
-                              <h3>Configuration file versus command line flags</h3>
-
-                                <p>The RPC client takes command line flags e.g. -port 9091 but it can also take the flag -configfile 'conf.json' so you can specify the configuration in a config file. For example:</p>
-
-                                <div class="callout" style="background-color: #EEEEEE;">
-                                <pre>
-{
-    "WorldpayWithinConfig": {
-        "BufferSize" : 100,
-        "Buffered": false,
-        "Framed": false,
-        "Host": "127.0.0.1",
-        "Logfile": "worldpayWithin.log",
-        "Loglevel": "warn",
-        "Port": 9081,
-        "Protocol": "binary",
-        "Secure": false
-    }
-}
-                                </pre>
-                                </div>
+<!--
+<h3>4. Run your first example Worldpay Within Code</h3>
 
 
-
-                              <h3>Tutorial on running two example apps on one machien</h3>
-
-
-                              <p>Tutorial for running on the same machine e.g. Java (producer) and Node.js (consumer)</p>
-
-                              <div style="text-align: center;"><figure>
-                                  <img style="padding-top: 25px;" src="images/get-started/outputoforchestration1.png" alt="The output of the log files for the orchestration of the flow"/>
-                                  <figcaption>The output of the log files for the orchestration of the flow.</figcaption>
-                              </figure></div>
-
-
-
-                              <div style="text-align: center;"><figure>
-                                  <img style="padding-top: 25px;" src="images/get-started/order-details-onlineworldpaycom.png" alt="Showing the payment in online.worldpay.com"/>
-                                  <figcaption>Showing the payment in online.worldpay.com.</figcaption>
-                              </figure></div>
-
-                              <ul>
-                              <li>Java - 9090 - Producer</li>
-                              <li>Node.js - 9091 - consumer</li>
-                              </ul>
-
-                              <ol>
-                              <li>Each app needs to run on it's own instance of the RPC service, so run one on 9090 and the other on 9091</li>
-                              <li>So we're running Java off of 9090 and running node.js off of 9091</li>
-                              <li>Open two terminal windows</li>
-                              <li>Configure the rpc agent in each terminal window to run on each of the ports, in the producer window run the RPC on port 9090 and the consumer window run the RPC on port 9091</li>
-                              <li>Configure the java app to run on 9090 (run as the producer)</li>
-                              <li>Configure the node.js app to run on 9091 - in createClient in example code (run as the consumer)</li>
-                              <li>Run the java producer app so we're broadcasting, note that the RPC agent broadcasting will continue to run in the background whilst the java program has exited</li>
-                              <li>Run the node.js consumer app immediately</li>
-                              <li>The service discovery, price negotiation, payment and service release flows will all be twiggered, as you can see below</li>
-                              </ol>
-
-
-
-
+<h3>5. Where to go from there</h3>
+-->
 
 
 
