@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/rifflock/lfshook"
+	log "github.com/sirupsen/logrus"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/rpc"
 )

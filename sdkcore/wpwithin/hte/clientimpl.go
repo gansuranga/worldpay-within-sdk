@@ -8,7 +8,7 @@ import (
 
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 // Concrete implementation of HTEClient

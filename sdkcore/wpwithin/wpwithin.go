@@ -16,7 +16,7 @@ import (
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/utils"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/utils/wslog"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 // Factory to allow easy creation of
@@ -444,7 +444,7 @@ func (wp *wpWithinImpl) StartServiceBroadcast(timeoutMillis int) error {
 	log.Debug("Will spin up go routine to perform broadcasting")
 	go func() {
 		log.WithFields(log.Fields{"message": msg, "timeoutmillis": timeoutMillis}).Debug("Inside go routine, will call wp.core.SvcBroadcaster.StartBroadcast(")
-		chBroadcastErr <- wp.core.SvcBroadcaster.StartBroadcast(msg, timeoutMillis)
+		chBroadcastErr <- wp.core.SvcBroadcaster.StartBroadcast(msg, timeoutMillis, wp.core.Device.Latitude, wp.core.Device.Longitude, wp.core.Device.MCC)
 		log.Debug("Did call wp.core.SvcBroadcaster.StartBroadcast()")
 	}()
 	log.Debug("Did spin up go routine to perform broadcasting")

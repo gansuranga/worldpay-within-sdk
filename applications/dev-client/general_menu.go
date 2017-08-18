@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	devclienttypes "github.com/wptechinnovation/worldpay-within-sdk/applications/dev-client/types"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/psp"

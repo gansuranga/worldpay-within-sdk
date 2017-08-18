@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"github.com/gorilla/mux"
 	"github.com/rifflock/lfshook"
 	"github.com/wptechinnovation/w3c-webpayments-http-api-reference/util"
@@ -87,6 +87,8 @@ func startAPI() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/device/{mcc}/{lat}/{lng}/{radius}", apiHandler.GetDevices).Methods("GET")
 	router.HandleFunc("/device", apiHandler.PostDevice).Methods("POST")
+	router.HandleFunc("/device", apiHandler.DeleteDevice).Methods("DELETE")
+
 	logrus.Debug("End setup API routes")
 
 	logrus.Debug("Begin HTTP listen and serve")

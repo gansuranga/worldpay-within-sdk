@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types"
 )
@@ -17,7 +17,7 @@ type broadcasterImpl struct {
 	comm      Communicator
 }
 
-func (bcast *broadcasterImpl) StartBroadcast(msg types.BroadcastMessage, timeoutMillis int) error {
+func (bcast *broadcasterImpl) StartBroadcast(msg types.BroadcastMessage, timeoutMillis int, flLat, flLong float32, mcc string) error {
 
 	log.Debug("Start svc broadcast")
 
