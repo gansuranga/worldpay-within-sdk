@@ -6,10 +6,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/sirupsen/logrus"
 	"github.com/gorilla/mux"
 	"github.com/rifflock/lfshook"
-	"github.com/wptechinnovation/w3c-webpayments-http-api-reference/util"
+	"github.com/sirupsen/logrus"
 )
 
 // Application flags
@@ -94,7 +93,20 @@ func startAPI() {
 	logrus.Debug("Begin HTTP listen and serve")
 	err = http.ListenAndServe(fmt.Sprintf(":%s", flagPort), router)
 
-	util.ErrorCheck(err, "Error starting HTTP server: ")
+	ErrorCheck(err, "Error starting HTTP server: ")
 
 	logrus.Info("End startAPI()")
+}
+
+// ErrorCheck check if the provided error is nil. If it is not nil, print the error and exit the application
+// The preMessage paramater give the opportunity to prepend the error message with a custom message, allowing the
+// developer to give some context to the error.
+func ErrorCheck(err error, preMessage string) {
+
+	if err != nil {
+
+		fmt.Printf("%s %q\n", preMessage, err.Error())
+
+		os.Exit(1)
+	}
 }
