@@ -6,11 +6,12 @@ Worldpay Within SDK to allow payments within IoT.
 
 The core of this SDK is written in Go with a native Go interface. Along with the native Go interface is an RPC layer (Apache Thrift) to allow communication through other languages.
 
-Currently, there are wrappers available for the following technologies:
-* Node.js
-* .NET
-* Java
-* Python (in development)
+Currently, therefore the SDK is available in the following languages as "wrappers", we're in the process of refactoring the repository and we'll give links to the decomposed repos here:
+* Node.js (Coming soon - but you can currently use what's here)
+* .NET (Coming soon - but you can currently use what's here)
+* Java ![The new WPW Java SDK repo can be found here](https://github.com/WPTechInnovation/wpw-sdk-java)
+* Python ![The new WPW Python SDK repo can be found here](https://github.com/WPTechInnovation/wpw-sdk-python)
+* Go (Coming soon - but you can currently use what's here)
 
 **Note 1**: Please note that if you intend to work with one of the wrapper frameworks, it is not required that you build the Go source code directly. With each release we will bundle pre-built binaries of the RPC-Agent application. The RPC-Agent is an application that starts the Thrift RPC interface into the Go SDK Core. Once this application is up and running the wrapper can communicate with the SDK Core. In the latest release of the SDK, the RPC-Agent is started automatically by the wrapper.
 
