@@ -11,7 +11,7 @@ Currently, therefore the SDK is available in the following languages as "wrapper
 * .NET (Coming soon - but you can currently use what's here)
 * Java - The new WPW Java SDK repo can be found here: https://github.com/WPTechInnovation/wpw-sdk-java
 * Python - The new WPW Python SDK repo can be found here: https://github.com/WPTechInnovation/wpw-sdk-python
-* Go (Coming soon - but you can currently use what's here)
+* Go - The new WPW Go SDK repo can be found here: https://github.com/WPTechInnovation/wpw-sdk-go
 
 **Note 1**: Please note that if you intend to work with one of the wrapper frameworks, it is not required that you build the Go source code directly. With each release we will bundle pre-built binaries of the RPC-Agent application. The RPC-Agent is an application that starts the Thrift RPC interface into the Go SDK Core. Once this application is up and running the wrapper can communicate with the SDK Core. In the latest release of the SDK, the RPC-Agent is started automatically by the wrapper.
 
