@@ -16,7 +16,7 @@ import (
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/utils"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/utils/wslog"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 // Factory to allow easy creation of

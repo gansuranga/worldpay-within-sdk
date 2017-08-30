@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/rpc/wpthrift/gen-go/wpthrift_types"
 	"github.com/wptechinnovation/worldpay-within-sdk/sdkcore/wpwithin/types"
