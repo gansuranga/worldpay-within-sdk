@@ -1,0 +1,726 @@
+
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Worldpay Within website">
+      
+      
+        <link rel="canonical" href="https://wptechinnovation.github.io/wpw-doc-dev/getting-started-with-go/">
+      
+      
+        <meta name="author" content="Worldpay Within">
+      
+      
+        <link rel="shortcut icon" href="../assets/images/favicon.ico">
+      
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.8.1">
+    
+    
+    
+      
+        <title>Go - Worldpay Within</title>
+      
+    
+    
+    
+      <script src="../assets/javascripts/modernizr-8210299719.js"></script>
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application-a15cc7de21.css">
+      
+    
+    
+      
+        <style>body,input{font-family:adelle_sansregular,"Helvetica Neue",Helvetica,Arial,sans-serif}h1,h2,h3,h4,h5,h6{font-family:adelle_sansthin,"Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    
+  </head>
+  
+  
+  
+  
+    <body>
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header" data-md-component="header">
+  
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <a href="https://wptechinnovation.github.io/wpw-doc-dev/" title="Worldpay Within" class="md-logo md-header-nav__button">
+            <img src="../images/logo.svg" width="160" height="32">
+                <span class="md-subtitle">within</span>
+          </a>
+        
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <span class="md-flex__ellipsis md-header-nav__title">
+          
+            
+              
+                
+                  <span class="md-header-nav__parent">
+                    SDK
+                  </span>
+                
+              
+              Go
+            
+          
+        </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result" data-md-lang-search="" data-md-lang-tokenizer="[\s\-]+">
+          <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/WPTechInnovation/wpw-doc-dev" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      WPTechInnovation/wpw-doc-dev
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    
+      <i class="md-logo md-nav__button">
+        <img src="../images/logo.svg" width="160" height="32">
+        <span class="md-subtitle">within</span>
+      </i>
+    
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/WPTechInnovation/wpw-doc-dev" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      WPTechInnovation/wpw-doc-dev
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+      
+    
+      
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../get-started/" title="Get started" class="md-nav__link">
+      Get started
+    </a>
+  </li>
+
+      
+    
+      
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      SDK
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        SDK
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../nodejs/" title="Node.js" class="md-nav__link">
+      Node.js
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../python27/" title="Python" class="md-nav__link">
+      Python
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../java/" title="Java" class="md-nav__link">
+      Java
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../dotnet/" title=".NET" class="md-nav__link">
+      .NET
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Go
+      </label>
+    
+    <a href="./" title="Go" class="md-nav__link md-nav__link--active">
+      Go
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started-with-go" title="Getting started with Go" class="md-nav__link">
+    Getting started with Go
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-binaries-if-you-dont-want-to-build-from-source" title="The binaries (if you don't want to build from source)" class="md-nav__link">
+    The binaries (if you don't want to build from source)
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usage" title="Usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-if-you-want-to-go-from-the-go-source-files" title="Install - if you want to go from the Go source files" class="md-nav__link">
+    Install - if you want to go from the Go source files
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-file-versus-command-line-flags" title="Configuration file versus command line flags" class="md-nav__link">
+    Configuration file versus command line flags
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-run-two-example-apps-on-one-machine" title="How to run two example apps on one machine" class="md-nav__link">
+    How to run two example apps on one machine
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+      
+    
+      
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Advanced
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Advanced
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../how-it-works/" title="How it works" class="md-nav__link">
+      How it works
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../architecture/" title="Architecture" class="md-nav__link">
+      Architecture
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../internal-structure/" title="Internal structure" class="md-nav__link">
+      Internal structure
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../sample-service-messaging/" title="Sample service messaging" class="md-nav__link">
+      Sample service messaging
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../api-spec/" title="API Spec" class="md-nav__link">
+      API Spec
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+      
+    
+      
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../hackathons/" title="Hackathons" class="md-nav__link">
+      Hackathons
+    </a>
+  </li>
+
+      
+    
+      
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started-with-go" title="Getting started with Go" class="md-nav__link">
+    Getting started with Go
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-binaries-if-you-dont-want-to-build-from-source" title="The binaries (if you don't want to build from source)" class="md-nav__link">
+    The binaries (if you don't want to build from source)
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usage" title="Usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-if-you-want-to-go-from-the-go-source-files" title="Install - if you want to go from the Go source files" class="md-nav__link">
+    Install - if you want to go from the Go source files
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-file-versus-command-line-flags" title="Configuration file versus command line flags" class="md-nav__link">
+    Configuration file versus command line flags
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-run-two-example-apps-on-one-machine" title="How to run two example apps on one machine" class="md-nav__link">
+    How to run two example apps on one machine
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/WPTechInnovation/wpw-doc-dev//edit/master/docs/getting-started-with-go.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
+                
+                
+                
+                  <h1>Go</h1>
+                
+                
+                <h2 id="getting-started-with-go">Getting started with Go<a class="headerlink" href="#getting-started-with-go" title="Permanent link">&para;</a></h2>
+<p>To code against the raw Go SDK, you will need to install Go and the Golang SDK. Alternatively, you can code against one of the multiple language wrappers, which give access to the SDK. </p>
+<p>The Golang SDK communicates with these other languages using RPC calls (in both directions), and the wrappers in the background interface using Thrift. This is not exposed to you as a developer; you work with the Interface layer in your language of choice. We've got SDKs in the following languages:
+<div class="download">
+  <a class="md-button" href="../nodejs">Node.js</a>
+  <a class="md-button" href="../python27">Python</a>
+  <a class="md-button" href="../java">Java</a>
+  <a class="md-button" href="../dotnet">.NET</a>
+</div></p>
+<h2 id="the-binaries-if-you-dont-want-to-build-from-source">The binaries (if you don't want to build from source)<a class="headerlink" href="#the-binaries-if-you-dont-want-to-build-from-source" title="Permanent link">&para;</a></h2>
+<p>Please see the <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/releases">Releases</a> section of GitHub for access to pre-built binaries of the RPC Agent and Dev Client apps. Both of the apps have been built for 32bit and 64bit architectures on Windows, MacOS, Linux and Linux (ARM).</p>
+<p>While the RPC Agent can be run from anywhere, it makes sense to add it to the directory of the application which will call it. The reason for this is that each application needs it own running instance of the RPC Agent and it can easily get confusing when there are multiple applications and agents deployed.</p>
+<p>Please see the examples in both the <a href="../java">Java</a> and <a href="../nodejs">Node.JS</a> wrappers. These examples currently hold binaries for MacOS x64. We suggest replacing that binary with an alternate build, if required.</p>
+<p>The dev client can be run from anywhere as it is not coupled with anything else.</p>
+<h3 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h3>
+<ul>
+<li>RPC Agent <code>./rpc-agent -configfile &lt;filename&gt;&lt;/filename&gt;</code>. Please see explanation of rpc-agent config file for further info.</li>
+<li>Dev Client <code>./dev-client</code></li>
+</ul>
+<h2 id="install-if-you-want-to-go-from-the-go-source-files">Install - if you want to go from the Go source files<a class="headerlink" href="#install-if-you-want-to-go-from-the-go-source-files" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Install the Go command line</li>
+<li>Set up the environmental variables correctly; you only need to set <code>$GOPATH</code>, and that should be set as <code>//</code> where you want the code, for example: <code>/src/innovation.worldpay.com</code></li>
+<li>Clone the repo to <code>$GOPATH/src/innovation.worldpay.com</code></li>
+<li>Get the dependencies: <code>go get github.com/Sirupsen/logrus</code></li>
+<li>Get the dependencies: <code>go get github.com/gorilla/mux</code></li>
+<li>Get the dependencies: <code>go get github.com/nu7hatch/gouuid</code></li>
+<li>Get the dependencies: <code>go get git.apache.org/thrift.git/lib/go/thrift</code></li>
+</ol>
+<h2 id="configuration-file-versus-command-line-flags">Configuration file versus command line flags<a class="headerlink" href="#configuration-file-versus-command-line-flags" title="Permanent link">&para;</a></h2>
+<p>The RPC client takes command line flags, for example <code>-port 9091</code>. It can also take the flag <code>-configfile 'conf.json'</code>, so you can specify the configuration in a config file. For example:</p>
+<div class="codehilite"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;WorldpayWithinConfig&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;BufferSize&quot;</span> <span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="nt">&quot;Buffered&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;Framed&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;Host&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;Logfile&quot;</span><span class="p">:</span> <span class="s2">&quot;worldpayWithin.log&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;Loglevel&quot;</span><span class="p">:</span> <span class="s2">&quot;warn&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;Port&quot;</span><span class="p">:</span> <span class="mi">9081</span><span class="p">,</span>
+        <span class="nt">&quot;Protocol&quot;</span><span class="p">:</span> <span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;Secure&quot;</span><span class="p">:</span> <span class="kc">false</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<h3 id="how-to-run-two-example-apps-on-one-machine">How to run two example apps on one machine<a class="headerlink" href="#how-to-run-two-example-apps-on-one-machine" title="Permanent link">&para;</a></h3>
+<p><img alt="The output of the log files for the orchestration of the flow" src="../images/get-started/outputoforchestration1.png" />
+<figcaption>The output of the log files for the orchestration of the flow.</figcaption></p>
+<p><img alt="Showing the payment in online.worldpay.com" src="../images/get-started/order-details-onlineworldpaycom.png" />
+<figcaption>Showing the payment in online.worldpay.com.</figcaption></p>
+<p>In the example, we're using two different ports:</p>
+<ul>
+<li>Java - 9090 - Producer</li>
+<li>Node.js - 9091 - Consumer</li>
+</ul>
+<p>Follow these steps to run two apps on one machine:</p>
+<ol>
+<li>Open two terminal windows.</li>
+<li>Configure the rpc agent in each terminal window to run on each of the ports. </li>
+<li>In the producer window, run the RPC on port <strong>9090</strong>.</li>
+<li>In the consumer window, run the RPC on port <strong>9091</strong>.</li>
+<li>Configure the Java app to run as the producer on <strong>9090</strong>.</li>
+<li>Configure the Node.js app to run as the consumer on <strong>9091</strong>, by changing the <code>createClient</code> in the example code.</li>
+<li>Run the Java producer app so we're broadcasting. The RPC agent broadcasting will continue to run in the background while the Java program has exited.</li>
+<li>Run the Node.js consumer app immediately.</li>
+<li>The <strong>Discover</strong>, <strong>Select</strong>, <strong>Pay</strong> and <strong>Release</strong> flows will all be triggered, as you can see above.</li>
+</ol>
+                
+                  
+                
+              
+              
+                
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+        
+          <a href="../dotnet/" title=".NET" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                
+                  .NET
+                
+              </span>
+            </div>
+          </a>
+        
+        
+        
+          <a href="../how-it-works/" title="How it works" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                
+                  How it works
+                
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application-6940329b9f.js"></script>
+      
+      
+      <script>app.initialize({url:{base:".."}})</script>
+      
+    
+    
+      
+      <script>!function(e,t,a,n,o,c,i){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,c=t.createElement(a),i=t.getElementsByTagName(a)[0],c.async=1,c.src=n,i.parentNode.insertBefore(c,i)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","None","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var t=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",t,e.href)})});var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})</script>
+      
+    
+  </body>
+</html>
