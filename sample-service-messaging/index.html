@@ -11,7 +11,7 @@
         <meta name="description" content="Worldpay Within website">
       
       
-        <link rel="canonical" href="https://wptechinnovation.github.io/wpw-doc-dev/sample-service-messaging/">
+        <link rel="canonical" href="https://wptechinnovation.github.io/worldpay-within-sdk/sample-service-messaging/">
       
       
         <meta name="author" content="Worldpay Within">
@@ -68,7 +68,7 @@
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
         
-          <a href="https://wptechinnovation.github.io/wpw-doc-dev/" title="Worldpay Within" class="md-logo md-header-nav__button">
+          <a href="https://wptechinnovation.github.io/worldpay-within-sdk/" title="Worldpay Within" class="md-logo md-header-nav__button">
             <img src="../images/logo.svg" width="160" height="32">
                 <span class="md-subtitle">within</span>
           </a>
@@ -128,7 +128,7 @@
   
 
 
-  <a href="https://github.com/WPTechInnovation/wpw-doc-dev" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="https://github.com/WPTechInnovation/worldpay-within-sdk" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -137,7 +137,7 @@
       </div>
     
     <div class="md-source__repository">
-      WPTechInnovation/wpw-doc-dev
+      WPTechInnovation/worldpay-within-sdk
     </div>
   </a>
 
@@ -175,7 +175,7 @@
   
 
 
-  <a href="https://github.com/WPTechInnovation/wpw-doc-dev" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="https://github.com/WPTechInnovation/worldpay-within-sdk" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -184,7 +184,7 @@
       </div>
     
     <div class="md-source__repository">
-      WPTechInnovation/wpw-doc-dev
+      WPTechInnovation/worldpay-within-sdk
     </div>
   </a>
 
@@ -757,7 +757,7 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/WPTechInnovation/wpw-doc-dev//edit/master/docs/sample-service-messaging.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
+                  <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/edit/master/docs/sample-service-messaging.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
                 
                 
                 
@@ -769,7 +769,7 @@
 <p>This is an early reference guide which has evolved since it was first published. However, in combination with the SDK code, it should give you plenty of hints as to how to work with the SDK. </p>
 </div>
 <h2 id="service-discovery-messages">Service discovery messages<a class="headerlink" href="#service-discovery-messages" title="Permanent link">&para;</a></h2>
-<p>We're going to build a reference application to prove the concepts and APIs outlined above. This reference application will be implemented on the current range of platforms aimed at providing IoT services. These boards are typically running ‘M’ class processors which as yet do not contain an SE. Currently only the application processors (A class such as A57 Cortex) contain SEs. However developments are being made in the IoT platform space, for example ARM has released a new M architecture with does contain an SE, although there will be delay before boards using these processors and compiler tools become mainstream. This document requires these more secure platforms to be available.</p>
+<p>We're going to build a reference application to prove the concepts and APIs outlined above. This reference application will be implemented on the current range of platforms aimed at providing IoT services. These boards are typically running ‘M’ class processors which as yet do not contain an SE. Currently only the application processors (A class such as A57 Cortex) contain SEs. However developments are being made in the IoT platform space, for example ARM has released a new M architecture with does contain an SE, although there will be a delay before boards using these processors and compiler tools become mainstream. This document requires these more secure platforms to be available.</p>
 <h3 id="service-broadcast">Service broadcast<a class="headerlink" href="#service-broadcast" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><span class="p">{</span>
     <span class="nt">&quot;DeviceDescription&quot;</span><span class="p">:</span> <span class="s2">&quot;Worldpay Within Enabled Electric Car Charger&quot;</span><span class="p">,</span>
@@ -781,7 +781,7 @@
 </pre></div>
 
 <h3 id="service-list-request">Service list request<a class="headerlink" href="#service-list-request" title="Permanent link">&para;</a></h3>
-<p>In order to build the URL, use the hostname and the port number, then concatenate the URL with “service/discover”.</p>
+<p>To build the URL, use the hostname and the port number, then concatenate the URL with “service/discover”.</p>
 <p><code>http://[Your hostname]:[Your port number]/v1/carcharge/service/discover</code></p>
 <div class="codehilite"><pre><span></span> <span class="p">{</span>
  <span class="p">}</span> 
@@ -809,7 +809,7 @@
 
 <h2 id="service-negotiation-messages">Service negotiation messages<a class="headerlink" href="#service-negotiation-messages" title="Permanent link">&para;</a></h2>
 <h3 id="service-price-request">Service price request<a class="headerlink" href="#service-price-request" title="Permanent link">&para;</a></h3>
-<p>In order to build the URL, use the hostname, with the port number, the url prefix all concatenated. The concatenate with “service” concatenated with “service ID” and then “prices”.</p>
+<p>To build the URL, use the hostname, with the port number, the url prefix all concatenated. The concatenate with “service” concatenated with “service ID” and then “prices”.</p>
 <p><code>http://[Your hostname]:[Your port number]/v1/carcharge/service/0/prices</code></p>
 <div class="codehilite"><pre><span></span><span class="p">{</span>
 <span class="p">}</span> 
@@ -850,7 +850,7 @@
 </pre></div>
 
 <h3 id="get-total-price-request">Get Total price request<a class="headerlink" href="#get-total-price-request" title="Permanent link">&para;</a></h3>
-<p>In order to build the URL, use the hostname, with the port number, the url prefix all concatenated. The concatenate with “service” concatenated with <code>service ID</code> and then <code>requestTotal</code>.</p>
+<p>To build the URL, use the hostname, with the port number, the url prefix all concatenated. The concatenate with “service” concatenated with <code>service ID</code> and then <code>requestTotal</code>.</p>
 <p><code>http://[Your hostname]:[Your port number]/v1/carcharge/service/0/requestTotal</code></p>
 <div class="codehilite"><pre><span></span><span class="p">{</span>
     <span class="nt">&quot;ClientID&quot;</span><span class="p">:</span><span class="s2">&quot;54560ba2-87c0-4172-a904-67a9b7a5e1ee&quot;</span><span class="p">,</span>
@@ -1084,7 +1084,7 @@
     
     
       
-      <script>!function(e,t,a,n,o,c,i){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,c=t.createElement(a),i=t.getElementsByTagName(a)[0],c.async=1,c.src=n,i.parentNode.insertBefore(c,i)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","None","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var t=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",t,e.href)})});var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})</script>
+      <script>!function(e,t,a,n,o,c,i){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,c=t.createElement(a),i=t.getElementsByTagName(a)[0],c.async=1,c.src=n,i.parentNode.insertBefore(c,i)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","UA-77147930-12","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var t=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",t,e.href)})});var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})</script>
       
     
   </body>
