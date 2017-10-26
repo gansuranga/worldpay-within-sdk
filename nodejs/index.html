@@ -19,7 +19,7 @@
       
         <link rel="shortcut icon" href="../assets/images/favicon.ico">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.8.1">
+      <meta name="generator" content="mkdocs-0.17.0, mkdocs-material-1.8.1">
     
     
     
@@ -323,6 +323,19 @@
     Debugging
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#os-specific-issues" title="OS-specific issues" class="md-nav__link">
+    OS-specific issues
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -582,6 +595,19 @@
     Debugging
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#os-specific-issues" title="OS-specific issues" class="md-nav__link">
+    OS-specific issues
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -619,7 +645,7 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/edit/master/docs/nodejs.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
+                  <a href="https://edit/master/docs/nodejs.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
                 
                 
                 
@@ -630,8 +656,8 @@
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
 <p>Before you get started:</p>
 <ul>
-<li>Install <a href="https://nodejs.org/en/">Node.js</a> on your system. We've tested this wrapper with version 6.11.1.</li>
-<li>Install <a href="https://npmjs.com/">npm</a> on your machine.</li>
+<li>Install <a href="https://nodejs.org/en/">Node.js</a> on your system. We've tested this wrapper with version 8.6.0 on Ubuntu and 4.8.4 on Raspberry Pi.</li>
+<li>Install <a href="https://npmjs.com/">npm</a> on your machine. We've tested version 5.5.1 on Ubuntu and 2.5.11 on Raspberry Pi.</li>
 <li>Create an account with <a href="https://online.worldpay.com">Worldpay Online</a> so that you can generate your own test API key. You'll replace the Worldpay test keys with your own in the SDK. </li>
 </ul>
 <div class="admonition warning">
@@ -641,9 +667,10 @@
 <h2 id="get-started">Get started<a class="headerlink" href="#get-started" title="Permanent link">&para;</a></h2>
 <p>Once you've got Node.js and npm.js, you should be good to go.</p>
 <ol>
-<li>Clone or download <a href="https://github.com/WPTechInnovation/wpw-sdk-nodejs">the repository</a>.</li>
-<li>Change to the folder <code>cd wpw-sdk-nodejs</code> (if using linux / unix).</li>
-<li>Run: <code>npm install thrift sleep</code>.  </li>
+<li>Clone or download <a href="https://github.com/WPTechInnovation/wpw-sdk-nodejs">the repository</a>: <code>git clone https://github.com/WPTechInnovation/wpw-sdk-nodejs.git</code></li>
+<li>Change to the folder <code>cd wpw-sdk-nodejs</code></li>
+<li>Update the submodules: <code>git submodule update --init --recursive</code></li>
+<li>Download the required modules: <code>npm install</code></li>
 </ol>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -653,10 +680,9 @@
 <h2 id="run-the-examples">Run the examples<a class="headerlink" href="#run-the-examples" title="Permanent link">&para;</a></h2>
 <p>Now you can start testing to see if it works. We'd recommend using your own test API keys for this. We've left ours in the code, but you won't be able to see the payments with our keys.</p>
 <ol>
-<li>In one terminal/cmd (or on one device) run: <code>node example-producer-callbacks.js</code>.
-    (You can run <code>node example-producer.js</code> but this does not recall the producer, once it times out)</li>
-<li>In another terminal/cmd, (or on another device, on the same network) run: <code>node example-consumer.js</code>.</li>
-<li>A payment should fire. If you see the <code>serviceDeliveryToken</code> returned within the producer terminal/cmd, you'll know that the payment was complete.</li>
+<li>In one terminal/cmd (or on one device) run: <code>node example-producer-callbacks.js</code></li>
+<li>In another terminal/cmd, (or on another device, on the same network) run: <code>node example-consumer.js</code></li>
+<li>A payment should fire. If you see the <code>serviceDeliveryToken</code> returned within the producer terminal/cmd, you'll know that the payment was complete. This payment will happen with our test keys, so you won't be able to see the payment.</li>
 </ol>
 <h2 id="see-the-payments">See the payments<a class="headerlink" href="#see-the-payments" title="Permanent link">&para;</a></h2>
 <p>Once the devices have successfully communicated with each other to make a payment, you can check to make sure that your devices are successfully making and receiving payments.</p>
@@ -673,13 +699,18 @@
 <li>Re-run the examples and you should see the payments coming through on the Worldpay Online payments dashboard.</li>
 </ol>
 <h2 id="debugging">Debugging<a class="headerlink" href="#debugging" title="Permanent link">&para;</a></h2>
-<p>If you get some odd error messages talking about a rpc-agent:</p>
-<ul>
-<li>Try typing the following command: <code>ps -e | grep rpc</code> to get the pid(s) of rpc-agents that are running.</li>
-<li>Then do <code>kill &lt;pid&gt;</code>, such as <code>kill 13249234</code> to kill these processes.</li>
-<li>Try re-running the examples.</li>
-</ul>
-<p>If you're still having trouble, you can contact us at <a href="mailto:innovation@worldpay.com"><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#73;&#110;&#110;&#111;&#118;&#97;&#116;&#105;&#111;&#110;&#64;&#87;&#111;&#114;&#108;&#100;&#112;&#97;&#121;&#46;&#99;&#111;&#109;">&#73;&#110;&#110;&#111;&#118;&#97;&#116;&#105;&#111;&#110;&#64;&#87;&#111;&#114;&#108;&#100;&#112;&#97;&#121;&#46;&#99;&#111;&#109;</a></a>. Alternatively, you can <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/issues">raise an issue in GitHub</a>.</p>
+<p>If you're having trouble, you can contact us at <a href="mailto:innovation@worldpay.com"><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#73;&#110;&#110;&#111;&#118;&#97;&#116;&#105;&#111;&#110;&#64;&#87;&#111;&#114;&#108;&#100;&#112;&#97;&#121;&#46;&#99;&#111;&#109;">&#73;&#110;&#110;&#111;&#118;&#97;&#116;&#105;&#111;&#110;&#64;&#87;&#111;&#114;&#108;&#100;&#112;&#97;&#121;&#46;&#99;&#111;&#109;</a></a>. Alternatively, you can <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/issues">raise an issue in GitHub</a>.</p>
+<h3 id="os-specific-issues">OS-specific issues<a class="headerlink" href="#os-specific-issues" title="Permanent link">&para;</a></h3>
+<p>On Debain 14, the default version of Node.JS is 0.10. Distributions based on it such as Raspbian and Ubuntu would be impacted as well. To install Node.JS 8.x:</p>
+<ol>
+<li>In a terminal, run <code>curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -</code></li>
+<li>Then do <code>sudo apt-get install -y nodejs</code></li>
+</ol>
+<p>To install Node.JS 4.x (Long Time Support release):</p>
+<ol>
+<li>In a terminal, run <code>curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash-</code></li>
+<li>Then do <code>sudo apt-get install -y nodejs</code> </li>
+</ol>
 <h2 id="so-whats-happening">So what's happening?<a class="headerlink" href="#so-whats-happening" title="Permanent link">&para;</a></h2>
 <p><img alt="The Worldpay Within puzzle piece" src="../images/architecture/Architecture1.png" />
 <figcaption>The Worldpay Within Flows sequence diagram</figcaption></p>
@@ -757,6 +788,10 @@
       
       
       <script>app.initialize({url:{base:".."}})</script>
+      
+        <script src="../search/require.js"></script>
+      
+        <script src="../search/search.js"></script>
       
     
     

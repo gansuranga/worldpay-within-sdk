@@ -19,7 +19,7 @@
       
         <link rel="shortcut icon" href="../assets/images/favicon.ico">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.8.1">
+      <meta name="generator" content="mkdocs-0.17.0, mkdocs-material-1.8.1">
     
     
     
@@ -326,16 +326,16 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-binaries-if-you-dont-want-to-build-from-source" title="The binaries (if you don't want to build from source)" class="md-nav__link">
-    The binaries (if you don't want to build from source)
+  <a href="#working-with-go-source-files" title="Working with Go source files" class="md-nav__link">
+    Working with Go source files
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usage" title="Usage" class="md-nav__link">
-    Usage
+  <a href="#prerequisites" title="Prerequisites" class="md-nav__link">
+    Prerequisites
   </a>
   
 </li>
@@ -346,29 +346,23 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-if-you-want-to-go-from-the-go-source-files" title="Install - if you want to go from the Go source files" class="md-nav__link">
-    Install - if you want to go from the Go source files
+  <a href="#get-started" title="Get started" class="md-nav__link">
+    Get started
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration-file-versus-command-line-flags" title="Configuration file versus command line flags" class="md-nav__link">
-    Configuration file versus command line flags
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#how-to-run-two-example-apps-on-one-machine" title="How to run two example apps on one machine" class="md-nav__link">
-    How to run two example apps on one machine
+  <a href="#running-the-examples" title="Running the examples" class="md-nav__link">
+    Running the examples
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#debugging" title="Debugging" class="md-nav__link">
+    Debugging
+  </a>
   
 </li>
       
@@ -515,16 +509,16 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-binaries-if-you-dont-want-to-build-from-source" title="The binaries (if you don't want to build from source)" class="md-nav__link">
-    The binaries (if you don't want to build from source)
+  <a href="#working-with-go-source-files" title="Working with Go source files" class="md-nav__link">
+    Working with Go source files
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usage" title="Usage" class="md-nav__link">
-    Usage
+  <a href="#prerequisites" title="Prerequisites" class="md-nav__link">
+    Prerequisites
   </a>
   
 </li>
@@ -535,29 +529,23 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-if-you-want-to-go-from-the-go-source-files" title="Install - if you want to go from the Go source files" class="md-nav__link">
-    Install - if you want to go from the Go source files
+  <a href="#get-started" title="Get started" class="md-nav__link">
+    Get started
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration-file-versus-command-line-flags" title="Configuration file versus command line flags" class="md-nav__link">
-    Configuration file versus command line flags
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#how-to-run-two-example-apps-on-one-machine" title="How to run two example apps on one machine" class="md-nav__link">
-    How to run two example apps on one machine
+  <a href="#running-the-examples" title="Running the examples" class="md-nav__link">
+    Running the examples
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#debugging" title="Debugging" class="md-nav__link">
+    Debugging
+  </a>
   
 </li>
       
@@ -575,7 +563,7 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/edit/master/docs/getting-started-with-go.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
+                  <a href="https://edit/master/docs/getting-started-with-go.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
                 
                 
                 
@@ -591,65 +579,50 @@
   <a class="md-button" href="../java">Java</a>
   <a class="md-button" href="../dotnet">.NET</a>
 </div></p>
-<h2 id="the-binaries-if-you-dont-want-to-build-from-source">The binaries (if you don't want to build from source)<a class="headerlink" href="#the-binaries-if-you-dont-want-to-build-from-source" title="Permanent link">&para;</a></h2>
-<p>Please see the <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/releases">Releases</a> section of GitHub for access to pre-built binaries of the RPC Agent and Dev Client apps. Both of the apps have been built for 32bit and 64bit architectures on Windows, MacOS, Linux and Linux (ARM).</p>
-<p>While the RPC Agent can be run from anywhere, it makes sense to add it to the directory of the application which will call it. The reason for this is that each application needs it own running instance of the RPC Agent and it can easily get confusing when there are multiple applications and agents deployed.</p>
-<p>Please see the examples in both the <a href="../java">Java</a> and <a href="../nodejs">Node.JS</a> wrappers. These examples currently hold binaries for MacOS x64. We suggest replacing that binary with an alternate build, if required.</p>
-<p>The dev client can be run from anywhere as it is not coupled with anything else.</p>
-<h3 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h3>
-<ul>
-<li>RPC Agent <code>./rpc-agent -configfile &lt;filename&gt;&lt;/filename&gt;</code>. Please see explanation of rpc-agent config file for further info.</li>
-<li>Dev Client <code>./dev-client</code></li>
-</ul>
-<h2 id="install-if-you-want-to-go-from-the-go-source-files">Install - if you want to go from the Go source files<a class="headerlink" href="#install-if-you-want-to-go-from-the-go-source-files" title="Permanent link">&para;</a></h2>
+<h2 id="working-with-go-source-files">Working with Go source files<a class="headerlink" href="#working-with-go-source-files" title="Permanent link">&para;</a></h2>
+<h3 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h3>
 <ol>
-<li>Install the Go command line</li>
-<li>Set up the environmental variables correctly; you only need to set <code>$GOPATH</code>, and that should be set as <code>//</code> where you want the code, for example: <code>/src/innovation.worldpay.com</code></li>
-<li>Clone the repo to <code>$GOPATH/src/innovation.worldpay.com</code></li>
-<li>Get the dependencies: <code>go get github.com/Sirupsen/logrus</code></li>
-<li>Get the dependencies: <code>go get github.com/gorilla/mux</code></li>
-<li>Get the dependencies: <code>go get github.com/nu7hatch/gouuid</code></li>
-<li>Get the dependencies: <code>go get git.apache.org/thrift.git/lib/go/thrift</code></li>
+<li>Install the newest <a href="https://golang.org/doc/install#install">Go command line</a>.</li>
+<li>If you do not have it, install <a href="https://git-scm.com">git</a>.</li>
 </ol>
-<h2 id="configuration-file-versus-command-line-flags">Configuration file versus command line flags<a class="headerlink" href="#configuration-file-versus-command-line-flags" title="Permanent link">&para;</a></h2>
-<p>The RPC client takes command line flags, for example <code>-port 9091</code>. It can also take the flag <code>-configfile 'conf.json'</code>, so you can specify the configuration in a config file. For example:</p>
-<div class="codehilite"><pre><span></span><span class="p">{</span>
-    <span class="nt">&quot;WorldpayWithinConfig&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">&quot;BufferSize&quot;</span> <span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
-        <span class="nt">&quot;Buffered&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="nt">&quot;Framed&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="nt">&quot;Host&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
-        <span class="nt">&quot;Logfile&quot;</span><span class="p">:</span> <span class="s2">&quot;worldpayWithin.log&quot;</span><span class="p">,</span>
-        <span class="nt">&quot;Loglevel&quot;</span><span class="p">:</span> <span class="s2">&quot;warn&quot;</span><span class="p">,</span>
-        <span class="nt">&quot;Port&quot;</span><span class="p">:</span> <span class="mi">9081</span><span class="p">,</span>
-        <span class="nt">&quot;Protocol&quot;</span><span class="p">:</span> <span class="s2">&quot;binary&quot;</span><span class="p">,</span>
-        <span class="nt">&quot;Secure&quot;</span><span class="p">:</span> <span class="kc">false</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-<h3 id="how-to-run-two-example-apps-on-one-machine">How to run two example apps on one machine<a class="headerlink" href="#how-to-run-two-example-apps-on-one-machine" title="Permanent link">&para;</a></h3>
+<h2 id="get-started">Get started<a class="headerlink" href="#get-started" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Create a $GOPATH environment variable: (for example, on unix do: <code>export GOPATH=/home/pi/go</code>).</li>
+<li>Get Apache Thrift and use the 0.10.0 branch:
+        1.  <code>go get git.apache.org/thrift.git/lib/go/thrift/...</code>
+        2.  <code>cd $GOPATH/src/git.apache.org/thrift.git</code>
+        3.  <code>git checkout 0.10.0</code></li>
+<li>Get the SDK: <code>go get github.com/WPTechInnovaion/wpw-sdk-go/...</code></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure you ignore the rpio.go system-specific warnings.</p>
+</div>
+<h2 id="running-the-examples">Running the examples<a class="headerlink" href="#running-the-examples" title="Permanent link">&para;</a></h2>
+<p>Now you've got everything set up, you're able to build the examples inside: <code>$GOPATH/src/github.com/WPTechInnovation/wpw-sdk-go/example</code>
+Each example consists of a sample producer and a sample consumer:</p>
+<ul>
+<li>$GOPATH/src/github.com/WPTechInnovation/wpw-sdk-go/examples/sample-consumer</li>
+<li>$GOPATH/src/github.com/WPTechInnovation/wpw-sdk-go/examples/sample-producer-callbacks</li>
+</ul>
+<p>To test the communication, build and run the producer:</p>
+<ol>
+<li><code>cd $GOPATH/src/github.com/WPTechInnovation/wpw-sdk-go/examples/sample-producer-callbacks</code></li>
+<li><code>go build</code></li>
+<li><code>./sample-producer-callbacks</code></li>
+</ol>
+<p>In a separate terminal window, build and run the consumer:</p>
+<ol>
+<li><code>cd $GOPATH/src/github.com/WPTechInnovation/wpw-sdk-go/examples/sample-consumer</code></li>
+<li><code>go build</code></li>
+<li><code>./sample-consumer</code></li>
+</ol>
 <p><img alt="The output of the log files for the orchestration of the flow" src="../images/get-started/outputoforchestration1.png" />
 <figcaption>The output of the log files for the orchestration of the flow.</figcaption></p>
 <p><img alt="Showing the payment in online.worldpay.com" src="../images/get-started/order-details-onlineworldpaycom.png" />
 <figcaption>Showing the payment in online.worldpay.com.</figcaption></p>
-<p>In the example, we're using two different ports:</p>
-<ul>
-<li>Java - 9090 - Producer</li>
-<li>Node.js - 9091 - Consumer</li>
-</ul>
-<p>Follow these steps to run two apps on one machine:</p>
-<ol>
-<li>Open two terminal windows.</li>
-<li>Configure the rpc agent in each terminal window to run on each of the ports. </li>
-<li>In the producer window, run the RPC on port <strong>9090</strong>.</li>
-<li>In the consumer window, run the RPC on port <strong>9091</strong>.</li>
-<li>Configure the Java app to run as the producer on <strong>9090</strong>.</li>
-<li>Configure the Node.js app to run as the consumer on <strong>9091</strong>, by changing the <code>createClient</code> in the example code.</li>
-<li>Run the Java producer app so we're broadcasting. The RPC agent broadcasting will continue to run in the background while the Java program has exited.</li>
-<li>Run the Node.js consumer app immediately.</li>
-<li>The <strong>Discover</strong>, <strong>Select</strong>, <strong>Pay</strong> and <strong>Release</strong> flows will all be triggered, as you can see above.</li>
-</ol>
+<h2 id="debugging">Debugging<a class="headerlink" href="#debugging" title="Permanent link">&para;</a></h2>
+<p>If you're having trouble, you can contact us at <a href="mailto:innovation@worldpay.com"><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#73;&#110;&#110;&#111;&#118;&#97;&#116;&#105;&#111;&#110;&#64;&#87;&#111;&#114;&#108;&#100;&#112;&#97;&#121;&#46;&#99;&#111;&#109;">&#73;&#110;&#110;&#111;&#118;&#97;&#116;&#105;&#111;&#110;&#64;&#87;&#111;&#114;&#108;&#100;&#112;&#97;&#121;&#46;&#99;&#111;&#109;</a></a>. Alternatively, you can <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/issues">raise an issue in GitHub</a>.</p>
                 
                   
                 
@@ -715,6 +688,10 @@
       
       
       <script>app.initialize({url:{base:".."}})</script>
+      
+        <script src="../search/require.js"></script>
+      
+        <script src="../search/search.js"></script>
       
     
     

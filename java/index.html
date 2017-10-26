@@ -19,7 +19,7 @@
       
         <link rel="shortcut icon" href="../assets/images/favicon.ico">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.8.1">
+      <meta name="generator" content="mkdocs-0.17.0, mkdocs-material-1.8.1">
     
     
     
@@ -619,7 +619,7 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/edit/master/docs/java.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
+                  <a href="https://edit/master/docs/java.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
                 
                 
                 
@@ -630,7 +630,8 @@
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
 <p>Before you get started:</p>
 <ul>
-<li>Install the Java SDK on your system, and prefereably a Java IDE (Integrated Development Environment) - our dev's love Netbeans, Eclipse and IntelliJ, but it's your choice; we've provided a maven script to build everything. </li>
+<li>Install Java JDK 1.8 on your systems.</li>
+<li>Install <a href="https://maven.apache.org/">Apache Maven</a> and add it to PATH.</li>
 <li>Create an account with <a href="https://online.worldpay.com">Worldpay Online</a> so that you can generate your own test API key. You'll replace the Worldpay test keys with your own in the SDK.</li>
 </ul>
 <div class="admonition warning">
@@ -639,16 +640,40 @@
 </div>
 <h2 id="get-started">Get started<a class="headerlink" href="#get-started" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Download the <a href="https://github.com/WPTechInnovation/wpw-sdk-java">repository</a>.</li>
-<li>Get the dependent repos by typing <code>git submodule init</code> and then <code>git submodule update --recursive --remote</code></li>
+<li>Clone the repository: <code>git clone https://github.com/WPTechInnovation/wpw-sdk-java.git</code></li>
+<li>Change directory: <code>cd wpw-sdk-java</code></li>
+<li>Run <code>git submodule update --init --recursive</code></li>
+<li>Then build it with maven using the default goal: <code>mvn</code></li>
 </ol>
 <h2 id="run-the-examples">Run the examples<a class="headerlink" href="#run-the-examples" title="Permanent link">&para;</a></h2>
-<p>You can try the examples by running them in two different console windows. Or, if you're installing on two separate devices, they must be one the same network that allows UDP broadcast traffic. Make sure you're using rhw Online Worldpay (OWP) files rather than the Worldpay Total (WT) ones.</p>
-<ul>
-<li>In the first window, run the consumer JAR</li>
-<li>In the second window, run the producer JAR</li>
-<li>The two smart devices should communicate with each other and make a payment</li>
-</ul>
+<p>You can try the examples by running them in two different console windows. Or, if you're installing on two separate devices, they must be one the same network that allows UDP broadcast traffic. Examples included in the repo are the sample projects: <strong>sample-consumer</strong>, <strong>sample-producer</strong> and <strong>sample-producer-callbacks</strong>. To run them you need to:</p>
+<ol>
+<li>In the first window, run the consumer JAR.<ol>
+<li><code>cd sample-producer-callbacks</code></li>
+<li><code>java -jar target/sample-producer-callbacks-&lt;version&gt;-alpha.jar</code></li>
+</ol>
+</li>
+<li>Simultaneously run the producer JAR.<ol>
+<li><code>cd sample-consumer</code></li>
+<li><code>java -jar target/sample-consumer-&lt;version&gt;-alpha.jar</code></li>
+</ol>
+</li>
+<li>The two smart devices should communicate with each other and make a payment.</li>
+</ol>
+<p>The car-example and car-charger are Spring boot projects that start a webservice on <strong>localhost:80</strong> and <strong>localhost:8000</strong>. Those ports should be free if you want to run them. To run these examples you need to:</p>
+<ol>
+<li>In the first window, run the car-example.<ol>
+<li><code>cd car-example</code></li>
+<li><code>java -jar ./target/car-example-&lt;version&gt;-alpha.jar</code></li>
+</ol>
+</li>
+<li>Simultaneously run the car-charger.<ol>
+<li><code>cd sample-consumer</code></li>
+<li><code>java -jar ./target/car-charger-&lt;version&gt;-alpha.jar</code></li>
+</ol>
+</li>
+<li>In your browser, navigate to <code>localhost:8000</code>, open SmartCar UI page in one tab and Producer UI page. Set the battery level by touching the green bar and begin charging by pressing the "Charge the battery" button.</li>
+</ol>
 <h2 id="see-the-payments">See the payments<a class="headerlink" href="#see-the-payments" title="Permanent link">&para;</a></h2>
 <p>Once the devices have successfully communicated with each other to make a payment, you can check to make sure that your devices are successfully making and receiving payments.</p>
 <h3 id="if-you-used-your-own-test-api-keys">If you used your own test API keys<a class="headerlink" href="#if-you-used-your-own-test-api-keys" title="Permanent link">&para;</a></h3>
@@ -664,13 +689,7 @@
 <li>Re-run the examples and you should see the payments coming through on the Worldpay Online payments dashboard.</li>
 </ol>
 <h2 id="debugging">Debugging<a class="headerlink" href="#debugging" title="Permanent link">&para;</a></h2>
-<p>If you get some odd error messages talking about a rpc-agent:</p>
-<ul>
-<li>Try typing the following command: <code>ps -e | grep rpc</code> to get the pid(s) of rpc-agents that are running.</li>
-<li>Then do <code>kill &lt;pid&gt;</code>, such as <code>kill 13249234</code> to kill these processes.</li>
-<li>Try re-running the examples</li>
-</ul>
-<p>If you're still having trouble, you can contact us at <a href="mailto:innovation@worldpay.com"><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#73;&#110;&#110;&#111;&#118;&#97;&#116;&#105;&#111;&#110;&#64;&#87;&#111;&#114;&#108;&#100;&#112;&#97;&#121;&#46;&#99;&#111;&#109;">&#73;&#110;&#110;&#111;&#118;&#97;&#116;&#105;&#111;&#110;&#64;&#87;&#111;&#114;&#108;&#100;&#112;&#97;&#121;&#46;&#99;&#111;&#109;</a></a>. Alternatively, you can <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/issues">raise an issue in GitHub</a>.</p>
+<p>If you're having trouble, you can contact us at <a href="mailto:innovation@worldpay.com"><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#73;&#110;&#110;&#111;&#118;&#97;&#116;&#105;&#111;&#110;&#64;&#87;&#111;&#114;&#108;&#100;&#112;&#97;&#121;&#46;&#99;&#111;&#109;">&#73;&#110;&#110;&#111;&#118;&#97;&#116;&#105;&#111;&#110;&#64;&#87;&#111;&#114;&#108;&#100;&#112;&#97;&#121;&#46;&#99;&#111;&#109;</a></a>. Alternatively, you can <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/issues">raise an issue in GitHub</a>.</p>
 <h2 id="so-whats-happening">So what's happening?<a class="headerlink" href="#so-whats-happening" title="Permanent link">&para;</a></h2>
 <p><img alt="The Worldpay Within puzzle piece" src="../images/architecture/Architecture1.png" />
 <figcaption>The Worldpay Within Flows sequence diagram</figcaption></p>
@@ -748,6 +767,10 @@
       
       
       <script>app.initialize({url:{base:".."}})</script>
+      
+        <script src="../search/require.js"></script>
+      
+        <script src="../search/search.js"></script>
       
     
     

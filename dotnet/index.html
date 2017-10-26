@@ -19,7 +19,7 @@
       
         <link rel="shortcut icon" href="../assets/images/favicon.ico">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.8.1">
+      <meta name="generator" content="mkdocs-0.17.0, mkdocs-material-1.8.1">
     
     
     
@@ -619,7 +619,7 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/edit/master/docs/dotnet.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
+                  <a href="https://edit/master/docs/dotnet.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
                 
                 
                 
@@ -630,7 +630,7 @@
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
 <p>Before you get started:</p>
 <ul>
-<li>Install the .NET 4.5 framework and Visual Studio 2017 (any edition) on your system. We've tested this wrapper with Visual 2017 Community Edition.</li>
+<li>Install the Visual Studio 2017 (any edition) on your system. We've tested this wrapper with Visual 2017 Community Edition .NET (4.5+).</li>
 <li>Create an account with <a href="https://online.worldpay.com">Worldpay Online</a> so that you can generate your own test API key. You'll replace the Worldpay test keys with your own in the SDK. </li>
 </ul>
 <div class="admonition warning">
@@ -642,29 +642,21 @@
 <p>Currently, there are no <a href="https://nuget.org">NuGet</a> published libraries for the SDK. This issue is being tracked in <a href="https://github.com/WPTechInnovation/wpw-sdk-dotnet/issues/1">Issue #1 on GitHub</a>.</p>
 <p>For now you'll need to build the project yourself, by following these steps:</p>
 <ol>
-<li>Clone or download the repository by typing <code>git clone git@github.com:WPTechInnovation/wpw-sdk-dotnet.git</code> in a terminal or console. See the <a href="https://github.com/WPTechInnovation/wpw-sdk-dotnet">project homepage</a> on GitHub for more options.</li>
-<li>Open up the solution file in Visual Studio 2017 (community edition or better).</li>
-<li>Build the solution.  Note that you must be connected to the Internet for NuGet dependencies to be downloaded:<ul>
-<li>ApacheThrift 0.10.0</li>
-<li>Common.Logging 3.3.1</li>
-<li>Common.Logging.Core 3.3.1</li>
-</ul>
-</li>
-<li>Download the RPC Agent binary build for your platform. The RPC Agents can be downloaded from <a href="https://github.com/WPTechInnovation/wpw-sdk-iot-core/tree/master/bin">the wpw-sdk-iot-core</a> project.<ul>
-<li>To configure the .NET SDK to find the agent, download the agent in to a directory named <strong>bin</strong> and set a <code>WPW_HOME</code> environment variable to point to the directory above it. For example, if <code>rpc-agent-windows-386.exe</code> is installed in <code>C:\users\Andy\wpw\bin</code>, then set <code>WPW_HOME</code> to <code>C:\users\Andy\wpw</code>.</li>
-</ul>
-</li>
+<li>Clone or download the repository by typing <code>git clone https://github.com/WPTechInnovation/wpw-sdk-dotnet.git</code> in a terminal or console. See the <a href="https://github.com/WPTechInnovation/wpw-sdk-dotnet">project homepage</a> on GitHub for more options.</li>
+<li>Change directory: <code>cd wpw-sdk-dotnet</code></li>
+<li>Update the submodules: <code>git submodule update --init --recursive</code></li>
+<li>Open the <strong>Worldpay.Within.sln</strong> project in Visual Studio 2017.</li>
 </ol>
 <h2 id="run-the-examples">Run the examples<a class="headerlink" href="#run-the-examples" title="Permanent link">&para;</a></h2>
 <p>Once you've loaded the projects in Visual Studio and built the project successfully (please note you can <a href="https://github.com/WPTechInnovation/wpw-sdk-dotnet/issues">report any problems or errors to us</a> on Github), you're good to begin testing.</p>
-<p>To run a sample app, run the <code>Worldpay.Within.Sample</code> project.</p>
-<p>We'd recommend using your own test API keys for this. We've left ours in the code, so that it "just works", but you won't be able to see the payments with our keys unless you change them. To do this, open <code>SimpleProducer.cs</code> and search for <code>MerchantServiceKey</code> in the <code>PSPConfig</code> declaration. You can replace the existing <code>MerchantServiceKey</code> with your own value. </p>
+<p>To run a sample app, run the <strong>Worldpay.Within.Sample</strong> project.</p>
+<p>We'd recommend using your own test API keys for this. We've left ours in the code, so that it "just works", but you won't be able to see the payments with our keys unless you change them. To do this, open <strong>SimpleProducer.cs</strong> and search for <code>MerchantServiceKey</code> in the <code>PSPConfig</code> declaration. You can replace the existing <code>MerchantServiceKey</code> with your own value. </p>
 <p>The sample application is a Windows console application. To make a simple payment, do the following:</p>
 <ol>
 <li>Select option 1 <strong>Start Simple Producer</strong>. This will start a local RPC Agent and register a separate producer with it. Ths producer has a very simple service declaration.</li>
 <li>Select option 3 <strong>Consume Purchase</strong>. This will start another RPC Agent and attempt to consume the first product of the first service it finds on the network (This will most likely be your producer).</li>
 </ol>
-<p>The sample application produces lots of logging; you can control this by editing the <code>App.config</code> file in the root of the sample project directory.</p>
+<p>The sample application produces lots of logging; you can control this by editing the <strong>App.config</strong> file in the root of the sample project directory.</p>
 <h2 id="see-the-payments">See the payments<a class="headerlink" href="#see-the-payments" title="Permanent link">&para;</a></h2>
 <p>Once the devices have successfully communicated with each other to make a payment, you can make sure that your devices are successfully making and receiving payments.</p>
 <p>If you used your own test API keys:</p>
@@ -676,7 +668,7 @@
 <ol>
 <li>Login to <a href="https://online.worldpay.com">Worldpay Online</a>.</li>
 <li>Got to <strong>Settings &gt; API keys</strong> and get your test keys.</li>
-<li>Replace the keys in <code>SimpleProducer.cs</code>.</li>
+<li>Replace the keys in <strong>SimpleProducer.cs</strong>.</li>
 </ol>
 <p>Re-run the sample application and you should see the payments coming through on the Worldpay Online payments dashboard.</p>
 <h2 id="so-whats-happening">So what's happening?<a class="headerlink" href="#so-whats-happening" title="Permanent link">&para;</a></h2>
@@ -685,7 +677,7 @@
 <p>You can see there are four phases; <strong>Discover</strong>, <strong>Select</strong>, <strong>Pay</strong>, and <strong>Release</strong>. For more information, see <a href="../index">Home</a>.</p>
 <h2 id="introduction-to-the-different-net-projects">Introduction to the different .NET projects<a class="headerlink" href="#introduction-to-the-different-net-projects" title="Permanent link">&para;</a></h2>
 <h3 id="worldpaywithin">Worldpay.Within<a class="headerlink" href="#worldpaywithin" title="Permanent link">&para;</a></h3>
-<p>This is the main .NET wrapper entry point assembly. The public API is contained inside the <code>Worldpay.Within</code> package.</p>
+<p>This is the main .NET wrapper entry point assembly. The public API is contained inside the <strong>Worldpay.Within</strong> package.</p>
 <p>You can use Sandcastle to build the docs, however they will be published online at some point (see <a href="https://github.com/WPTechInnovation/wpw-sdk-dotnet/issues/2">Issue 2</a>).</p>
 <h3 id="worldpaywithinrpc">Worldpay.Within.Rpc<a class="headerlink" href="#worldpaywithinrpc" title="Permanent link">&para;</a></h3>
 <p>This project contains nothing but the generated RPC wrappers for Thrift; you never edit code in here. This is a separate project because the style and organisation of the code generated by the Thrift compiler is pretty poor; this approach isolates this to a single project.</p>
@@ -694,15 +686,15 @@
 <blockquote>
 <p>The <code>-r</code> is there just for safety, in case subdirectories are used in future for storing dependent Thrift IDL files.</p>
 </blockquote>
-<p>Be aware that the above paths assume that you have downloaded the <a href="https://github.com/WPTechInnovation/worldpay-within-sdk">Worldpay Within main SDK project</a> in to a regular "Go" development structure. However, only the thrift interface files are actually required. You can grab those directly from <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/tree/master/rpc">here</a>. You need two files: <code>wptypes.thrift</code> and <code>wpwithin.thrift</code> - both files must be in the same directory.  They are not included within the .NET repository because they are centrally maintained and used to generate multiple language wrappers.</p>
+<p>Be aware that the above paths assume that you have downloaded the <a href="https://github.com/WPTechInnovation/worldpay-within-sdk">Worldpay Within main SDK project</a> in to a regular "Go" development structure. However, only the thrift interface files are actually required. You can grab those directly from <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/tree/master/rpc">here</a>. You need two files: <strong>wptypes.thrift</strong> and <strong>wpwithin.thrift</strong> - both files must be in the same directory.  They are not included within the .NET repository because they are centrally maintained and used to generate multiple language wrappers.</p>
 <p>Be sure to refresh the project source tree in Visual Studio to ensure that any newly generated files are included in the project. If you fail to do this, expect compile errors for missing types to be thrown.</p>
 <h2 id="using-in-your-own-applications">Using in your own applications<a class="headerlink" href="#using-in-your-own-applications" title="Permanent link">&para;</a></h2>
 <p>To use Worldpay Within, add the following DLLs to your project path:</p>
 <ol>
-<li><code>Worldpay.Within.dll</code> - this contains the SDK code and public entry points.</li>
-<li><code>Worldpay.Within.Rpc.dll</code> - the Thrift compiler-generated code to bridge to the core Go SDK.</li>
-<li><code>Thrift.dll</code> - Apache Thrift library. </li>
-<li><code>Logging Framework</code> - whatever logging framework we're going to use.</li>
+<li><strong>Worldpay.Within.dll</strong> - this contains the SDK code and public entry points.</li>
+<li><strong>Worldpay.Within.Rpc.dll</strong> - the Thrift compiler-generated code to bridge to the core Go SDK.</li>
+<li><strong>Thrift.dll</strong> - Apache Thrift library. </li>
+<li><strong>Logging Framework</strong> - whatever logging framework we're going to use.</li>
 </ol>
 <p>To run a Worldpay Within application, the Thrift RPC code will need to be able to talk to an RPC Agent. The RPC Agent is a standalone application that manages the communication with remote third parties (for example, if you are creating a Consumer then the SDK code communicates with a local RPC Agent using the Thrift protocol, which then talks via HTTP to a remote RPC Agent, which then talks to a local Producer via the Thrift protocol).</p>
 <h2 id="want-to-contribute">Want to contribute?<a class="headerlink" href="#want-to-contribute" title="Permanent link">&para;</a></h2>
@@ -773,6 +765,10 @@
       
       
       <script>app.initialize({url:{base:".."}})</script>
+      
+        <script src="../search/require.js"></script>
+      
+        <script src="../search/search.js"></script>
       
     
     
