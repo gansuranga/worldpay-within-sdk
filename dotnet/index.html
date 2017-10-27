@@ -328,8 +328,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#see-the-payments" title="See the payments" class="md-nav__link">
-    See the payments
+  <a href="#seeing-your-payments" title="Seeing your payments" class="md-nav__link">
+    Seeing your payments
   </a>
   
 </li>
@@ -551,8 +551,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#see-the-payments" title="See the payments" class="md-nav__link">
-    See the payments
+  <a href="#seeing-your-payments" title="Seeing your payments" class="md-nav__link">
+    Seeing your payments
   </a>
   
 </li>
@@ -631,6 +631,7 @@
 <p>Before you get started:</p>
 <ul>
 <li>Install the Visual Studio 2017 (any edition) on your system. We've tested this wrapper with Visual 2017 Community Edition .NET (4.5+).</li>
+<li>If you do not have it, install <a href="https://git-scm.com">git</a>.</li>
 <li>Create an account with <a href="https://online.worldpay.com">Worldpay Online</a> so that you can generate your own test API key. You'll replace the Worldpay test keys with your own in the SDK. </li>
 </ul>
 <div class="admonition warning">
@@ -650,27 +651,52 @@
 <h2 id="run-the-examples">Run the examples<a class="headerlink" href="#run-the-examples" title="Permanent link">&para;</a></h2>
 <p>Once you've loaded the projects in Visual Studio and built the project successfully (please note you can <a href="https://github.com/WPTechInnovation/wpw-sdk-dotnet/issues">report any problems or errors to us</a> on Github), you're good to begin testing.</p>
 <p>To run a sample app, run the <strong>Worldpay.Within.Sample</strong> project.</p>
-<p>We'd recommend using your own test API keys for this. We've left ours in the code, so that it "just works", but you won't be able to see the payments with our keys unless you change them. To do this, open <strong>SimpleProducer.cs</strong> and search for <code>MerchantServiceKey</code> in the <code>PSPConfig</code> declaration. You can replace the existing <code>MerchantServiceKey</code> with your own value. </p>
+<p>We'd recommend using your own test API keys for this. We've left ours in the code, so that it "just works", but you won't be able to see the payments with our keys unless you change them. For more information, refer to <a href="#create-own-keys">Creating your own keys</a> below.</p>
 <p>The sample application is a Windows console application. To make a simple payment, do the following:</p>
 <ol>
 <li>Select option 1 <strong>Start Simple Producer</strong>. This will start a local RPC Agent and register a separate producer with it. Ths producer has a very simple service declaration.</li>
 <li>Select option 3 <strong>Consume Purchase</strong>. This will start another RPC Agent and attempt to consume the first product of the first service it finds on the network (This will most likely be your producer).</li>
 </ol>
 <p>The sample application produces lots of logging; you can control this by editing the <strong>App.config</strong> file in the root of the sample project directory.</p>
-<h2 id="see-the-payments">See the payments<a class="headerlink" href="#see-the-payments" title="Permanent link">&para;</a></h2>
-<p>Once the devices have successfully communicated with each other to make a payment, you can make sure that your devices are successfully making and receiving payments.</p>
-<p>If you used your own test API keys:</p>
+<h2 id="creating-your-own-keys"><a name="create-own-keys"></a> Creating your own keys<a class="headerlink" href="#creating-your-own-keys" title="Permanent link">&para;</a></h2>
+<p>You can do this whenever you want, but you're going to need to create your own API keys. These keys allow you to simulate payments and see the outcome, rather than just using the keys Worldpay included in their SDKs.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Make sure you only use test keys.</p>
+</div>
+<p>To add your own test API keys:</p>
+<ol>
+<li>Login to <a href="https://www.online.worldpay.com">Worldpay Online</a>.</li>
+<li>Go to <strong>Settings</strong>.</li>
+<li>Then click <strong>API Keys</strong>.</li>
+<li>Grab your <strong>Service key</strong> and <strong>Client key</strong>. They'll look something like this: <code>T_S_fd00db67-b77b-4d6e-1a2a-45f65123f795</code>.</li>
+<li>Find the config folder of the SDK and find the producer JSON files.</li>
+<li>Add your Service and Client keys:<ol>
+<li>The <code>pspConfig.merchant_client_key</code> and <code>pspConfig.hte_public_key</code> must have the same key.</li>
+<li>The <code>pspConfig.merchant_service_key</code> and <code>pspConfig.hte_private_key</code> must have the same keys.</li>
+</ol>
+</li>
+<li>Save your work.</li>
+</ol>
+<p>Once you've added your own test keys, you'll be able to start testing your payments.</p>
+<h2 id="seeing-your-payments">Seeing your payments<a class="headerlink" href="#seeing-your-payments" title="Permanent link">&para;</a></h2>
+<p>Now that you've added your own test keys to the producer config files, you can start testing your payments. Refer to the <strong>Run the examples</strong> topic for more information about this.</p>
+<p>To see your test payments:</p>
 <ol>
 <li>Login to <a href="https://online.worldpay.com">Worldpay Online</a>.</li>
-<li>You'll see your dashboard. Scroll down and you should see the payment within your <strong>Recent Orders</strong>.</li>
+<li>On the homepage, scroll down to the <strong>Recent Orders</strong> section.</li>
+<li>Your payments are here. You'll be able to see:<ol>
+<li><strong>Order Code</strong> - The order code</li>
+<li><strong>Customer Order Code</strong> - The customer's order code</li>
+<li><strong>Gross Amount</strong> - The gross amount of the order</li>
+<li><strong>State</strong> - The state of the order. For example, SUCCESS or AUTHORIZED</li>
+<li><strong>Payment type</strong> - The type of payment. For example, ECOM</li>
+<li><strong>Order type</strong>  - The type of order. For example, VISA_CREDIT or VISA_DEBIT</li>
+<li><strong>Updated</strong> - The last time the payment state changed</li>
 </ol>
-<p>If you've used Worldpay's own test API keys:</p>
-<ol>
-<li>Login to <a href="https://online.worldpay.com">Worldpay Online</a>.</li>
-<li>Got to <strong>Settings &gt; API keys</strong> and get your test keys.</li>
-<li>Replace the keys in <strong>SimpleProducer.cs</strong>.</li>
+</li>
 </ol>
-<p>Re-run the sample application and you should see the payments coming through on the Worldpay Online payments dashboard.</p>
+<p>For more information, refer to the <a href="https://developer.worldpay.com/jsonapi/docs">Worldpay Online documentation</a>.</p>
 <h2 id="so-whats-happening">So what's happening?<a class="headerlink" href="#so-whats-happening" title="Permanent link">&para;</a></h2>
 <p><img alt="The Worldpay Within puzzle piece" src="../images/architecture/Architecture1.png" />
 <figcaption>The Worldpay Within Flows sequence diagram</figcaption></p>

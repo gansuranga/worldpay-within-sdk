@@ -316,29 +316,16 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#see-the-payments" title="See the payments" class="md-nav__link">
-    See the payments
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#if-you-used-your-own-test-api-keys" title="If you used your own test API keys" class="md-nav__link">
-    If you used your own test API keys
+  <a href="#creating-your-own-keys" title="Creating your own keys" class="md-nav__link">
+    Creating your own keys
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#if-youve-used-worldpays-own-test-api-keys" title="If you've used Worldpay's own test API keys" class="md-nav__link">
-    If you've used Worldpay's own test API keys
+      
+        <li class="md-nav__item">
+  <a href="#seeing-your-payments" title="Seeing your payments" class="md-nav__link">
+    Seeing your payments
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -551,29 +538,16 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#see-the-payments" title="See the payments" class="md-nav__link">
-    See the payments
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#if-you-used-your-own-test-api-keys" title="If you used your own test API keys" class="md-nav__link">
-    If you used your own test API keys
+  <a href="#creating-your-own-keys" title="Creating your own keys" class="md-nav__link">
+    Creating your own keys
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#if-youve-used-worldpays-own-test-api-keys" title="If you've used Worldpay's own test API keys" class="md-nav__link">
-    If you've used Worldpay's own test API keys
+      
+        <li class="md-nav__item">
+  <a href="#seeing-your-payments" title="Seeing your payments" class="md-nav__link">
+    Seeing your payments
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -631,6 +605,8 @@
 <p>Before you get started:</p>
 <ul>
 <li>Install Java JDK 1.8 on your systems.</li>
+<li>Set the <code>JAVA_HOME</code> variable and make sure it points to your JDK installation directory.</li>
+<li>If you do not have it, install <a href="https://git-scm.com">git</a>.</li>
 <li>Install <a href="https://maven.apache.org/">Apache Maven</a> and add it to PATH.</li>
 <li>Create an account with <a href="https://online.worldpay.com">Worldpay Online</a> so that you can generate your own test API key. You'll replace the Worldpay test keys with your own in the SDK.</li>
 </ul>
@@ -674,20 +650,45 @@
 </li>
 <li>In your browser, navigate to <code>localhost:8000</code>, open SmartCar UI page in one tab and Producer UI page. Set the battery level by touching the green bar and begin charging by pressing the "Charge the battery" button.</li>
 </ol>
-<h2 id="see-the-payments">See the payments<a class="headerlink" href="#see-the-payments" title="Permanent link">&para;</a></h2>
-<p>Once the devices have successfully communicated with each other to make a payment, you can check to make sure that your devices are successfully making and receiving payments.</p>
-<h3 id="if-you-used-your-own-test-api-keys">If you used your own test API keys<a class="headerlink" href="#if-you-used-your-own-test-api-keys" title="Permanent link">&para;</a></h3>
+<h2 id="creating-your-own-keys">Creating your own keys<a class="headerlink" href="#creating-your-own-keys" title="Permanent link">&para;</a></h2>
+<p>You can do this whenever you want, but you're going to need to create your own API keys. These keys allow you to simulate payments and see the outcome, rather than just using the keys Worldpay included in their SDKs.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Make sure you only use test keys.</p>
+</div>
+<p>To add your own test API keys:</p>
+<ol>
+<li>Login to <a href="https://www.online.worldpay.com">Worldpay Online</a>.</li>
+<li>Go to <strong>Settings</strong>.</li>
+<li>Then click <strong>API Keys</strong>.</li>
+<li>Grab your <strong>Service key</strong> and <strong>Client key</strong>. They'll look something like this: <code>T_S_fd00db67-b77b-4d6e-1a2a-45f65123f795</code>.</li>
+<li>Find the config folder of the SDK and find the producer JSON files.</li>
+<li>Add your Service and Client keys:<ol>
+<li>The <code>pspConfig.merchant_client_key</code> and <code>pspConfig.hte_public_key</code> must have the same key.</li>
+<li>The <code>pspConfig.merchant_service_key</code> and <code>pspConfig.hte_private_key</code> must have the same keys.</li>
+</ol>
+</li>
+<li>Save your work.</li>
+</ol>
+<p>Once you've added your own test keys, you'll be able to start testing your payments.</p>
+<h2 id="seeing-your-payments">Seeing your payments<a class="headerlink" href="#seeing-your-payments" title="Permanent link">&para;</a></h2>
+<p>Now that you've added your own test keys to the producer config files, you can start testing your payments. Refer to the <strong>Run the examples</strong> topic for more information about this.</p>
+<p>To see your test payments:</p>
 <ol>
 <li>Login to <a href="https://online.worldpay.com">Worldpay Online</a>.</li>
-<li>You'll see your dashboard. Scroll down and you should see the payment within your <strong>Recent Orders</strong>.</li>
+<li>On the homepage, scroll down to the <strong>Recent Orders</strong> section.</li>
+<li>Your payments are here. You'll be able to see:<ol>
+<li><strong>Order Code</strong> - The order code</li>
+<li><strong>Customer Order Code</strong> - The customer's order code</li>
+<li><strong>Gross Amount</strong> - The gross amount of the order</li>
+<li><strong>State</strong> - The state of the order. For example, SUCCESS or AUTHORIZED</li>
+<li><strong>Payment type</strong> - The type of payment. For example, ECOM</li>
+<li><strong>Order type</strong>  - The type of order. For example, VISA_CREDIT or VISA_DEBIT</li>
+<li><strong>Updated</strong> - The last time the payment state changed</li>
 </ol>
-<h3 id="if-youve-used-worldpays-own-test-api-keys">If you've used Worldpay's own test API keys<a class="headerlink" href="#if-youve-used-worldpays-own-test-api-keys" title="Permanent link">&para;</a></h3>
-<ol>
-<li>Login to <a href="https://online.worldpay.com">Worldpay Online</a>.</li>
-<li>Got to <strong>Settings &gt; API keys</strong> and get your test keys.</li>
-<li>Replace the keys in the producer Java files.</li>
-<li>Re-run the examples and you should see the payments coming through on the Worldpay Online payments dashboard.</li>
+</li>
 </ol>
+<p>For more information, refer to the <a href="https://developer.worldpay.com/jsonapi/docs">Worldpay Online documentation</a>.</p>
 <h2 id="debugging">Debugging<a class="headerlink" href="#debugging" title="Permanent link">&para;</a></h2>
 <p>If you're having trouble, you can contact us at <a href="mailto:innovation@worldpay.com"><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#73;&#110;&#110;&#111;&#118;&#97;&#116;&#105;&#111;&#110;&#64;&#87;&#111;&#114;&#108;&#100;&#112;&#97;&#121;&#46;&#99;&#111;&#109;">&#73;&#110;&#110;&#111;&#118;&#97;&#116;&#105;&#111;&#110;&#64;&#87;&#111;&#114;&#108;&#100;&#112;&#97;&#121;&#46;&#99;&#111;&#109;</a></a>. Alternatively, you can <a href="https://github.com/WPTechInnovation/worldpay-within-sdk/issues">raise an issue in GitHub</a>.</p>
 <h2 id="so-whats-happening">So what's happening?<a class="headerlink" href="#so-whats-happening" title="Permanent link">&para;</a></h2>
