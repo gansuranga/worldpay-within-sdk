@@ -1,5 +1,13 @@
-# worldpay-within-sdk
+#**This repository is deprecated**
+**You should use one of these instead:**
+* GO: https://github.com/WPTechInnovation/wpw-sdk-go
+* Nodejs: https://github.com/WPTechInnovation/wpw-sdk-nodejs
+* Java: https://github.com/WPTechInnovation/wpw-sdk-java
+* Python: https://github.com/WPTechInnovation/wpw-sdk-python
+* .Net: https://github.com/WPTechInnovation/wpw-sdk-dotnet
 
+
+# worldpay-within-sdk
 ![Travis Ci Status](https://travis-ci.org/WPTechInnovation/worldpay-within-sdk.svg?branch=master)
 
 Worldpay Within SDK to allow payments within IoT.
@@ -7,8 +15,8 @@ Worldpay Within SDK to allow payments within IoT.
 The core of this SDK is written in Go with a native Go interface. Along with the native Go interface is an RPC layer (Apache Thrift) to allow communication through other languages.
 
 Currently, therefore the SDK is available in the following languages as "wrappers", we're in the process of refactoring the repository and we'll give links to the decomposed repos here:
-* Node.js (Coming soon - but you can currently use what's here)
-* .NET (Coming soon - but you can currently use what's here)
+* Node.js The new WPW Node.js SDK can be found here: https://github.com/WPTechInnovation/wpw-sdk-nodejs
+* .NET The new WPW .Net SDK can be found here: https://github.com/WPTechInnovation/wpw-sdk-dotnet
 * Java - The new WPW Java SDK repo can be found here: https://github.com/WPTechInnovation/wpw-sdk-java
 * Python - The new WPW Python SDK repo can be found here: https://github.com/WPTechInnovation/wpw-sdk-python
 * Go - The new WPW Go SDK repo can be found here: https://github.com/WPTechInnovation/wpw-sdk-go
