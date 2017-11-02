@@ -1,19 +1,12 @@
 # Worldpay Within SDK RPC
 
-Apache Thrift is used to generate an interface between the WPWithin SDK written in Go and other programming languages.
+## Use sub-repos for Worldpay Within SDK
 
-More information at https://thrift.apache.org and https://en.wikipedia.org/wiki/Apache_Thrift
+**This repository is deprecated as the main source of the code and executables, we've decomposed this into smaller repos. So please use the following directories below.**
+This repo will still be used for the list of issues and the 'hub' repo and where the documentation will sit You should use one of these instead:
 
-If you plan on modifying the Thrift layer of this application it may be worth looking at the index of [Thrift tutorials](https://thrift.apache.org/tutorial/) if you have not already done so.
-
-### wpwithin.thrift
-
-This file defines the services functions that can be called via Thrift. These functions map onto `wpwithin.go` in the `sdkcore\wpwithin` directory at the root of this repository.
-
-### wptypes.thrift
-
-The types referred to in wpwithin.thrift are stored here.
-
-### Code generation
-
-If you intent to generate thrift client/server code then you may need to specify a namespace at the top of both files.
+* GO: https://github.com/WPTechInnovation/wpw-sdk-go
+* Nodejs: https://github.com/WPTechInnovation/wpw-sdk-nodejs
+* Java: https://github.com/WPTechInnovation/wpw-sdk-java
+* Python: https://github.com/WPTechInnovation/wpw-sdk-python
+* .Net: https://github.com/WPTechInnovation/wpw-sdk-dotnet
