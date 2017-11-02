@@ -1,20 +1,12 @@
 # The Java Wrapper - For Worldpay Within
 
-## Setup
+## Use sub-repos for Worldpay Within SDK
 
-* **Prerequisite**: Correctly installed and configured Java (1.7) runtime.
-* In your project, reference `WPWithin.jar` from the releases section
+**This repository is deprecated as the main source of the code and executables, we've decomposed this into smaller repos. So please use the following directories below.**
+This repo will still be used for the list of issues and the 'hub' repo and where the documentation will sit You should use one of these instead:
 
-## Running the test apps
-
-[There is lot's of detail here on running the RPC Agent, or the Client app with the Java example programs](https://github.com/WPTechInnovation/worldpay-within-sdk/tree/develop/applications/dev-client)
-
-[There's also further information here on orchestrating multiple applications in Java or Node.js](http://wptechinnovation.github.io/worldpay-within-sdk/getting-started.html)
-
-## The Javadoc
-
-[The javadoc for the wrapper can be found here](http://wptechinnovation.github.io/worldpay-within-sdk/wrapper-doc/javadoc/)
-
-## The flows and API
-
-[The flows and API can be found here](http://wptechinnovation.github.io/worldpay-within-sdk/the-flows.html)
+* GO: https://github.com/WPTechInnovation/wpw-sdk-go
+* Nodejs: https://github.com/WPTechInnovation/wpw-sdk-nodejs
+* Java: https://github.com/WPTechInnovation/wpw-sdk-java
+* Python: https://github.com/WPTechInnovation/wpw-sdk-python
+* .Net: https://github.com/WPTechInnovation/wpw-sdk-dotnet
