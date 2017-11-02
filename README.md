@@ -1,4 +1,4 @@
-<h1>Use sub-repos for Worldpay Within SDK</h1>
+# Use sub-repos for Worldpay Within SDK
 **This repository is deprecated as the main source of the code and executables, we've decomposed this into smaller repos. So please use the following directories below.**
 
 **This repo will still be used for the list of issues and the 'hub' repo and where the documentation will sit**
