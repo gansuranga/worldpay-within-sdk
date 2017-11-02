@@ -1,10 +1,12 @@
 # WorldpayWithin Python 2.7 Wrapper
 
-A Python 2.7 wrapper for the WorldpayWithin IoT payment SDK.
+## Use sub-repos for Worldpay Within SDK
 
-Please see the following files for examples of usage:
-* runConsumer.py
-* runProducer.py
-* runProducerCallbacks.py
+**This repository is deprecated as the main source of the code and executables, we've decomposed this into smaller repos. So please use the following directories below.**
+This repo will still be used for the list of issues and the 'hub' repo and where the documentation will sit You should use one of these instead:
 
-In order to have this library start the RPC Agent automatically then you will need to provide it in this directory and named `rpc-agent`. The binary will need to be the version for the OS/Architecture that you plan on running your application.
+* GO: https://github.com/WPTechInnovation/wpw-sdk-go
+* Nodejs: https://github.com/WPTechInnovation/wpw-sdk-nodejs
+* Java: https://github.com/WPTechInnovation/wpw-sdk-java
+* Python: https://github.com/WPTechInnovation/wpw-sdk-python
+* .Net: https://github.com/WPTechInnovation/wpw-sdk-dotnet
