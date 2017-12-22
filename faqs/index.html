@@ -133,7 +133,7 @@
       </div>
     
     <div class="md-source__repository">
-      WPTechInnovation/worldpay-within-sdk/
+      WPTechInnovation/wpw-doc-dev
     </div>
   </a>
 
@@ -180,7 +180,7 @@
       </div>
     
     <div class="md-source__repository">
-      WPTechInnovation/worldpay-within-sdk/
+      WPTechInnovation/wpw-doc-dev
     </div>
   </a>
 
@@ -743,8 +743,10 @@ Here is one way to do it (another way is to filter the list of discovered device
 <p>It could be that you're not waiting long enough for the producer to broadcast its message. The SDK broadcasts the producer message every 5000 milliseconds (that's every 5 seconds). So this means that your consumer has to be searching for the device for more than 5 seconds to ensure that it finds it.
 If this is too long for you, and you're at a hackathon, come and talk to a mentor. Else, <a href="mailto:innovation@worldpay.com">email us</a>.</p>
 <h2 id="3-ive-tried-that-but-i-still-cannot-find-my-producer">3. I've tried that but I still cannot find my producer.<a class="headerlink" href="#3-ive-tried-that-but-i-still-cannot-find-my-producer" title="Permanent link">&para;</a></h2>
-<p>!! note
-  This issue has mostly been found on Windows devices.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This issue has mostly been found on Windows devices.</p>
+</div>
 <p>If none of your consumers can see a broadcasting producer then check to see which network interface the producer is broadcasting on.
 The SDK will always broadcast on the first available network adapter.  So, for example, if you're using the Wireless network but your first adapter when you list the interfaces is <strong>eth0</strong>, then your broadcasts will be on <strong>eth0</strong> and <em>not</em> on the <strong>wlan0</strong> or any other wireless adapter.
 To fix this, the easiest thing to do is to disable the unused adapter so that your wireless adapter is the first one. Alternatively you can modify the routing table so that <strong>255.255.255.255</strong> goes to the right adapter.</p>
