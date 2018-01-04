@@ -54,17 +54,21 @@ func initLogging() {
 	logFile := "http-directory.log"
 
 	fmt.Println("Begin set log file hooks")
-	logrus.AddHook(lfshook.NewHook(lfshook.PathMap{
-		logrus.PanicLevel: logFile,
-		logrus.FatalLevel: logFile,
-		logrus.ErrorLevel: logFile,
-		logrus.WarnLevel:  logFile,
-		logrus.DebugLevel: logFile,
-		logrus.InfoLevel:  logFile,
-	}))
+	logrus.AddHook(
+		lfshook.NewHook(lfshook.PathMap{
+			logrus.PanicLevel: logFile,
+			logrus.FatalLevel: logFile,
+			logrus.ErrorLevel: logFile,
+			logrus.WarnLevel:  logFile,
+			logrus.DebugLevel: logFile,
+			logrus.InfoLevel:  logFile,
+		},&logrus.JSONFormatter{}))
 	fmt.Println("End set log file hooks")
 
 	logrus.Info("Logging setup completed")
+
+	logrus.Info("Listening on port " + flagPort)
+	logrus.Info("Logfile " + logFile)
 
 	fmt.Println("Finish initLogging()")
 }

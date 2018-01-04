@@ -14,6 +14,7 @@ import (
 type APIHandler interface {
 	GetDevices(w http.ResponseWriter, r *http.Request)
 	PostDevice(w http.ResponseWriter, r *http.Request)
+	DeleteDevice(w http.ResponseWriter, r *http.Request)
 }
 
 // APIHandlerImpl implemenentation of APIHandler
@@ -117,4 +118,10 @@ func (dm *APIHandlerImpl) PostDevice(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("Did return msg to client: %s\n", msg)
 	fmt.Printf("Did return HTTP status code (%d) to client.\n", respCode)
+}
+func (dm *APIHandlerImpl) DeleteDevice(w http.ResponseWriter, r *http.Request) {
+	//decoder := json.NewDecoder(r.Body)
+
+	fmt.Println("STUB TODO")
+
 }
