@@ -53,6 +53,8 @@ func (dm *APIHandlerImpl) GetDevices(w http.ResponseWriter, r *http.Request) {
 	flLat, err := strconv.ParseFloat(reqVars["lat"], 32)
 	flLong, err := strconv.ParseFloat(reqVars["lng"], 32)
 
+	logrus.Debug("GetDevices request received")
+
 	if err != nil {
 
 		w.WriteHeader(http.StatusInternalServerError)
@@ -83,6 +85,7 @@ func (dm *APIHandlerImpl) GetDevices(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(jsonBytes))
+	logrus.Debug("replied with ", len(devices), " devices")
 }
 
 // PostDevice ..

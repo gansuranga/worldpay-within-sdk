@@ -40,6 +40,18 @@ func (dm *DeviceManagerImpl) AddDevice(device *Device) error {
 	return nil
 }
 
+// DeleteDevice
+func (dm *DeviceManagerImpl) DeleteDevice(device *Device) error {
+	if device == nil {
+		return errors.New("Device is nil")
+	}
+
+	// TODO: Lock?
+	// TODO: remove device
+
+	return nil
+}
+
 // GetDevices ..
 func (dm *DeviceManagerImpl) GetDevices(mcc string, flLat, flLng float32, radius int) ([]Device, error) {
 
